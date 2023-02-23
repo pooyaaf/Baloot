@@ -22,7 +22,7 @@ public class Commodity {
     private double price;
     @Getter
     @Setter
-    private List<String> categories;
+    private String[] categories;
     @Getter
     @Setter
     private double rating;
