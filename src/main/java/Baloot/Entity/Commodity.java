@@ -40,4 +40,16 @@ public class Commodity {
         rating = model.rating;
         inStock = model.inStock;
     }
+
+    public CommodityModel getModel() {
+        CommodityModel model = new CommodityModel();
+        model.id = id;
+        model.name = name;
+        model.providerId = providerId;
+        model.price = price;
+        model.categories = categories;
+        model.rating = rating;
+        model.inStock = inStock;
+        return model;
+    }
 }

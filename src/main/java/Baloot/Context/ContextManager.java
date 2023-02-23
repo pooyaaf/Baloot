@@ -7,6 +7,7 @@ import Baloot.Exception.CommodityNotFound;
 import Baloot.Exception.ProviderNotFound;
 import Baloot.Exception.UserNotFound;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 public class ContextManager {
@@ -43,5 +44,10 @@ public class ContextManager {
             throw new CommodityNotFound();
         }
         return commodities.get(id);
+    }
+
+    //
+    public static Collection<Commodity> getAllCommodities() {
+        return commodities.values();
     }
 }
