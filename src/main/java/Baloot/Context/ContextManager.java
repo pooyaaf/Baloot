@@ -39,7 +39,7 @@ public class ContextManager {
         commodities.put(id, commodity);
     }
 
-    public static Commodity getMovie(Integer id) throws Exception, CommodityNotFound {
+    public static Commodity getCommodity(Integer id) throws Exception, CommodityNotFound {
         if (!commodities.containsKey(id)) {
             throw new CommodityNotFound();
         }

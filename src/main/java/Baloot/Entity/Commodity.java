@@ -5,6 +5,7 @@ import Baloot.Model.CommodityModel;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class Commodity {
@@ -29,7 +30,7 @@ public class Commodity {
     @Getter
     @Setter
     private int inStock;
-
+    HashMap<String, Integer> userRates = new HashMap<>();
     public Commodity(CommodityModel model) {
         super();
         id = model.id;
@@ -51,5 +52,13 @@ public class Commodity {
         model.rating = rating;
         model.inStock = inStock;
         return model;
+    }
+    public void addRate(String username, Integer rate) {
+        userRates.put(username, rate);
+        Double mean = 0.0;
+        for (Integer val : userRates.values()) {
+            mean += val;
+        }
+        rating = mean / userRates.size();
     }
 }
