@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Route("getCommoditiesList")
-public class GetCommoditiesList {
+public class GetCommoditiesList extends Command{
     @AcceptMethod(RequestMethod.GET)
     public CommodityListModel handle(){
         Collection<Commodity> commodities = ContextManager.getAllCommodities();

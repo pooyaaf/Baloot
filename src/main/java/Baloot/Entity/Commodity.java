@@ -2,6 +2,7 @@ package Baloot.Entity;
 
 
 import Baloot.Model.CommodityModel;
+import Baloot.Model.ReportCommodityModel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -69,6 +70,17 @@ public class Commodity {
         model.categories = convertCategoriesListToStringCategories(categories);
         model.rating = rating;
         model.inStock = inStock;
+        return model;
+    }
+
+    public ReportCommodityModel getReportModel() {
+        ReportCommodityModel model = new ReportCommodityModel();
+        model.id = id;
+        model.name = name;
+        model.providerId = providerId;
+        model.price = price;
+        model.categories = convertCategoriesListToStringCategories(categories);
+        model.rating = rating;
         return model;
     }
 
