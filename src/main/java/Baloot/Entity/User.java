@@ -49,4 +49,8 @@ public class User {
             throw new CommodityIsNotInBuyList();
         buyList.remove(commodity);
     }
+
+    public HashSet<Commodity> getBuyList() {
+        return buyList;
+    }
 }
