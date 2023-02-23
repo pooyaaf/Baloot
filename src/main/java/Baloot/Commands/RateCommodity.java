@@ -11,7 +11,7 @@ import Baloot.RequestMethod;
 import Baloot.Route;
 
 @Route("rateCommodity")
-public class rateCommodity {
+public class RateCommodity {
     @AcceptMethod(RequestMethod.GET)
     public String handle(RateModel model) throws Exception, UserNotFound, CommodityNotFound {
         if (model.score < 1 || model.score > 10) {

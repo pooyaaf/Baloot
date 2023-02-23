@@ -9,7 +9,7 @@ import Baloot.RequestMethod;
 import Baloot.Route;
 
 @Route("addCommodity")
-public class addCommodity extends Command {
+public class AddCommodity extends Command {
     @AcceptMethod(RequestMethod.GET)
     public String handle(CommodityModel model) throws Exception, ProviderNotFound {
         ContextManager.getProvider(model.providerId);
