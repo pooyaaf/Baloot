@@ -17,7 +17,7 @@ import java.util.Collection;
 @Route("getCommoditiesByCategory")
 public class GetCommoditiesByCategory extends Command {
     @AcceptMethod(RequestMethod.GET)
-    public CommoditiesListByCategoryModel handle(CategoryModel input) throws Exception, UserNotFound {
+    public CommoditiesListByCategoryModel handle(CategoryModel input) {
         CommoditiesListByCategoryModel result = new CommoditiesListByCategoryModel();
         result.commoditiesListByCategory = new ArrayList<>();
         try {

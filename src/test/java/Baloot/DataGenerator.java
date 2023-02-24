@@ -6,9 +6,21 @@ import Baloot.Entity.Provider;
 import Baloot.Entity.User;
 import Baloot.Model.CommodityModel;
 import Baloot.Model.ProviderModel;
+import Baloot.Model.ReportCommodityModel;
 import Baloot.Model.UserModel;
 
 class DataGenerator {
+    static public ReportCommodityModel generateReportCommodityModel(int id, String name, int providerId, double price, String categories, double rating) {
+        ReportCommodityModel reportCommodityModel = new ReportCommodityModel();
+        reportCommodityModel.id = id;
+        reportCommodityModel.name = name;
+        reportCommodityModel.providerId = providerId;
+        reportCommodityModel.price = price;
+        reportCommodityModel.categories = categories;
+        reportCommodityModel.rating = rating;
+        return reportCommodityModel;
+    }
+
     static void GenerateUser(String username, String password, String email, String birthDate, String address, int credit) {
         UserModel userModel = new UserModel();
         userModel.username = username;

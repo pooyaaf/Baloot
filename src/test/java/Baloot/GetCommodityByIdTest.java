@@ -7,21 +7,12 @@ import Baloot.Model.CommodityByIdModel;
 import Baloot.Model.ReportCommodityModel;
 import org.junit.Before;
 import org.junit.Test;
+
+import static Baloot.DataGenerator.generateReportCommodityModel;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GetCommodityByIdTest {
     private Integer commodityId = 1;
-
-    public ReportCommodityModel generateReportCommodityModel(int id, String name, int providerId, double price, String categories, double rating) {
-        ReportCommodityModel reportCommodityModel = new ReportCommodityModel();
-        reportCommodityModel.id = id;
-        reportCommodityModel.name = name;
-        reportCommodityModel.providerId = providerId;
-        reportCommodityModel.price = price;
-        reportCommodityModel.categories = categories;
-        reportCommodityModel.rating = rating;
-        return reportCommodityModel;
-    }
 
     @Before
     public void setUp() throws Exception {
