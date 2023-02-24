@@ -6,5 +6,5 @@ rateCommodity {"username":"user1", "commodityId":1, "score":7}
 addToBuyList {"username":"user1", "commodityId":1}
 removeFromBuyList {"username": "user1", "commodityId": 1}
 getCommodityById {"id": 2}
-// getCommoditiesByCategory {"category":"[Technology,Phone]"}
+getCommoditiesByCategory {"category":"Phone"}
 getBuyList {"username": "user1"}

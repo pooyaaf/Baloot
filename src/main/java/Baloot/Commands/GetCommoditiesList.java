@@ -16,9 +16,9 @@ public class GetCommoditiesList extends Command{
     public CommodityListModel handle(){
         Collection<Commodity> commodities = ContextManager.getAllCommodities();
         CommodityListModel result = new CommodityListModel();
-        result.CommodityList = new ArrayList<>();
+        result.commoditiesList = new ArrayList<>();
         for (Commodity commodity : commodities) {
-            result.CommodityList.add(commodity.getModel());
+            result.commoditiesList.add(commodity.getModel());
         }
         return result;
     }
