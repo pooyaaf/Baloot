@@ -11,14 +11,14 @@ import Baloot.RequestMethod;
 import Baloot.Route;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collection;
 
 @Route("getBuyList")
 public class GetBuyList extends Command{
     @AcceptMethod(RequestMethod.GET)
     public BuyListModel handle(UserByUsernameModel input) throws Exception, UserNotFound {
         User user = ContextManager.getUser(input.username);
-        HashSet<Commodity> buyList = user.getBuyList();
+        Collection<Commodity> buyList = user.getBuyList();
         BuyListModel result = new BuyListModel();
         result.buyList = new ArrayList<>();
         for (Commodity commodity : buyList) {

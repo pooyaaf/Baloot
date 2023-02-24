@@ -1,12 +1,12 @@
 package Baloot.Entity;
 
 import Baloot.Exception.CommodityIsNotInBuyList;
-import Baloot.Exception.UserNotFound;
 import Baloot.Model.UserModel;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashSet;
+import java.util.Collection;
+import java.util.HashMap;
 
 public class User {
     @Setter
@@ -27,7 +27,7 @@ public class User {
     @Setter
     @Getter
     private int credit;
-    private HashSet<Commodity> buyList;
+    private HashMap<Integer, Commodity> buyList;
 
     public User(UserModel model) {
         super();
@@ -37,20 +37,20 @@ public class User {
         birthDate = model.birthDate;
         address = model.address;
         credit = model.credit;
-        buyList = new HashSet<>();
+        buyList = new HashMap<>();
     }
 
     public void addToBuyList(Commodity commodity) {
-        buyList.add(commodity);
+        buyList.put(commodity.getId(), commodity);
     }
 
     public void removeFromBuyList(Commodity commodity) throws CommodityIsNotInBuyList {
-        if (!buyList.contains(commodity))
+        if (!buyList.containsKey(commodity.getId()))
             throw new CommodityIsNotInBuyList();
-        buyList.remove(commodity);
+        buyList.remove(commodity.getId());
     }
 
-    public HashSet<Commodity> getBuyList() {
-        return buyList;
+    public Collection<Commodity> getBuyList() {
+        return buyList.values();
     }
 }

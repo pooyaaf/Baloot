@@ -12,7 +12,7 @@ import Baloot.RequestMethod;
 import Baloot.Route;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collection;
 
 @Route("getCommoditiesByCategory")
 public class GetCommoditiesByCategory extends Command {
@@ -22,7 +22,7 @@ public class GetCommoditiesByCategory extends Command {
         result.commoditiesListByCategory = new ArrayList<>();
         try {
             Category category = ContextManager.getCategory(input.category);
-            HashSet<Commodity> commodities = category.getAllCommodity();
+            Collection<Commodity> commodities = category.getAllCommodity();
             for (Commodity commodity : commodities) {
                 result.commoditiesListByCategory.add(commodity.getReportModel());
             }
