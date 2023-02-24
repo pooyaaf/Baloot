@@ -1,11 +1,15 @@
 package Baloot;
 
+import Baloot.Commands.UsernameValidation;
 import Baloot.Exception.InvalidCommand;
+import Baloot.Validation.Username;
 import com.google.gson.Gson;
 import org.reflections.Reflections;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Set;
@@ -25,6 +29,18 @@ public class App {
                 handle(cmd);
             } catch (Exception exception) {
                 System.out.println(exception.getMessage());
+            }
+        }
+    }
+    private static void validate(Object model) throws Exception {
+        Field[] fields = model.getClass().getFields();
+        for (Field field : fields) {
+
+            Annotation[] annotations = field.getAnnotations();
+            for (Annotation annotation : annotations) {
+                if (annotation.annotationType() == Username.class && !UsernameValidation.userValidation((String) field.get(model))) {
+                    throw new InvalidCommand();
+                }
             }
         }
     }
@@ -80,7 +96,7 @@ public class App {
                 } else {
                     Class<?> parameterType = method.getParameterTypes()[0];
                     Object data = gson.fromJson(body, parameterType);
-
+                    validate(data);
                     result = method.invoke(instance, data);
                 }
             }
