@@ -17,6 +17,7 @@ public class RemoveFromBuyList extends Command {
     public String handle(BuyModel input) throws Exception, UserNotFound, CommodityNotFound, CommodityIsNotInBuyList {
         Commodity commodity = ContextManager.getCommodity(input.commodityId);
         User user = ContextManager.getUser(input.username);
+        commodity.increaseInStuck();
         user.removeFromBuyList(commodity);
 
         return "commodity was removed to buy list successfully";

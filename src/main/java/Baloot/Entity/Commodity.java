@@ -1,6 +1,7 @@
 package Baloot.Entity;
 
 
+import Baloot.Exception.CommodityNotInStuck;
 import Baloot.Model.CommodityModel;
 import Baloot.Model.ReportCommodityModel;
 import lombok.Getter;
@@ -91,5 +92,15 @@ public class Commodity {
             mean += val;
         }
         rating = mean / userRates.size();
+    }
+
+    public void increaseInStuck() {
+        inStock += 1;
+    }
+
+    public void decreaseInStuck() throws CommodityNotInStuck {
+        if (inStock <= 0)
+            throw new CommodityNotInStuck();
+        inStock -= 1;
     }
 }
