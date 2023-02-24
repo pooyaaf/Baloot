@@ -103,4 +103,7 @@ public class Commodity {
             throw new CommodityNotInStuck();
         inStock -= 1;
     }
+    public Double getRate() {
+        return rating;
+    }
 }
