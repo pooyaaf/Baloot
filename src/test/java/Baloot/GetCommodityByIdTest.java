@@ -50,4 +50,23 @@ public class GetCommodityByIdTest {
 
         command.handle(inputModel);
     }
+
+    @Test(expected = NullPointerException.class)
+    public void getCommodityById_IfInputModelIsNull_Throws() throws Exception, CommodityNotFound {
+        GetCommodityById command = new GetCommodityById();
+
+        // Set the input model to null
+        CommodityByIdModel inputModel = null;
+
+        command.handle(inputModel);
+    }
+    @Test(expected = IllegalArgumentException.class)
+    public void getCommodityById_IfInputModelHasNullId_Throws() throws Exception, CommodityNotFound {
+        GetCommodityById command = new GetCommodityById();
+
+        // Set the input model's id to null
+        CommodityByIdModel inputModel = new CommodityByIdModel();
+        inputModel.id = Integer.parseInt(null);
+        command.handle(inputModel);
+    }
 }

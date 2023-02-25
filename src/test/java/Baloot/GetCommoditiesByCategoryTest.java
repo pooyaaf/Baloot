@@ -51,4 +51,15 @@ public class GetCommoditiesByCategoryTest {
         CommoditiesListByCategoryModel commoditiesListByCategoryModel = command.handle(categoryModel);
         assertEquals(0, commoditiesListByCategoryModel.commoditiesListByCategory.size());
     }
+    @Test
+    public void getCommoditiesByCategory_ifNoCommoditiesInCategory_ShouldReturnEmptyList() {
+        CategoryModel categoryModel = new CategoryModel();
+        categoryModel.category = "Non-existent category";
+        GetCommoditiesByCategory command = new GetCommoditiesByCategory();
+
+        CommoditiesListByCategoryModel commoditiesListByCategoryModel = command.handle(categoryModel);
+        assertThat(commoditiesListByCategoryModel.commoditiesListByCategory).isEmpty();
+    }
+
+
 }
