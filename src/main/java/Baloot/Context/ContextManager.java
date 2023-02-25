@@ -17,7 +17,12 @@ public class ContextManager {
     private static HashMap<String, User> users = new HashMap<>();
     private static HashMap<Integer, Provider> providers = new HashMap<>();
     private static HashMap<Integer, Commodity> commodities = new HashMap<>();
-
+    public static void resetContext() {
+        categories.clear();
+        commodities.clear();
+        users.clear();
+        providers.clear();
+    }
     public static void putUser(String username, User user) {
         users.put(username, user);
     }

@@ -8,6 +8,7 @@ import Baloot.Exception.CommodityNotFound;
 import Baloot.Exception.InvalidRateScore;
 import Baloot.Exception.UserNotFound;
 import Baloot.Model.RateModel;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,7 +31,10 @@ public class CommodityRateTest {
         DataGenerator.GenerateCommodity(2, "Product B", 1, 20.0, "[Technology,Phone]", 3.5, 50);
         DataGenerator.GenerateCommodity(3, "Product C", 2, 15.0, "[Book]", 4.5, 200);
     }
-
+    @After
+    public void teardown() {
+        ContextManager.resetContext();
+    }
     @Test
     public void rateCommodity_SuccessfulRating() throws UserNotFound, CommodityNotFound, Exception {
         RateModel model = new RateModel();

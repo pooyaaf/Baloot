@@ -1,7 +1,9 @@
 package Baloot;
 
 import Baloot.Commands.GetCommoditiesByCategory;
+import Baloot.Context.ContextManager;
 import Baloot.Model.*;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 

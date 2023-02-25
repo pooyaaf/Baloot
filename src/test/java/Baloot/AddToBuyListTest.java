@@ -7,6 +7,7 @@ import Baloot.Exception.CommodityNotFound;
 import Baloot.Exception.CommodityNotInStuck;
 import Baloot.Exception.UserNotFound;
 import Baloot.Model.*;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,6 +30,11 @@ public class AddToBuyListTest {
         // Generate commodities
         DataGenerator.GenerateCommodity(1, "Product A", 1, 10.0, "[Phone]", 4.0, inStuck);
 
+    }
+
+    @After
+    public void teardown() {
+        ContextManager.resetContext();
     }
 
     @Test
@@ -75,7 +81,7 @@ public class AddToBuyListTest {
     public void addToBuyList_UserNotFound_Throws() throws Exception, UserNotFound, CommodityNotFound, CommodityNotInStuck {
         BuyModel buyModel = new BuyModel();
         buyModel.commodityId = commodityId;
-        buyModel.username = username+"NotIn";
+        buyModel.username = username + "NotIn";
         AddToBuyList command = new AddToBuyList();
 
         command.handle(buyModel);
