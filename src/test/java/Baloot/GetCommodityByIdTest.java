@@ -19,12 +19,12 @@ public class GetCommodityByIdTest {
         // Generate providers
         DataGenerator.GenerateProvider(1, "Provider A", "2023-02-23");
         // Generate commodities
-        DataGenerator.GenerateCommodity(1, "Product A", 1, 10.0, "[Phone]", 4.0, 100);
+        DataGenerator.GenerateCommodity(1, "Product A", 1, 10.0, new String[]{"Phone"}, 4.0, 100);
     }
 
     @Test
     public void getCommodityById_ShouldReturnExpectedCommodityInfo() throws CommodityNotFound, Exception {
-        ReportCommodityModel expectedModel = generateReportCommodityModel(1, "Product A", 1, 10.0, "[Phone]", 4.0);
+        ReportCommodityModel expectedModel = generateReportCommodityModel(1, "Product A", 1, 10.0, new String[]{"Phone"}, 4.0);
 
         CommodityByIdModel inputModel = new CommodityByIdModel();
         inputModel.id = commodityId;
@@ -40,7 +40,7 @@ public class GetCommodityByIdTest {
 
     @Test(expected = CommodityNotFound.class)
     public void getCommodityById_IfIdNotAvailableCommodityNotFound_Throws() throws Exception, CommodityNotFound {
-        ReportCommodityModel expectedModel = generateReportCommodityModel(1, "Product A", 1, 10.0, "[Phone]", 4.0);
+        ReportCommodityModel expectedModel = generateReportCommodityModel(1, "Product A", 1, 10.0, new String[]{"Phone"}, 4.0);
 
         CommodityByIdModel inputModel = new CommodityByIdModel();
         Integer notAvailableCommodityId = 7;

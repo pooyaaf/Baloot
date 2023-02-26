@@ -10,7 +10,7 @@ import Baloot.Model.ReportCommodityModel;
 import Baloot.Model.UserModel;
 
 class DataGenerator {
-    static public ReportCommodityModel generateReportCommodityModel(int id, String name, int providerId, double price, String categories, double rating) {
+    static public ReportCommodityModel generateReportCommodityModel(int id, String name, int providerId, double price, String[] categories, double rating) {
         ReportCommodityModel reportCommodityModel = new ReportCommodityModel();
         reportCommodityModel.id = id;
         reportCommodityModel.name = name;
@@ -43,7 +43,7 @@ class DataGenerator {
 
     }
 
-    static void GenerateCommodity(int id, String name, int providerId, double price, String categories, double rating, int inStock) {
+    static void GenerateCommodity(int id, String name, int providerId, double price, String[] categories, double rating, int inStock) {
         CommodityModel commodityModel = new CommodityModel();
         commodityModel.id=id;
         commodityModel.inStock=inStock;

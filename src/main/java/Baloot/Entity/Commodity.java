@@ -40,26 +40,9 @@ public class Commodity {
         name = model.name;
         providerId = model.providerId;
         price = model.price;
-        categories = convertStringCategoriesToCategoriesList(model.categories);
+        categories = model.categories;
         rating = model.rating;
         inStock = model.inStock;
-    }
-
-    public String[] convertStringCategoriesToCategoriesList(String stringCategories) {
-        stringCategories = stringCategories.substring(1, stringCategories.length() - 1);
-        return stringCategories.split(", ");
-    }
-
-    public String convertCategoriesListToStringCategories(String[] categoriesList) {
-        String stringCategories = "[";
-        for (int i = 0; i < categoriesList.length; i++) {
-            stringCategories += categoriesList[i];
-            if (i != categoriesList.length - 1) {
-                stringCategories += ", ";
-            }
-        }
-        stringCategories += "]";
-        return stringCategories;
     }
 
     public CommodityModel getModel() {
@@ -68,7 +51,7 @@ public class Commodity {
         model.name = name;
         model.providerId = providerId;
         model.price = price;
-        model.categories = convertCategoriesListToStringCategories(categories);
+        model.categories = categories;
         model.rating = rating;
         model.inStock = inStock;
         return model;
@@ -80,7 +63,7 @@ public class Commodity {
         model.name = name;
         model.providerId = providerId;
         model.price = price;
-        model.categories = convertCategoriesListToStringCategories(categories);
+        model.categories = categories;
         model.rating = rating;
         return model;
     }

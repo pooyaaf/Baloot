@@ -27,9 +27,9 @@ public class CommodityRateTest {
         DataGenerator.GenerateProvider(1, "Provider A", "2023-02-23");
         DataGenerator.GenerateProvider(2, "Provider B", "2023-02-23");
         // Generate commodities
-        DataGenerator.GenerateCommodity(1, "Product A", 1, 10.0, "[Phone]", 4.0, 100);
-        DataGenerator.GenerateCommodity(2, "Product B", 1, 20.0, "[Technology,Phone]", 3.5, 50);
-        DataGenerator.GenerateCommodity(3, "Product C", 2, 15.0, "[Book]", 4.5, 200);
+        DataGenerator.GenerateCommodity(1, "Product A", 1, 10.0, new String[]{"Phone"}, 4.0, 100);
+        DataGenerator.GenerateCommodity(2, "Product B", 1, 20.0, new String[]{"Technology,Phone"}, 3.5, 50);
+        DataGenerator.GenerateCommodity(3, "Product C", 2, 15.0, new String[]{"Book"}, 4.5, 200);
     }
     @After
     public void teardown() {

@@ -5,6 +5,6 @@ public class ReportCommodityModel {
     public String name;
     public int providerId;
     public double price;
-    public String categories;
+    public String[] categories;
     public double rating;
 }

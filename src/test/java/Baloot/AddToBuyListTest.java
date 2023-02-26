@@ -28,7 +28,7 @@ public class AddToBuyListTest {
         // Generate providers
         DataGenerator.GenerateProvider(1, "Provider A", "2023-02-23");
         // Generate commodities
-        DataGenerator.GenerateCommodity(1, "Product A", 1, 10.0, "[Phone]", 4.0, inStuck);
+        DataGenerator.GenerateCommodity(1, "Product A", 1, 10.0, new String[]{"Phone"}, 4.0, inStuck);
 
     }
 
@@ -91,7 +91,7 @@ public class AddToBuyListTest {
     public void addToBuyList_CommodityNotInStuck_Throws() throws Exception, UserNotFound, CommodityNotFound, CommodityNotInStuck {
         Integer zeroInStock = 0;
         Integer notInStockCommodityId = 2;
-        DataGenerator.GenerateCommodity(notInStockCommodityId, "Product A", 1, 10.0, "[Phone]", 4.0, zeroInStock);
+        DataGenerator.GenerateCommodity(notInStockCommodityId, "Product A", 1, 10.0, new String[]{"Phone"}, 4.0, zeroInStock);
 
         BuyModel buyModel = new BuyModel();
         buyModel.commodityId = notInStockCommodityId;

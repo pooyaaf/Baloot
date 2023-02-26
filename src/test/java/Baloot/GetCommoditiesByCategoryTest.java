@@ -24,14 +24,14 @@ public class GetCommoditiesByCategoryTest {
         // Generate providers
         DataGenerator.GenerateProvider(1, "Provider A", "2023-02-23");
         // Generate commodities
-        DataGenerator.GenerateCommodity(1, "Product A", 1, 10.0, "[Phone]", 4.0, inStuck);
+        DataGenerator.GenerateCommodity(1, "Product A", 1, 10.0, new String[]{"Phone"}, 4.0, inStuck);
     }
 
     @Test
     public void getCommoditiesByCategory_ShouldSuccessful() {
         CategoryModel categoryModel = new CategoryModel();
         categoryModel.category = category;
-        ReportCommodityModel expectedModel = generateReportCommodityModel(1, "Product A", 1, 10.0, "[Phone]", 4.0);
+        ReportCommodityModel expectedModel = generateReportCommodityModel(1, "Product A", 1, 10.0, new String[]{"Phone"}, 4.0);
         GetCommoditiesByCategory command = new GetCommoditiesByCategory();
 
 
