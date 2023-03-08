@@ -2,13 +2,12 @@ package Baloot.Entity;
 
 
 import Baloot.Exception.CommodityNotInStuck;
-import Baloot.Model.CommodityModel;
+import Baloot.Model.view.CommodityModel;
 import Baloot.Model.ReportCommodityModel;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class Commodity {
     @Getter

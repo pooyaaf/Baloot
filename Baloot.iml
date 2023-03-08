@@ -22,5 +22,6 @@
     <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.18.24" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.assertj:assertj-core:3.24.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: net.bytebuddy:byte-buddy:1.12.13" level="project" />
+    <orderEntry type="library" name="Maven: org.jsoup:jsoup:1.14.3" level="project" />
   </component>
 </module>
