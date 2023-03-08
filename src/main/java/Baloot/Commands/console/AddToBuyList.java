@@ -1,6 +1,7 @@
-package Baloot.Commands;
+package Baloot.Commands.console;
 
 import Baloot.AcceptMethod;
+import Baloot.Commands.Command;
 import Baloot.Context.ContextManager;
 import Baloot.Entity.Commodity;
 import Baloot.Entity.User;

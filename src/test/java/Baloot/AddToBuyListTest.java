@@ -1,6 +1,6 @@
 package Baloot;
 
-import Baloot.Commands.AddToBuyList;
+import Baloot.Commands.console.AddToBuyList;
 import Baloot.Context.ContextManager;
 import Baloot.Entity.Commodity;
 import Baloot.Exception.CommodityNotFound;
