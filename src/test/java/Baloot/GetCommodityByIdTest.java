@@ -2,9 +2,8 @@ package Baloot;
 
 import Baloot.Commands.GetCommodityById;
 import Baloot.Exception.CommodityNotFound;
-import Baloot.Exception.UserNotFound;
 import Baloot.Model.CommodityByIdModel;
-import Baloot.Model.ReportCommodityModel;
+import Baloot.Model.CommodityShortModel;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,14 +23,14 @@ public class GetCommodityByIdTest {
 
     @Test
     public void getCommodityById_ShouldReturnExpectedCommodityInfo() throws CommodityNotFound, Exception {
-        ReportCommodityModel expectedModel = generateReportCommodityModel(1, "Product A", 1, 10.0, new String[]{"Phone"}, 4.0);
+        CommodityShortModel expectedModel = generateReportCommodityModel(1, "Product A", 1, 10.0, new String[]{"Phone"}, 4.0);
 
         CommodityByIdModel inputModel = new CommodityByIdModel();
         inputModel.id = commodityId;
 
         GetCommodityById command = new GetCommodityById();
 
-        ReportCommodityModel model = command.handle(inputModel);
+        CommodityShortModel model = command.handle(inputModel);
 
         assertThat(model)
                 .usingRecursiveComparison()
@@ -40,7 +39,7 @@ public class GetCommodityByIdTest {
 
     @Test(expected = CommodityNotFound.class)
     public void getCommodityById_IfIdNotAvailableCommodityNotFound_Throws() throws Exception, CommodityNotFound {
-        ReportCommodityModel expectedModel = generateReportCommodityModel(1, "Product A", 1, 10.0, new String[]{"Phone"}, 4.0);
+        CommodityShortModel expectedModel = generateReportCommodityModel(1, "Product A", 1, 10.0, new String[]{"Phone"}, 4.0);
 
         CommodityByIdModel inputModel = new CommodityByIdModel();
         Integer notAvailableCommodityId = 7;

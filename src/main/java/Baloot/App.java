@@ -1,9 +1,15 @@
 package Baloot;
 
 import Baloot.Commands.UsernameValidation;
+import Baloot.Context.ContextManager;
 import Baloot.Exception.InvalidCommand;
+import Baloot.Model.view.Component;
 import Baloot.Validation.Username;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import io.javalin.Javalin;
+import io.javalin.http.Handler;
+import io.javalin.http.HandlerType;
 import org.reflections.Reflections;
 
 import java.io.BufferedReader;
@@ -20,19 +26,44 @@ public class App {
     public static void main(String[] args) {
         boolean exit = false;
         Reflections reflections = new Reflections("Baloot");
-        handlers = reflections.getTypesAnnotatedWith(Route.class);
-        while (!exit) {
-            try {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-//                String cmd = System.console().readLine();
-                String cmd = reader.readLine();
-                handle(cmd);
-            } catch (Exception exception) {
-                System.out.println(exception.getMessage());
+        Javalin app = Javalin.create();
+
+        Set<Class<?>> handlers = reflections.getTypesAnnotatedWith(Route.class);
+        for (Class<?> handler : handlers) {
+            Route route = handler.getAnnotation(Route.class);
+            app.addHandler(HandlerType.GET, route.value(), (Handler) new RequestHandler(handler));
+        }
+
+        app.start(7070);
+    }
+}
+
+    class RequestHandler implements Handler {
+        private Class<?> command;
+
+        public RequestHandler(Class<?> _command) {
+            command = _command;
+        }
+
+        @Override
+        public void handle(io.javalin.http.Context context) throws java.lang.Exception {
+            Gson gson = new GsonBuilder()
+                    .setDateFormat("yyyy-MM-dd")
+                    .serializeNulls()
+                    .create();
+
+            String body = gson.toJson(context.pathParamMap());
+            Object response = CallMethod(command, RequestMethod.valueOf(context.req.getMethod()), body);
+
+            if(response instanceof Component){
+                Component component = (Component)response;
+                String output = component.render();
+                context.res.setStatus(200);
+                context.html(output);
             }
         }
-    }
-    private static void validate(Object model) throws Exception {
+
+        private static void validate(Object model) throws Exception {
         Field[] fields = model.getClass().getFields();
         for (Field field : fields) {
 
@@ -43,37 +74,6 @@ public class App {
                 }
             }
         }
-    }
-    private static void handle(String cmd) {
-        String[] segments = cmd.split(" ", 2);
-        ResponseModel resposne = new ResponseModel();
-        Gson gson = new Gson();
-
-        resposne.success = false;
-        resposne.data = new InvalidCommand().getMessage();
-
-        for (Class<?> handler : handlers) {
-            Route annotation = handler.getAnnotation(Route.class);
-            if (!annotation.value().equals(segments[0])) {
-                continue;
-            }
-            try {
-                String data = segments.length > 1 ? segments[1] : "";
-                Object result = CallMethod(handler, RequestMethod.GET, data);
-                // { success : true , result }
-                resposne.success = true;
-                resposne.data = result;
-                break;
-            } catch (InvocationTargetException e) {
-                // { success : false, error }
-                resposne.success = false;
-                resposne.data = e.getTargetException().getMessage();
-                break;
-            } catch (Exception e) {
-            }
-        }
-
-        System.out.println(gson.toJson(resposne));
     }
 
     private static Object CallMethod(Class<?> handler, RequestMethod requestMethod, String body) throws Exception {

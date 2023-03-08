@@ -8,12 +8,12 @@ import Baloot.Model.CommodityByIdModel;
 import Baloot.RequestMethod;
 import Baloot.Route;
 
-import Baloot.Model.ReportCommodityModel;
+import Baloot.Model.CommodityShortModel;
 
 @Route("getCommodityById")
 public class GetCommodityById extends Command{
     @AcceptMethod(RequestMethod.GET)
-    public ReportCommodityModel handle(CommodityByIdModel input) throws Exception, CommodityNotFound {
+    public CommodityShortModel handle(CommodityByIdModel input) throws Exception, CommodityNotFound {
         Commodity commodity = ContextManager.getCommodity(input.id);
         return commodity.getReportModel();
     }

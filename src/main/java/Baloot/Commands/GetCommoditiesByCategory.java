@@ -14,7 +14,7 @@ import Baloot.Route;
 import java.util.ArrayList;
 import java.util.Collection;
 
-@Route("getCommoditiesByCategory")
+@Route("getCommoditiesByCategory/{categories}")
 public class GetCommoditiesByCategory extends Command {
     @AcceptMethod(RequestMethod.GET)
     public CommoditiesListByCategoryModel handle(CategoryModel input) {

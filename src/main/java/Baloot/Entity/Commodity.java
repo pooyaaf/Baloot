@@ -3,7 +3,7 @@ package Baloot.Entity;
 
 import Baloot.Exception.CommodityNotInStuck;
 import Baloot.Model.view.CommodityModel;
-import Baloot.Model.ReportCommodityModel;
+import Baloot.Model.CommodityShortModel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -56,8 +56,8 @@ public class Commodity {
         return model;
     }
 
-    public ReportCommodityModel getReportModel() {
-        ReportCommodityModel model = new ReportCommodityModel();
+    public CommodityShortModel getReportModel() {
+        CommodityShortModel model = new CommodityShortModel();
         model.id = id;
         model.name = name;
         model.providerId = providerId;

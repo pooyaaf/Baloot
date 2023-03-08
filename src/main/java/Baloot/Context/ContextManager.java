@@ -8,6 +8,13 @@ import Baloot.Exception.CategoryNotFound;
 import Baloot.Exception.CommodityNotFound;
 import Baloot.Exception.ProviderNotFound;
 import Baloot.Exception.UserNotFound;
+import Baloot.Model.ProviderModel;
+import Baloot.Model.UserModel;
+import Baloot.Model.view.CommodityModel;
+import Baloot.Validation.IgnoreFailureTypeAdapterFactory;
+import Baloot.service.Http;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -17,6 +24,45 @@ public class ContextManager {
     private static HashMap<String, User> users = new HashMap<>();
     private static HashMap<Integer, Provider> providers = new HashMap<>();
     private static HashMap<Integer, Commodity> commodities = new HashMap<>();
+
+
+
+
+    public static void initialize() {
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd")
+                .registerTypeAdapterFactory(new IgnoreFailureTypeAdapterFactory())
+                .create();
+
+        String users = Http.Get("users");
+        UserModel[] userArray = gson.fromJson(users, UserModel[].class);
+        for (UserModel model : userArray) {
+            User user = new User(model);
+            putUser(model.username, user);
+        }
+
+        String commodities = Http.Get("commodities");
+        CommodityModel[] commodityArray = gson.fromJson(commodities, CommodityModel[].class);
+        for (CommodityModel model : commodityArray) {
+            Commodity commodity = new Commodity(model);
+            putCommodity(model.id, commodity);
+        }
+
+        String providers = Http.Get("providers");
+        ProviderModel[] providersArray = gson.fromJson(providers, ProviderModel[].class);
+        for (ProviderModel model : providersArray) {
+            Provider provider = new Provider(model);
+            putProvider(model.id, provider);
+        }
+        //todo - comment model should be add
+
+//        String comments = Http.Get("comments");
+//        CommentModel[] commentsArray = gson.fromJson(comments, CommentModel[].class);
+//        for (CommentModel model : commentsArray) {
+//        }
+    }
+
+
     public static void resetContext() {
         categories.clear();
         commodities.clear();

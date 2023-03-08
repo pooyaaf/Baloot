@@ -1,9 +1,7 @@
 package Baloot;
 
 import Baloot.Commands.GetCommoditiesByCategory;
-import Baloot.Context.ContextManager;
 import Baloot.Model.*;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,7 +29,7 @@ public class GetCommoditiesByCategoryTest {
     public void getCommoditiesByCategory_ShouldSuccessful() {
         CategoryModel categoryModel = new CategoryModel();
         categoryModel.category = category;
-        ReportCommodityModel expectedModel = generateReportCommodityModel(1, "Product A", 1, 10.0, new String[]{"Phone"}, 4.0);
+        CommodityShortModel expectedModel = generateReportCommodityModel(1, "Product A", 1, 10.0, new String[]{"Phone"}, 4.0);
         GetCommoditiesByCategory command = new GetCommoditiesByCategory();
 
 

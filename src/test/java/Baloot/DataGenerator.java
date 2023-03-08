@@ -6,12 +6,12 @@ import Baloot.Entity.Provider;
 import Baloot.Entity.User;
 import Baloot.Model.view.CommodityModel;
 import Baloot.Model.ProviderModel;
-import Baloot.Model.ReportCommodityModel;
+import Baloot.Model.CommodityShortModel;
 import Baloot.Model.UserModel;
 
 class DataGenerator {
-    static public ReportCommodityModel generateReportCommodityModel(int id, String name, int providerId, double price, String[] categories, double rating) {
-        ReportCommodityModel reportCommodityModel = new ReportCommodityModel();
+    static public CommodityShortModel generateReportCommodityModel(int id, String name, int providerId, double price, String[] categories, double rating) {
+        CommodityShortModel reportCommodityModel = new CommodityShortModel();
         reportCommodityModel.id = id;
         reportCommodityModel.name = name;
         reportCommodityModel.providerId = providerId;
