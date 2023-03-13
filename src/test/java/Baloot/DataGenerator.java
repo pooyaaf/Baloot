@@ -6,18 +6,20 @@ import Baloot.Entity.Provider;
 import Baloot.Entity.User;
 import Baloot.Model.view.CommodityModel;
 import Baloot.Model.ProviderModel;
-import Baloot.Model.CommodityShortModel;
+import Baloot.Model.view.CommodityShortModel;
 import Baloot.Model.UserModel;
 
 class DataGenerator {
-    static public CommodityShortModel generateReportCommodityModel(int id, String name, int providerId, double price, String[] categories, double rating) {
+    static public CommodityShortModel generateReportCommodityModel(int id, String name, int providerId, double price, String[] categories, double rating, int inStock) {
         CommodityShortModel reportCommodityModel = new CommodityShortModel();
-        reportCommodityModel.id = id;
-        reportCommodityModel.name = name;
-        reportCommodityModel.providerId = providerId;
-        reportCommodityModel.price = price;
-        reportCommodityModel.categories = categories;
-        reportCommodityModel.rating = rating;
+        reportCommodityModel.commodityModel = new CommodityModel();
+        reportCommodityModel.commodityModel.id = id;
+        reportCommodityModel.commodityModel.name = name;
+        reportCommodityModel.commodityModel.providerId = providerId;
+        reportCommodityModel.commodityModel.price = price;
+        reportCommodityModel.commodityModel.categories = categories;
+        reportCommodityModel.commodityModel.rating = rating;
+        reportCommodityModel.commodityModel.inStock = inStock;
         return reportCommodityModel;
     }
 

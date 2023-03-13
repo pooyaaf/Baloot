@@ -2,8 +2,8 @@ package Baloot;
 
 import Baloot.Commands.GetCommodityById;
 import Baloot.Exception.CommodityNotFound;
-import Baloot.Model.CommodityByIdModel;
-import Baloot.Model.CommodityShortModel;
+import Baloot.Model.view.CommodityByIdModel;
+import Baloot.Model.view.CommodityShortModel;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,10 +23,10 @@ public class GetCommodityByIdTest {
 
     @Test
     public void getCommodityById_ShouldReturnExpectedCommodityInfo() throws CommodityNotFound, Exception {
-        CommodityShortModel expectedModel = generateReportCommodityModel(1, "Product A", 1, 10.0, new String[]{"Phone"}, 4.0);
+        CommodityShortModel expectedModel = generateReportCommodityModel(1, "Product A", 1, 10.0, new String[]{"Phone"}, 4.0, 100);
 
         CommodityByIdModel inputModel = new CommodityByIdModel();
-        inputModel.id = commodityId;
+        inputModel.commodity_id = String.valueOf(commodityId);
 
         GetCommodityById command = new GetCommodityById();
 
@@ -39,11 +39,11 @@ public class GetCommodityByIdTest {
 
     @Test(expected = CommodityNotFound.class)
     public void getCommodityById_IfIdNotAvailableCommodityNotFound_Throws() throws Exception, CommodityNotFound {
-        CommodityShortModel expectedModel = generateReportCommodityModel(1, "Product A", 1, 10.0, new String[]{"Phone"}, 4.0);
+        CommodityShortModel expectedModel = generateReportCommodityModel(1, "Product A", 1, 10.0, new String[]{"Phone"}, 4.0, 100);
 
         CommodityByIdModel inputModel = new CommodityByIdModel();
         Integer notAvailableCommodityId = 7;
-        inputModel.id = notAvailableCommodityId;
+        inputModel.commodity_id = String.valueOf(notAvailableCommodityId);
 
         GetCommodityById command = new GetCommodityById();
 
@@ -65,7 +65,7 @@ public class GetCommodityByIdTest {
 
         // Set the input model's id to null
         CommodityByIdModel inputModel = new CommodityByIdModel();
-        inputModel.id = Integer.parseInt(null);
+        inputModel.commodity_id = null;
         command.handle(inputModel);
     }
 }
