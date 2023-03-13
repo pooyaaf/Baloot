@@ -5,7 +5,7 @@ import Baloot.Commands.Command;
 import Baloot.Context.ContextManager;
 import Baloot.Entity.Commodity;
 import Baloot.Exception.ProviderNotFound;
-import Baloot.Model.view.CommodityModel;
+import Baloot.Model.CommodityModel;
 import Baloot.RequestMethod;
 import Baloot.Route;
 

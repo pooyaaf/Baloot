@@ -4,7 +4,7 @@ import Baloot.Context.ContextManager;
 import Baloot.Entity.Commodity;
 import Baloot.Entity.Provider;
 import Baloot.Entity.User;
-import Baloot.Model.view.CommodityModel;
+import Baloot.Model.CommodityModel;
 import Baloot.Model.ProviderModel;
 import Baloot.Model.view.CommodityShortModel;
 import Baloot.Model.UserModel;

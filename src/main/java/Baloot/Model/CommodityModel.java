@@ -1,4 +1,4 @@
-package Baloot.Model.view;
+package Baloot.Model;
 
 import java.util.List;
 

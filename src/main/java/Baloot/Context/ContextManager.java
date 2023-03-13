@@ -10,7 +10,7 @@ import Baloot.Exception.ProviderNotFound;
 import Baloot.Exception.UserNotFound;
 import Baloot.Model.ProviderModel;
 import Baloot.Model.UserModel;
-import Baloot.Model.view.CommodityModel;
+import Baloot.Model.CommodityModel;
 import Baloot.Validation.IgnoreFailureTypeAdapterFactory;
 import Baloot.service.Http;
 import com.google.gson.Gson;
@@ -40,6 +40,13 @@ public class ContextManager {
             putUser(model.username, user);
         }
 
+        String providers = Http.Get("providers");
+        ProviderModel[] providersArray = gson.fromJson(providers, ProviderModel[].class);
+        for (ProviderModel model : providersArray) {
+            Provider provider = new Provider(model);
+            putProvider(model.id, provider);
+        }
+
         String commodities = Http.Get("commodities");
         CommodityModel[] commodityArray = gson.fromJson(commodities, CommodityModel[].class);
         for (CommodityModel model : commodityArray) {
@@ -47,12 +54,6 @@ public class ContextManager {
             putCommodity(model.id, commodity);
         }
 
-        String providers = Http.Get("providers");
-        ProviderModel[] providersArray = gson.fromJson(providers, ProviderModel[].class);
-        for (ProviderModel model : providersArray) {
-            Provider provider = new Provider(model);
-            putProvider(model.id, provider);
-        }
         //todo - comment model should be add
 
 //        String comments = Http.Get("comments");
@@ -109,9 +110,17 @@ public class ContextManager {
         }
     }
 
+    public static void updateProvider(Commodity commodity) {
+        Integer providerId = commodity.getProviderId();
+        if (providers.containsKey(providerId)) {
+            Provider provider = providers.get(providerId);
+            provider.addCommodity(commodity);
+        }
+    }
     public static void putCommodity(Integer id, Commodity commodity) {
         commodities.put(id, commodity);
         updateCategories(commodity);
+        updateProvider(commodity);
     }
 
     public static Commodity getCommodity(Integer id) throws Exception, CommodityNotFound {

@@ -2,7 +2,7 @@ package Baloot.Entity;
 
 
 import Baloot.Exception.CommodityNotInStuck;
-import Baloot.Model.view.CommodityModel;
+import Baloot.Model.CommodityModel;
 import Baloot.Model.view.CommodityShortModel;
 import lombok.Getter;
 import lombok.Setter;

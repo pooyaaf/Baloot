@@ -4,8 +4,7 @@ import Baloot.AcceptMethod;
 import Baloot.Context.ContextManager;
 import Baloot.Entity.Commodity;
 import Baloot.Exception.CommodityNotFound;
-import Baloot.Model.view.CommodityByIdModel;
-import Baloot.Model.view.CommodityModel;
+import Baloot.Model.CommodityByIdModel;
 import Baloot.RequestMethod;
 import Baloot.Route;
 
