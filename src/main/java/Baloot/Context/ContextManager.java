@@ -27,8 +27,6 @@ public class ContextManager {
     private static HashMap<Integer, Commodity> commodities = new HashMap<>();
 
 
-
-
     public static void initialize() {
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd")
@@ -70,6 +68,7 @@ public class ContextManager {
         users.clear();
         providers.clear();
     }
+
     public static void putUser(String username, User user) {
         users.put(username, user);
     }

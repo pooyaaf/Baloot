@@ -11,7 +11,6 @@ import io.javalin.Javalin;
 import io.javalin.http.Handler;
 import io.javalin.http.HandlerType;
 import org.reflections.Reflections;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.lang.annotation.Annotation;
@@ -27,7 +26,7 @@ public class App {
         boolean exit = false;
         Reflections reflections = new Reflections("Baloot");
         Javalin app = Javalin.create();
-
+        ContextManager.initialize();
         Set<Class<?>> handlers = reflections.getTypesAnnotatedWith(Route.class);
         for (Class<?> handler : handlers) {
             Route route = handler.getAnnotation(Route.class);
