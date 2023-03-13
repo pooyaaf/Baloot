@@ -16,7 +16,6 @@ public class ProviderViewModel implements Component{
     private String generateHtmlTableRow(CommodityModel commodityModel) {
         String row = "<td>" + commodityModel.id.toString() + "</td>\n" +
                         "<td>" + commodityModel.name + "</td>\n" +
-                        "<td>" + commodityModel.providerId.toString() + "</td>\n" +
                         "<td>" + String.valueOf(commodityModel.price) + "</td>\n" +
                         "<td>" + String.join(", ", commodityModel.categories) + "</td>\n" +
                         "<td>" + String.valueOf(commodityModel.rating) + "</td>\n" +
