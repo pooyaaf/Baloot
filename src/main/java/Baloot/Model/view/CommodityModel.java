@@ -3,13 +3,13 @@ package Baloot.Model.view;
 import java.util.List;
 
 public class CommodityModel {
-    public int id;
+    public Integer id;
     public String name;
-    public int providerId;
+    public Integer providerId;
     public double price;
     public String[] categories;
     public double rating;
-    public int inStock;
+    public Integer inStock;
 
 
 }
