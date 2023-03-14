@@ -8,3 +8,9 @@ import java.lang.annotation.*;
 public @interface Route {
     String value();
 }
+
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@interface RouteContainer {
+    Route[] value();
+}

@@ -35,10 +35,14 @@ public class App {
         ContextManager.initialize();
 
         Javalin app = Javalin.create();
-        Set<Class<?>> handlers = reflections.getTypesAnnotatedWith(Route.class);
+        Set<Class<?>> handlers = reflections.getTypesAnnotatedWith(RouteContainer.class);
+        handlers.addAll(reflections.getTypesAnnotatedWith(Route.class));
         for (Class<?> handler : handlers) {
-            Route route = handler.getAnnotation(Route.class);
-            app.addHandler(HandlerType.GET, route.value(), new RequestHandler(handler));
+            Route[] routes = handler.getAnnotationsByType(Route.class);
+            for (Route route : routes) {
+                app.get(route.value(), new RequestHandler(handler));
+                app.post(route.value(), new RequestHandler(handler));
+            }
             app.error(404, ctx -> {
                 ctx.html(getCodeResponse(404));
             });
