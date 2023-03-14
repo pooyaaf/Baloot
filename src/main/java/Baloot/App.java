@@ -21,6 +21,9 @@ import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class App {
@@ -65,10 +68,10 @@ public class App {
                     .serializeNulls()
                     .create();
 
-            String body = gson.toJson(context.pathParamMap());
+            String body = gson.toJson(bind(context));
             try {
                 Object response = CallMethod(command, RequestMethod.valueOf(context.req.getMethod()), body);
-                context.res.setStatus(200  );
+                context.res.setStatus(200);
 
                 if (response instanceof Component) {
                     Component component = (Component) response;
@@ -96,7 +99,24 @@ public class App {
             }
         }
     }
-
+        private static void AddAll(Map<String, Object> map, Map<String, List<String>> data) {
+            if (data == null)
+                return;
+            for (Map.Entry<String, List<String>> entry : data.entrySet()) {
+                if (entry.getValue().size() == 1) {
+                    map.put(entry.getKey(), entry.getValue().get(0));
+                } else {
+                    map.put(entry.getKey(), entry.getValue());
+                }
+            }
+        }
+        private static Map<String, Object> bind(io.javalin.http.Context context) {
+            Map<String, Object> params = new HashMap<>();
+            AddAll(params, context.formParamMap());
+            AddAll(params, context.queryParamMap());
+            params.putAll(context.pathParamMap());
+            return params;
+        }
     private static Object CallMethod(Class<?> handler, RequestMethod requestMethod, String body) throws Exception {
         Method[] methods = handler.getMethods();
         Object result = null;
