@@ -2,6 +2,7 @@ package Baloot;
 
 import Baloot.Commands.UsernameValidation;
 import Baloot.Context.ContextManager;
+import Baloot.Exception.HttpException;
 import Baloot.Exception.InvalidCommand;
 import Baloot.Model.view.Component;
 import Baloot.Validation.Username;
@@ -17,6 +18,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Set;
 
 public class App {
@@ -25,15 +29,25 @@ public class App {
     public static void main(String[] args) {
         boolean exit = false;
         Reflections reflections = new Reflections("Baloot");
-        Javalin app = Javalin.create();
         ContextManager.initialize();
+
+        Javalin app = Javalin.create();
         Set<Class<?>> handlers = reflections.getTypesAnnotatedWith(Route.class);
         for (Class<?> handler : handlers) {
             Route route = handler.getAnnotation(Route.class);
-            app.addHandler(HandlerType.GET, route.value(), (Handler) new RequestHandler(handler));
+            app.addHandler(HandlerType.GET, route.value(), new RequestHandler(handler));
+            app.error(404, ctx -> {
+                ctx.html(getCodeResponse(404));
+            });
+            app.error(403, ctx -> {
+                ctx.html(getCodeResponse(403));
+            });
         }
-
         app.start(7070);
+    }
+    public static String getCodeResponse(Integer code) throws Exception {
+        Path path = Paths.get("src/main/resources/templates", code + ".html");
+        return Files.readString(path);
     }
 }
 
@@ -52,14 +66,22 @@ public class App {
                     .create();
 
             String body = gson.toJson(context.pathParamMap());
-            Object response = CallMethod(command, RequestMethod.valueOf(context.req.getMethod()), body);
+            try {
+                Object response = CallMethod(command, RequestMethod.valueOf(context.req.getMethod()), body);
+                context.res.setStatus(200  );
 
-            if(response instanceof Component){
-                Component component = (Component)response;
-                String output = component.render();
-                context.res.setStatus(200);
-                context.html(output);
+                if (response instanceof Component) {
+                    Component component = (Component) response;
+                    String output = component.render();
+                    context.html(output);
+                }
+                else{
+                    context.html(App.getCodeResponse(200));
+                }
+            } catch (HttpException e) {
+                context.res.setStatus(e.getStatus());
             }
+
         }
 
         private static void validate(Object model) throws Exception {
