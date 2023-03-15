@@ -2,6 +2,7 @@ package Baloot.Entity;
 
 import Baloot.Exception.CommodityIsNotInBuyList;
 import Baloot.Model.UserModel;
+import Baloot.Model.view.UserInfoModel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -52,5 +53,17 @@ public class User {
 
     public Collection<Commodity> getBuyList() {
         return buyList.values();
+    }
+
+    public UserInfoModel getUserInfoModel() {
+        UserInfoModel userInfoModel = new UserInfoModel();
+        userInfoModel.userModel = new UserModel();
+        userInfoModel.userModel.username = username;
+        userInfoModel.userModel.password = password;
+        userInfoModel.userModel.credit = credit;
+        userInfoModel.userModel.birthDate = birthDate;
+        userInfoModel.userModel.email = email;
+        userInfoModel.userModel.address = address;
+        return userInfoModel;
     }
 }
