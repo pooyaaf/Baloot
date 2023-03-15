@@ -66,4 +66,10 @@ public class User {
         userInfoModel.userModel.address = address;
         return userInfoModel;
     }
+
+    public void addCredit(int credit) {
+        if (credit > 0) {
+            this.credit += credit;
+        }
+    }
 }
