@@ -12,7 +12,7 @@ public class CommodityShortModel implements Component {
 
     @Override
     public String render() {
-        File in = new File("src/main/java/Baloot/templates/Commodity.html");
+        File in = new File("src/main/resources/templates/Commodity.html");
         try {
             Document doc = Jsoup.parse(in, "UTF-8");
             doc.getElementById("id").text("Id: " + commodityModel.id.toString());

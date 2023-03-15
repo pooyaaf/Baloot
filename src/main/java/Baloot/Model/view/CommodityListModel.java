@@ -25,7 +25,7 @@ public class CommodityListModel implements Component{
         return row;
     }
     public String render() {
-        File in = new File("src/main/java/Baloot/templates/Commodities.html");
+        File in = new File("src/main/resources/templates/Commodities.html");
         try {
             Document doc = Jsoup.parse(in, "UTF-8");
             Element table = doc.getElementsByTag("table").first();

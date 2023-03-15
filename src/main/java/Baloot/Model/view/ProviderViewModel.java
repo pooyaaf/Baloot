@@ -25,7 +25,7 @@ public class ProviderViewModel implements Component{
     }
     @Override
     public String render() {
-        File in = new File("src/main/java/Baloot/templates/Provider.html");
+        File in = new File("src/main/resources/templates/Provider.html");
         try {
             Document doc = Jsoup.parse(in, "UTF-8");
             Element table = doc.getElementsByTag("table").first();
