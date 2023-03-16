@@ -1,13 +1,8 @@
 package Baloot.Context;
 
-import Baloot.Entity.Category;
-import Baloot.Entity.Commodity;
-import Baloot.Entity.Provider;
-import Baloot.Entity.User;
-import Baloot.Exception.CategoryNotFound;
-import Baloot.Exception.CommodityNotFound;
-import Baloot.Exception.ProviderNotFound;
-import Baloot.Exception.UserNotFound;
+import Baloot.Entity.*;
+import Baloot.Exception.*;
+import Baloot.Model.CommentModel;
 import Baloot.Model.ProviderModel;
 import Baloot.Model.UserModel;
 import Baloot.Model.CommodityModel;
@@ -25,7 +20,7 @@ public class ContextManager {
     private static HashMap<String, User> users = new HashMap<>();
     private static HashMap<Integer, Provider> providers = new HashMap<>();
     private static HashMap<Integer, Commodity> commodities = new HashMap<>();
-
+    private static HashMap<Integer, Comment> comments = new HashMap<>();
 
     public static void initialize() {
         Gson gson = new GsonBuilder()
@@ -54,12 +49,12 @@ public class ContextManager {
             putCommodity(model.id, commodity);
         }
 
-        //todo - comment model should be add
-
-//        String comments = Http.Get("comments");
-//        CommentModel[] commentsArray = gson.fromJson(comments, CommentModel[].class);
-//        for (CommentModel model : commentsArray) {
-//        }
+        String commentsString = Http.Get("comments");
+        CommentModel[] commentsArray = gson.fromJson(commentsString, CommentModel[].class);
+        for (CommentModel model : commentsArray) {
+            Comment comment = new Comment(model);
+            putComment(comment.getId(), comment);
+        }
     }
 
 
@@ -117,6 +112,7 @@ public class ContextManager {
             provider.addCommodity(commodity);
         }
     }
+
     public static void putCommodity(Integer id, Commodity commodity) {
         commodities.put(id, commodity);
         updateCategories(commodity);
@@ -130,10 +126,10 @@ public class ContextManager {
         return commodities.get(id);
     }
 
-    //
     public static Collection<Commodity> getAllCommodities() {
         return commodities.values();
     }
+
     public static Collection<Commodity> getCommodityByCategory(String category) {
         ArrayList<Commodity> result = new ArrayList<>();
 
@@ -144,5 +140,25 @@ public class ContextManager {
         }
 
         return result;
+    }
+
+    public static void updateCommodity(Comment comment) {
+        Integer commodityId = comment.getCommodityId();
+        if (commodities.containsKey(commodityId)) {
+            Commodity commodity = commodities.get(commodityId);
+            commodity.putComment(comment);
+        }
+    }
+
+    public static void putComment(Integer id, Comment comment) {
+        comments.put(id, comment);
+        updateCommodity(comment);
+    }
+
+    public static Comment getComment(Integer id) throws CommentNotFound {
+        if (!comments.containsKey(id)) {
+            throw new CommentNotFound();
+        }
+        return comments.get(id);
     }
 }

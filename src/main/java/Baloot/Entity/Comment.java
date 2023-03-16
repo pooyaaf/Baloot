@@ -1,15 +1,20 @@
 package Baloot.Entity;
 
 import Baloot.Model.CommentModel;
+import Baloot.Model.CommentReportModel;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 import java.util.HashMap;
 
-public class Comment {private static Integer idCounter = 1;
+public class Comment {
+    private static Integer idCounter = 1;
 
     Integer id;
+    @Getter
     Integer commodityId;
-    String userName;
+    String userEmail;
     String text;
     Date date;
     HashMap<String, Integer> votes = new HashMap<>();
@@ -21,13 +26,14 @@ public class Comment {private static Integer idCounter = 1;
     }
 
     public String getuserName() {
-        return userName;
+        return userEmail;
     }
 
     public String getText() {
         return text;
     }
-    public Date getDate(){
+
+    public Date getDate() {
         return date;
     }
 
@@ -35,9 +41,9 @@ public class Comment {private static Integer idCounter = 1;
         super();
         id = idCounter++;
         commodityId = model.commodityId;
-        userName = model.userName;
+        userEmail = model.userEmail;
         text = model.text;
-        date = new Date();
+        date = model.date;
     }
 
     public void addVote(Integer vote, String userName) {
@@ -61,6 +67,16 @@ public class Comment {private static Integer idCounter = 1;
 
     public Integer getDislikes() {
         return dislikes;
+    }
+
+    public CommentReportModel getReportModel() {
+        CommentReportModel commentReportModel = new CommentReportModel();
+        commentReportModel.userEmail = userEmail;
+        commentReportModel.text = text;
+        commentReportModel.date = date;
+        commentReportModel.like = likes;
+        commentReportModel.dislike = dislikes;
+        return commentReportModel;
     }
 
 }

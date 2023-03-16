@@ -1,12 +1,17 @@
 package Baloot.Entity;
 
 
+import Baloot.Context.ContextManager;
 import Baloot.Exception.CommodityNotInStuck;
+import Baloot.Model.CommentReportModel;
 import Baloot.Model.CommodityModel;
+import Baloot.Model.view.CommodityListModel;
 import Baloot.Model.view.CommodityShortModel;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 public class Commodity {
@@ -32,6 +37,7 @@ public class Commodity {
     @Setter
     private int inStock;
     HashMap<String, Integer> userRates = new HashMap<>();
+    private HashMap<Integer, Comment> comments;
 
     public Commodity(CommodityModel model) {
         super();
@@ -42,6 +48,7 @@ public class Commodity {
         categories = model.categories;
         rating = model.rating;
         inStock = model.inStock;
+        comments = new HashMap<>();
     }
 
     public CommodityModel getModel() {
@@ -58,6 +65,7 @@ public class Commodity {
 
     public CommodityShortModel getReportModel() {
         CommodityShortModel model = new CommodityShortModel();
+        model.commentsList = new ArrayList<>();
         model.commodityModel = new CommodityModel();
         model.commodityModel.id = id;
         model.commodityModel.name = name;
@@ -66,6 +74,7 @@ public class Commodity {
         model.commodityModel.categories = categories;
         model.commodityModel.rating = rating;
         model.commodityModel.inStock = inStock;
+        model.commentsList = getCommentsList();
         return model;
     }
 
@@ -87,6 +96,7 @@ public class Commodity {
             throw new CommodityNotInStuck();
         inStock -= 1;
     }
+
     public Double getRate() {
         return rating;
     }
@@ -98,5 +108,17 @@ public class Commodity {
             }
         }
         return false;
+    }
+
+    public void putComment(Comment comment) {
+        comments.put(comment.getId(), comment);
+    }
+
+    public ArrayList<CommentReportModel> getCommentsList() {
+        ArrayList<CommentReportModel> result = new ArrayList<>();
+        for (Comment comment : comments.values()) {
+            result.add(comment.getReportModel());
+        }
+        return result;
     }
 }
