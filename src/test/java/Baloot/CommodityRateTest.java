@@ -3,7 +3,6 @@ package Baloot;
 import Baloot.Commands.RateCommodity;
 import Baloot.Context.ContextManager;
 import Baloot.Entity.Commodity;
-import Baloot.Entity.User;
 import Baloot.Exception.CommodityNotFound;
 import Baloot.Exception.InvalidRateScore;
 import Baloot.Exception.UserNotFound;
@@ -39,7 +38,7 @@ public class CommodityRateTest {
     public void rateCommodity_SuccessfulRating() throws UserNotFound, CommodityNotFound, Exception {
         RateModel model = new RateModel();
         model.commodityId = commodityId;
-        model.score = 8;
+        model.rate = 8;
         model.username = username;
 
         RateCommodity command = new RateCommodity();
@@ -56,7 +55,7 @@ public class CommodityRateTest {
     public void rateCommodity_RateOutOfRangeLow_Throws() throws Exception, UserNotFound, CommodityNotFound {
         RateModel model = new RateModel();
         model.commodityId = commodityId;
-        model.score = -1;
+        model.rate = -1;
         model.username = username;
         RateCommodity command = new RateCommodity();
 
@@ -66,7 +65,7 @@ public class CommodityRateTest {
     public void rateCommodity_RateOutOfRangeHigh_Throws() throws Exception, UserNotFound, CommodityNotFound {
         RateModel model = new RateModel();
         model.commodityId = commodityId;
-        model.score = 11;
+        model.rate = 11;
         model.username = username;
         RateCommodity command = new RateCommodity();
 
@@ -76,7 +75,7 @@ public class CommodityRateTest {
     public void rateCommodity_CommodityNotFound_Throws() throws Exception, UserNotFound, CommodityNotFound {
         RateModel model = new RateModel();
         model.commodityId = commodityId+100;
-        model.score = 8;
+        model.rate = 8;
         model.username = username;
         RateCommodity command = new RateCommodity();
 
@@ -86,7 +85,7 @@ public class CommodityRateTest {
     public void rateCommodity_UserNotFound_Throws() throws Exception, UserNotFound, CommodityNotFound {
         RateModel model = new RateModel();
         model.commodityId = commodityId;
-        model.score = 8;
+        model.rate = 8;
         model.username = username+"NotIn";
         RateCommodity command = new RateCommodity();
 
