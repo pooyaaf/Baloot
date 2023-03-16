@@ -5,9 +5,9 @@ import Baloot.Context.ContextManager;
 import Baloot.Entity.Category;
 import Baloot.Entity.Commodity;
 import Baloot.Exception.CategoryNotFound;
-import Baloot.Exception.UserNotFound;
 import Baloot.Model.CategoryModel;
 import Baloot.Model.CommoditiesListByCategoryModel;
+import Baloot.Model.view.CommodityListModel;
 import Baloot.RequestMethod;
 import Baloot.Route;
 
@@ -17,14 +17,14 @@ import java.util.Collection;
 @Route("commodities/search/{categories}")
 public class GetCommoditiesByCategory extends Command {
     @AcceptMethod(RequestMethod.GET)
-    public CommoditiesListByCategoryModel handle(CategoryModel input) {
-        CommoditiesListByCategoryModel result = new CommoditiesListByCategoryModel();
-        result.commoditiesListByCategory = new ArrayList<>();
+    public CommodityListModel handle(CategoryModel input) {
+        CommodityListModel result = new CommodityListModel();
+        result.commoditiesList = new ArrayList<>();
         try {
-            Category category = ContextManager.getCategory(input.category);
+            Category category = ContextManager.getCategory(input.categories);
             Collection<Commodity> commodities = category.getAllCommodity();
             for (Commodity commodity : commodities) {
-                result.commoditiesListByCategory.add(commodity.getReportModel());
+                result.commoditiesList.add(commodity.getModel());
             }
             return result;
         }

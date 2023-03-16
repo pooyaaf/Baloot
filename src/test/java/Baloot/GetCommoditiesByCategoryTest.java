@@ -2,6 +2,7 @@ package Baloot;
 
 import Baloot.Commands.GetCommoditiesByCategory;
 import Baloot.Model.*;
+import Baloot.Model.view.CommodityListModel;
 import Baloot.Model.view.CommodityShortModel;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,14 +30,14 @@ public class GetCommoditiesByCategoryTest {
     @Test
     public void getCommoditiesByCategory_ShouldSuccessful() {
         CategoryModel categoryModel = new CategoryModel();
-        categoryModel.category = category;
+        categoryModel.categories = category;
         CommodityShortModel expectedModel = generateReportCommodityModel(1, "Product A", 1, 10.0, new String[]{"Phone"}, 4.0, inStuck);
         GetCommoditiesByCategory command = new GetCommoditiesByCategory();
 
 
-        CommoditiesListByCategoryModel commoditiesListByCategoryModel = command.handle(categoryModel);
-        assertEquals(1, commoditiesListByCategoryModel.commoditiesListByCategory.size());
-        assertThat(commoditiesListByCategoryModel.commoditiesListByCategory.get(0))
+        CommodityListModel commodityListModel = command.handle(categoryModel);
+        assertEquals(1, commodityListModel.commoditiesList.size());
+        assertThat(commodityListModel.commoditiesList.get(0))
                 .usingRecursiveComparison()
                 .isEqualTo(expectedModel);
     }
@@ -44,20 +45,20 @@ public class GetCommoditiesByCategoryTest {
     @Test
     public void getCommoditiesByCategory_ifCategoryNotExistOutputDataShouldEmpty() {
         CategoryModel categoryModel = new CategoryModel();
-        categoryModel.category = category + "notIn";
+        categoryModel.categories = category + "notIn";
         GetCommoditiesByCategory command = new GetCommoditiesByCategory();
 
-        CommoditiesListByCategoryModel commoditiesListByCategoryModel = command.handle(categoryModel);
-        assertEquals(0, commoditiesListByCategoryModel.commoditiesListByCategory.size());
+        CommodityListModel commodityListModel = command.handle(categoryModel);
+        assertEquals(0, commodityListModel.commoditiesList.size());
     }
     @Test
     public void getCommoditiesByCategory_ifNoCommoditiesInCategory_ShouldReturnEmptyList() {
         CategoryModel categoryModel = new CategoryModel();
-        categoryModel.category = "Non-existent category";
+        categoryModel.categories = "Non-existent category";
         GetCommoditiesByCategory command = new GetCommoditiesByCategory();
 
-        CommoditiesListByCategoryModel commoditiesListByCategoryModel = command.handle(categoryModel);
-        assertThat(commoditiesListByCategoryModel.commoditiesListByCategory).isEmpty();
+        CommodityListModel commodityListModel = command.handle(categoryModel);
+        assertThat(commodityListModel.commoditiesList).isEmpty();
     }
 
 

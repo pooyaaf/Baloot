@@ -1,5 +1,5 @@
 package Baloot.Model;
 
 public class CategoryModel {
-    public String category;
+    public String categories;
 }

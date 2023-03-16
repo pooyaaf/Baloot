@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Route("commodities/search/{start_price}/{end_price}")
-public class CommoditiesListByPriceRange extends Command {
+public class GetCommoditiesByPriceRange extends Command {
     @AcceptMethod(RequestMethod.GET)
     public CommodityListModel handle(CommoditiesListByPriceRangeModel input){
         Collection<Commodity> commodities = ContextManager.getAllCommodities();
