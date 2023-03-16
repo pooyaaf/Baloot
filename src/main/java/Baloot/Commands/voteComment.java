@@ -15,7 +15,7 @@ import Baloot.RequestMethod;
 import Baloot.Route;
 
 @Route("/voteComment/{username}/{commentId}/{vote}")
-public class voteComment {
+public class voteComment extends Command {
 
     public CommodityShortModel handle(VoteCommentModel model) throws Exception, UserNotFound, CommodityNotFound, CommentNotFound {
         if (!model.isVoteCorrect()) {

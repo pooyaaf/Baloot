@@ -12,7 +12,7 @@ import Baloot.RequestMethod;
 import Baloot.Route;
 
 @Route("rateCommodity/{username}/{commodityId}/{rate}")
-public class RateCommodity {
+public class RateCommodity extends Command {
     @AcceptMethod(RequestMethod.GET)
     public CommodityShortModel handle(RateModel model) throws Exception, UserNotFound, CommodityNotFound {
         if (model.rate < 1 || model.rate > 10) {

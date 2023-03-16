@@ -121,4 +121,8 @@ public class Commodity {
         }
         return result;
     }
+
+    public boolean checkPriceRange(double start_price, double end_price) {
+        return start_price <= price && price <= end_price;
+    }
 }
