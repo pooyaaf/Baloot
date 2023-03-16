@@ -134,4 +134,15 @@ public class ContextManager {
     public static Collection<Commodity> getAllCommodities() {
         return commodities.values();
     }
+    public static Collection<Commodity> getCommodityByCategory(String category) {
+        ArrayList<Commodity> result = new ArrayList<>();
+
+        for (Commodity commodity : commodities.values()) {
+            if (commodity.isInCategory(category)) {
+                result.add(commodity);
+            }
+        }
+
+        return result;
+    }
 }

@@ -90,4 +90,13 @@ public class Commodity {
     public Double getRate() {
         return rating;
     }
+
+    public Boolean isInCategory(String targetCategory) {
+        for (String category : categories) {
+            if (category.equals(targetCategory)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
