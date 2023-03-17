@@ -15,6 +15,13 @@ public class UserInfoModel implements Component {
     public ArrayList<CommodityModel> buyList;
     public ArrayList<CommodityModel> purchasedList;
 
+    private String generateRemoveFromBuyListForm(String username, Integer commodityId) {
+        return String.format("<form action=\"/removeFromBuyList/%s/%s\" method=\"POST\" >\n" +
+                "    <input id=\"form_commodity_id\" type=\"hidden\" name=\"commodityId\" value=\"%d\">\n" +
+                "    <button type=\"submit\">Remove</button>\n" +
+                "</form>", username, commodityId.toString(), commodityId);
+    }
+
     private String generatePaymentScript(String userId) {
         return String.format("<script> function payment() {\n" +
                 "        let url = document.getElementById(\"payment_id\").action;\n" +
@@ -32,7 +39,7 @@ public class UserInfoModel implements Component {
                 "<td>" + String.join(", ", commodityModel.categories) + "</td>\n" +
                 "<td>" + String.valueOf(commodityModel.rating) + "</td>\n" +
                 "<td>" + commodityModel.inStock.toString() + "</td>\n" +
-                "<td><a href=\"/commodities/" + commodityModel.id.toString() + "\">Link</a></td>";
+                "<td><a href=\"/commodities/" + commodityModel.id.toString() + "\">Link</a></td>\n";
         return row;
     }
 
@@ -57,6 +64,8 @@ public class UserInfoModel implements Component {
             firstTable.getElementsByTag("tr").last().remove();
             for (CommodityModel commodityModel : buyList) {
                 String row = generateHtmlTableRow(commodityModel);
+                row += "<td>" + generateRemoveFromBuyListForm(userModel.username, commodityModel.id) + "</td>";
+
                 firstTable.append(row);
             }
 

@@ -15,12 +15,21 @@ import Baloot.Route;
 
 @Route("removeFromBuyList/{username}/{commodityId}")
 public class RemoveFromBuyList extends Command {
-    @AcceptMethod(RequestMethod.GET)
     public CommodityShortModel handle(CommodityBuyListModel input) throws Exception, UserNotFound, CommodityNotFound, CommodityIsNotInBuyList {
         Commodity commodity = ContextManager.getCommodity(Integer.parseInt(input.commodityId));
         User user = ContextManager.getUser(input.username);
         commodity.increaseInStuck();
         user.removeFromBuyList(commodity);
         return commodity.getReportModel();
+    }
+
+    @AcceptMethod(RequestMethod.GET)
+    public CommodityShortModel getHandle(CommodityBuyListModel input) throws Exception, UserNotFound, CommodityNotFound, CommodityIsNotInBuyList {
+        return handle(input);
+    }
+
+    @AcceptMethod(RequestMethod.POST)
+    public CommodityShortModel postHandle(CommodityBuyListModel input) throws Exception, UserNotFound, CommodityNotFound, CommodityIsNotInBuyList {
+        return handle(input);
     }
 }
