@@ -15,6 +15,15 @@ public class UserInfoModel implements Component {
     public ArrayList<CommodityModel> buyList;
     public ArrayList<CommodityModel> purchasedList;
 
+    private String generatePaymentScript(String userId) {
+        return String.format("<script> function payment() {\n" +
+                "        let url = document.getElementById(\"payment_id\").action;\n" +
+                "        url += \"/\" + \"%s\";\n" +
+                "        document.getElementById(\"payment_id\").action = url;\n" +
+                "\t}\n" +
+                "\t</script>", userId);
+    }
+
     private String generateHtmlTableRow(CommodityModel commodityModel) {
         String row = "<td>" + commodityModel.id.toString() + "</td>\n" +
                 "<td>" + commodityModel.name + "</td>\n" +
@@ -32,11 +41,17 @@ public class UserInfoModel implements Component {
         File in = new File("src/main/resources/templates/User.html");
         try {
             Document doc = Jsoup.parse(in, "UTF-8");
+            doc.append(generatePaymentScript(userModel.username));
             doc.getElementById("username").text("Username: " + userModel.username);
             doc.getElementById("email").text("Email: " + userModel.email);
             doc.getElementById("birthDate").text("Birth Date: " + userModel.birthDate);
             doc.getElementById("address").text(userModel.address);
             doc.getElementById("credit").text("Credit: " + userModel.credit);
+
+            Element paymentForm = doc.getElementsByTag("form").first();
+            paymentForm.attr("onsubmit", "payment()");
+            paymentForm.attr("id", "payment_id");
+            paymentForm.attr("action", "/payment");
 
             Element firstTable = doc.getElementsByTag("table").first();
             firstTable.getElementsByTag("tr").last().remove();

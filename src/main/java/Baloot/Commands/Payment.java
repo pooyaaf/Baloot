@@ -17,7 +17,6 @@ import Baloot.Route;
 
 @Route("payment/{user_id}")
 public class Payment extends Command {
-    @AcceptMethod(RequestMethod.GET)
     public UserInfoModel handle(UserByIdModel input) throws Exception, CommodityNotFound, UserNotFound, CommodityNotInStuck {
         User user = ContextManager.getUser(input.user_id);
         try {
@@ -28,5 +27,15 @@ public class Payment extends Command {
         }
 
         return user.getUserInfoModel();
+    }
+
+    @AcceptMethod(RequestMethod.GET)
+    public UserInfoModel getHandle(UserByIdModel input) throws Exception, CommodityNotFound, UserNotFound, CommodityNotInStuck {
+        return handle(input);
+    }
+
+    @AcceptMethod(RequestMethod.POST)
+    public UserInfoModel postHandle(UserByIdModel input) throws Exception, CommodityNotFound, UserNotFound, CommodityNotInStuck {
+        return handle(input);
     }
 }
