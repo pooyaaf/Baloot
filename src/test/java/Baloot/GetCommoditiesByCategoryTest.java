@@ -39,7 +39,7 @@ public class GetCommoditiesByCategoryTest {
         assertEquals(1, commodityListModel.commoditiesList.size());
         assertThat(commodityListModel.commoditiesList.get(0))
                 .usingRecursiveComparison()
-                .isEqualTo(expectedModel);
+                .isEqualTo(expectedModel.commodityModel);
     }
 
     @Test

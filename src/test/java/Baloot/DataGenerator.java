@@ -12,9 +12,12 @@ import Baloot.Model.ProviderModel;
 import Baloot.Model.view.CommodityShortModel;
 import Baloot.Model.UserModel;
 
+import java.util.ArrayList;
+
 class DataGenerator {
     static public CommodityShortModel generateReportCommodityModel(int id, String name, int providerId, double price, String[] categories, double rating, int inStock) {
         CommodityShortModel reportCommodityModel = new CommodityShortModel();
+        reportCommodityModel.commentsList = new ArrayList<>();
         reportCommodityModel.commodityModel = new CommodityModel();
         reportCommodityModel.commodityModel.id = id;
         reportCommodityModel.commodityModel.name = name;
