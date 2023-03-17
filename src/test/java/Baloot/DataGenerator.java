@@ -64,19 +64,17 @@ class DataGenerator {
         ContextManager.putCommodity(id,commodity);
     }
 
-    public static Integer GenerateComment(Integer commodityId, String userEmail) {
+    public static Integer GenerateComment(Integer commodityId, String userEmail, String text) {
         CommentModel commentModel = new CommentModel();
         commentModel.commodityId = commodityId;
         commentModel.userEmail = userEmail;
+        commentModel.text = text;
         Comment comment = new Comment(commentModel);
         try {
-            Commodity commodity = ContextManager.getCommodity(commodityId);
-            commodity.putComment(comment);
+            ContextManager.putComment(comment.getId(), comment);
             return comment.getId();
         } catch (Exception e) {
-        } catch (CommodityNotFound e) {
-            throw new RuntimeException(e);
+            return null;
         }
-        return null;
     }
 }

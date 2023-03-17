@@ -60,6 +60,7 @@ public class ContextManager {
 
     public static void resetContext() {
         categories.clear();
+        comments.clear();
         commodities.clear();
         users.clear();
         providers.clear();
