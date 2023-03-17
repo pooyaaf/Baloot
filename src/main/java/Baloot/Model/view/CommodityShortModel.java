@@ -39,16 +39,73 @@ public class CommodityShortModel implements Component {
                 "\t</script>", commodityId);
     }
 
+    private String generateLikeScript() {
+        return "<script> function vote_like() {\n" +
+                "        let url = document.getElementById(\"like_id\").action;\n" +
+                "        const url_array = url.split(\"/\")\n" +
+                "        const vote = url_array.pop()\n" +
+                "        const commentId = url_array.pop()\n" +
+                "        url = url_array.join(\"/\")\n" +
+                "        url += \"/\" + document.getElementsByName(\"user_id\")[0].value;\n" +
+                "        url += \"/\" + commentId;\n" +
+                "        url += \"/\" + vote;\n" +
+                "        document.getElementById(\"like_id\").action = url;\n" +
+                "\t}\n" +
+                "\t</script>";
+    }
+
+    private String generateDislikeScript() {
+        return "<script> function vote_dislike() {\n" +
+                "        let url = document.getElementById(\"dislike_id\").action;\n" +
+                "        const url_array = url.split(\"/\")\n" +
+                "        const vote = url_array.pop()\n" +
+                "        const commentId = url_array.pop()\n" +
+                "        url = url_array.join(\"/\")\n" +
+                "        url += \"/\" + document.getElementsByName(\"user_id\")[0].value;\n" +
+                "        url += \"/\" + commentId;\n" +
+                "        url += \"/\" + vote;\n" +
+                "        document.getElementById(\"dislike_id\").action = url;\n" +
+                "\t}\n" +
+                "\t</script>";
+    }
+
+    private String generateLikeVoteForm(Integer count, Integer commentId) {
+        return String.format("<form id=\"like_id\" action=\"/voteComment/%d/1\" method=\"POST\" onsubmit=\"vote_like()\">\n" +
+                "  <label for=\"\">%d</label>\n" +
+                "  <input\n" +
+                "    id=\"form_comment_id\"\n" +
+                "    type=\"hidden\"\n" +
+                "    name=\"comment_id\"\n" +
+                "    value=\"01\"\n" +
+                "  />\n" +
+                "  <button type=\"submit\">like</button>\n" +
+                "</form>", commentId, count);
+    }
+
+    private String generateDislikeVoteForm(Integer count, Integer commentId) {
+        return String.format("<form id=\"dislike_id\" action=\"/voteComment/%d/-1\" method=\"POST\" onsubmit=\"vote_dislike()\">\n" +
+                "  <label for=\"\">%d</label>\n" +
+                "  <input\n" +
+                "    id=\"form_comment_id\"\n" +
+                "    type=\"hidden\"\n" +
+                "    name=\"comment_id\"\n" +
+                "    value=\"01\"\n" +
+                "  />\n" +
+                "  <button type=\"submit\">dislike</button>\n" +
+                "</form>", commentId, count);
+    }
+
     private String generateHtmlTableRow(CommentReportModel commentReportModel) {
         Format formatter = new SimpleDateFormat("yyyy-MM-dd");
         String row =
                 "<td>" + commentReportModel.userEmail + "</td>\n" +
                         "<td>" + commentReportModel.text + "</td>\n" +
                         "<td>" + formatter.format(commentReportModel.date) + "</td>\n" +
-                        "<td>" + commentReportModel.like + "</td>\n" +
-                        "<td>" + commentReportModel.dislike + "</td>\n";
+                        "<td>" + generateLikeVoteForm(commentReportModel.like, commentReportModel.id) + "</td>\n" +
+                        "<td>" + generateDislikeVoteForm(commentReportModel.dislike, commentReportModel.id) + "</td>\n";
         return row;
     }
+
     @Override
     public String render() {
         File in = new File("src/main/resources/templates/Commodity.html");
@@ -56,6 +113,9 @@ public class CommodityShortModel implements Component {
             Document doc = Jsoup.parse(in, "UTF-8");
             doc.append(generateRateScript(commodityModel.id.toString()));
             doc.append(generateAddToBuyListScript(commodityModel.id.toString()));
+            doc.append(generateLikeScript());
+            doc.append(generateDislikeScript());
+
             doc.getElementById("id").text("Id: " + commodityModel.id.toString());
             doc.getElementById("name").text("Name: " + commodityModel.name);
             doc.getElementById("providerId").text("Provider Id: " + commodityModel.providerId.toString());
@@ -75,7 +135,7 @@ public class CommodityShortModel implements Component {
             rateForm.attr("id", "myRate");
             rateForm.attr("action", "/rateCommodity");
 
-            Element addToBuyListForm = doc.getElementsByTag("form").last();
+            Element addToBuyListForm = doc.getElementsByTag("form").get(1);
             addToBuyListForm.attr("onsubmit", "add_to_buy_list()");
             addToBuyListForm.attr("id", "buy_list");
             addToBuyListForm.attr("action", "/addToBuyList");

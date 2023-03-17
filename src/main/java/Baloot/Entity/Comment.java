@@ -71,6 +71,7 @@ public class Comment {
 
     public CommentReportModel getReportModel() {
         CommentReportModel commentReportModel = new CommentReportModel();
+        commentReportModel.id = id;
         commentReportModel.userEmail = userEmail;
         commentReportModel.text = text;
         commentReportModel.date = date;
