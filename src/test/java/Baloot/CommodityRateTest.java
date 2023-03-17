@@ -36,19 +36,32 @@ public class CommodityRateTest {
     }
     @Test
     public void rateCommodity_SuccessfulRating() throws UserNotFound, CommodityNotFound, Exception {
-        RateModel model = new RateModel();
-        model.commodityId = commodityId;
-        model.rate = 8;
-        model.username = username;
-
         RateCommodity command = new RateCommodity();
-
+        RateModel model = new RateModel();
+        model.username = username;
+        model.commodityId = commodityId;
+        model.rate = 9;
         command.handle(model);
-
         Commodity commodity = ContextManager.getCommodity(commodityId);
-//        User user = ContextManager.getUser(username);
-        Double rating = 8.0;
-        assertEquals(rating,commodity.getRate());
+
+        Double rating = 9.0;
+        assertEquals(rating, commodity.getRate());
+
+        RateModel model2 = new RateModel();
+        model2.rate=2;
+        model2.commodityId=commodityId;
+        model2.username="user2";
+        command.handle(model2);
+
+        RateModel model3 = new RateModel();
+        model3.rate=4;
+        model3.commodityId=commodityId;
+        model3.username="user3";
+        command.handle(model3);
+        command.handle(model3);
+
+        rating = 5.0;
+        assertEquals(rating, commodity.getRate());
     }
 
     @Test(expected = InvalidRateScore.class)
