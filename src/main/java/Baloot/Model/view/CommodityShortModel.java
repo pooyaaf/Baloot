@@ -16,6 +16,18 @@ public class CommodityShortModel implements Component {
     public CommodityModel commodityModel;
     public ArrayList<CommentReportModel> commentsList;
 
+    private String generateRateScript(String commodityId) {
+        return String.format("<script> let commodity_id = %s;\n" +
+                "function rate() {\n" +
+                "        let y = document.getElementById(\"myRate\").action;\n" +
+                "        y += \"/\" + document.getElementsByName(\"user_id\")[0].value;\n" +
+                "        y += \"/\" + commodity_id;\n" +
+                "        y += \"/\" + document.getElementsByName(\"quantity\")[0].value;\n" +
+                "        document.getElementById(\"myRate\").action = y;\n" +
+                "\t}\n" +
+                "\t</script>", commodityId);
+    }
+
     private String generateHtmlTableRow(CommentReportModel commentReportModel) {
         Format formatter = new SimpleDateFormat("yyyy-MM-dd");
         String row =
@@ -31,6 +43,7 @@ public class CommodityShortModel implements Component {
         File in = new File("src/main/resources/templates/Commodity.html");
         try {
             Document doc = Jsoup.parse(in, "UTF-8");
+            doc.append(generateRateScript(commodityModel.id.toString()));
             doc.getElementById("id").text("Id: " + commodityModel.id.toString());
             doc.getElementById("name").text("Name: " + commodityModel.name);
             doc.getElementById("providerId").text("Provider Id: " + commodityModel.providerId.toString());
@@ -44,6 +57,12 @@ public class CommodityShortModel implements Component {
                 String row = generateHtmlTableRow(commentReportModel);
                 table.append(row);
             }
+
+            Element rateForm = doc.getElementsByTag("form").first();
+            rateForm.attr("onsubmit", "rate()");
+            rateForm.attr("id", "myRate");
+            rateForm.attr("action", "/rateCommodity");
+
             return doc.toString();
         } catch (IOException e) {
             e.printStackTrace();

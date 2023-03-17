@@ -28,13 +28,12 @@ public class voteComment extends Command {
         return commodity.getReportModel();
     }
     @AcceptMethod(RequestMethod.GET)
-    public void handleGet(VoteCommentModel model) throws Exception, UserNotFound, CommodityNotFound, CommentNotFound {
-        handle(model);
+    public CommodityShortModel handleGet(VoteCommentModel model) throws Exception, UserNotFound, CommodityNotFound, CommentNotFound {
+        return handle(model);
     }
 
     @AcceptMethod(RequestMethod.POST)
-    public void handlePost(VoteCommentModel model) throws Exception, UserNotFound, CommodityNotFound, CommentNotFound {
-        handle(model);
+    public CommodityShortModel handlePost(VoteCommentModel model) throws Exception, UserNotFound, CommodityNotFound, CommentNotFound {
+        return handle(model);
     }
-
 }
