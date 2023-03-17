@@ -28,6 +28,17 @@ public class CommodityShortModel implements Component {
                 "\t</script>", commodityId);
     }
 
+    private String generateAddToBuyListScript(String commodityId) {
+        return String.format("<script> commodity_id = %s;\n" +
+                "function add_to_buy_list() {\n" +
+                "        let url = document.getElementById(\"buy_list\").action;\n" +
+                "        url += \"/\" + document.getElementsByName(\"user_id\")[0].value;\n" +
+                "        url += \"/\" + commodity_id;\n" +
+                "        document.getElementById(\"buy_list\").action = url;\n" +
+                "\t}\n" +
+                "\t</script>", commodityId);
+    }
+
     private String generateHtmlTableRow(CommentReportModel commentReportModel) {
         Format formatter = new SimpleDateFormat("yyyy-MM-dd");
         String row =
@@ -44,6 +55,7 @@ public class CommodityShortModel implements Component {
         try {
             Document doc = Jsoup.parse(in, "UTF-8");
             doc.append(generateRateScript(commodityModel.id.toString()));
+            doc.append(generateAddToBuyListScript(commodityModel.id.toString()));
             doc.getElementById("id").text("Id: " + commodityModel.id.toString());
             doc.getElementById("name").text("Name: " + commodityModel.name);
             doc.getElementById("providerId").text("Provider Id: " + commodityModel.providerId.toString());
@@ -62,6 +74,11 @@ public class CommodityShortModel implements Component {
             rateForm.attr("onsubmit", "rate()");
             rateForm.attr("id", "myRate");
             rateForm.attr("action", "/rateCommodity");
+
+            Element addToBuyListForm = doc.getElementsByTag("form").last();
+            addToBuyListForm.attr("onsubmit", "add_to_buy_list()");
+            addToBuyListForm.attr("id", "buy_list");
+            addToBuyListForm.attr("action", "/addToBuyList");
 
             return doc.toString();
         } catch (IOException e) {

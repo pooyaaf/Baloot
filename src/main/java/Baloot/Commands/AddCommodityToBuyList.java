@@ -15,7 +15,6 @@ import Baloot.Route;
 
 @Route("addToBuyList/{username}/{commodityId}")
 public class AddCommodityToBuyList extends Command{
-    @AcceptMethod(RequestMethod.GET)
     public CommodityShortModel handle(CommodityBuyListModel input) throws Exception, CommodityNotFound, UserNotFound, CommodityNotInStuck {
         Commodity commodity = ContextManager.getCommodity(Integer.parseInt(input.commodityId));
         User user = ContextManager.getUser(input.username);
@@ -23,5 +22,15 @@ public class AddCommodityToBuyList extends Command{
         user.addToBuyList(commodity);
 
         return commodity.getReportModel();
+    }
+
+    @AcceptMethod(RequestMethod.GET)
+    public CommodityShortModel getHandle(CommodityBuyListModel input) throws Exception, CommodityNotFound, UserNotFound, CommodityNotInStuck {
+        return handle(input);
+    }
+
+    @AcceptMethod(RequestMethod.POST)
+    public CommodityShortModel postHandle(CommodityBuyListModel input) throws Exception, CommodityNotFound, UserNotFound, CommodityNotInStuck {
+        return handle(input);
     }
 }
