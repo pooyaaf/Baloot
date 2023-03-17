@@ -44,4 +44,23 @@ public class CommodityQuetyTest {
         assertEquals(output.commoditiesList.size(), 1);
     }
 
+    @Test
+    public void getCommodityByPrice_GetNoCommodities_Runs() throws Exception {
+        GetCommoditiesByPriceRange getCommoditiesByPriceRange = new GetCommoditiesByPriceRange();
+        CommoditiesListByPriceRangeModel model = new CommoditiesListByPriceRangeModel();
+
+        model.start_price = 5.0;
+        model.end_price = 9.0;
+        CommodityListModel output = getCommoditiesByPriceRange.handle(model);
+
+        assertEquals(output.commoditiesList.size(), 0);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void getCommodityByPrice_NegativePriceRange_ThrowsException() throws Exception {
+        GetCommoditiesByPriceRange getCommoditiesByPriceRange = new GetCommoditiesByPriceRange();
+        CommoditiesListByPriceRangeModel model = new CommoditiesListByPriceRangeModel(-10,20);
+        getCommoditiesByPriceRange.handle(model);
+    }
+
 }
