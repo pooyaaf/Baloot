@@ -1,9 +1,12 @@
 package Baloot;
 
 import Baloot.Context.ContextManager;
+import Baloot.Entity.Comment;
 import Baloot.Entity.Commodity;
 import Baloot.Entity.Provider;
 import Baloot.Entity.User;
+import Baloot.Exception.CommodityNotFound;
+import Baloot.Model.CommentModel;
 import Baloot.Model.CommodityModel;
 import Baloot.Model.ProviderModel;
 import Baloot.Model.view.CommodityShortModel;
@@ -56,5 +59,21 @@ class DataGenerator {
         commodityModel.price=price;
         Commodity commodity = new Commodity(commodityModel);
         ContextManager.putCommodity(id,commodity);
+    }
+
+    public static Integer GenerateComment(Integer commodityId, String userEmail) {
+        CommentModel commentModel = new CommentModel();
+        commentModel.commodityId = commodityId;
+        commentModel.userEmail = userEmail;
+        Comment comment = new Comment(commentModel);
+        try {
+            Commodity commodity = ContextManager.getCommodity(commodityId);
+            commodity.putComment(comment);
+            return comment.getId();
+        } catch (Exception e) {
+        } catch (CommodityNotFound e) {
+            throw new RuntimeException(e);
+        }
+        return null;
     }
 }
