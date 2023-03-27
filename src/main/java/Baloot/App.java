@@ -10,7 +10,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.javalin.Javalin;
 import io.javalin.http.Handler;
-import io.javalin.http.HandlerType;
 import org.reflections.Reflections;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -32,7 +31,7 @@ public class App {
     public static void main(String[] args) {
         boolean exit = false;
         Reflections reflections = new Reflections("Baloot");
-        ContextManager.initialize();
+        ContextManager.getInstance().initialize();
 
         Javalin app = Javalin.create();
         Set<Class<?>> handlers = reflections.getTypesAnnotatedWith(RouteContainer.class);
@@ -58,40 +57,40 @@ public class App {
     }
 }
 
-    class RequestHandler implements Handler {
-        private Class<?> command;
+class RequestHandler implements Handler {
+    private Class<?> command;
 
-        public RequestHandler(Class<?> _command) {
-            command = _command;
-        }
+    public RequestHandler(Class<?> _command) {
+        command = _command;
+    }
 
-        @Override
-        public void handle(io.javalin.http.Context context) throws java.lang.Exception {
-            Gson gson = new GsonBuilder()
-                    .setDateFormat("yyyy-MM-dd")
-                    .serializeNulls()
-                    .create();
+    @Override
+    public void handle(io.javalin.http.Context context) throws java.lang.Exception {
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd")
+                .serializeNulls()
+                .create();
 
-            String body = gson.toJson(bind(context));
-            try {
-                Object response = CallMethod(command, RequestMethod.valueOf(context.req.getMethod()), body);
-                context.res.setStatus(200);
+        String body = gson.toJson(bind(context));
+        try {
+            Object response = CallMethod(command, RequestMethod.valueOf(context.req.getMethod()), body);
+            context.res.setStatus(200);
 
-                if (response instanceof Component) {
-                    Component component = (Component) response;
-                    String output = component.render();
-                    context.html(output);
-                }
-                else{
-                    context.html(App.getCodeResponse(200));
-                }
-            } catch (HttpException e) {
-                context.res.setStatus(e.getStatus());
+            if (response instanceof Component) {
+                Component component = (Component) response;
+                String output = component.render();
+                context.html(output);
             }
-
+            else{
+                context.html(App.getCodeResponse(200));
+            }
+        } catch (HttpException e) {
+            context.res.setStatus(e.getStatus());
         }
 
-        private static void validate(Object model) throws Exception {
+    }
+
+    private static void validate(Object model) throws Exception {
         Field[] fields = model.getClass().getFields();
         for (Field field : fields) {
 
@@ -103,24 +102,24 @@ public class App {
             }
         }
     }
-        private static void AddAll(Map<String, Object> map, Map<String, List<String>> data) {
-            if (data == null)
-                return;
-            for (Map.Entry<String, List<String>> entry : data.entrySet()) {
-                if (entry.getValue().size() == 1) {
-                    map.put(entry.getKey(), entry.getValue().get(0));
-                } else {
-                    map.put(entry.getKey(), entry.getValue());
-                }
+    private static void AddAll(Map<String, Object> map, Map<String, List<String>> data) {
+        if (data == null)
+            return;
+        for (Map.Entry<String, List<String>> entry : data.entrySet()) {
+            if (entry.getValue().size() == 1) {
+                map.put(entry.getKey(), entry.getValue().get(0));
+            } else {
+                map.put(entry.getKey(), entry.getValue());
             }
         }
-        private static Map<String, Object> bind(io.javalin.http.Context context) {
-            Map<String, Object> params = new HashMap<>();
-            AddAll(params, context.formParamMap());
-            AddAll(params, context.queryParamMap());
-            params.putAll(context.pathParamMap());
-            return params;
-        }
+    }
+    private static Map<String, Object> bind(io.javalin.http.Context context) {
+        Map<String, Object> params = new HashMap<>();
+        AddAll(params, context.formParamMap());
+        AddAll(params, context.queryParamMap());
+        params.putAll(context.pathParamMap());
+        return params;
+    }
     private static Object CallMethod(Class<?> handler, RequestMethod requestMethod, String body) throws Exception {
         Method[] methods = handler.getMethods();
         Object result = null;

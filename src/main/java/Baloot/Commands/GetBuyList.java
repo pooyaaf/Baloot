@@ -17,7 +17,7 @@ import java.util.Collection;
 public class GetBuyList extends Command{
     @AcceptMethod(RequestMethod.GET)
     public BuyListModel handle(UserByUsernameModel input) throws Exception, UserNotFound {
-        User user = ContextManager.getUser(input.username);
+        User user = ContextManager.getInstance().getUser(input.username);
         Collection<Commodity> buyList = user.getBuyList();
         BuyListModel result = new BuyListModel();
         result.buyList = new ArrayList<>();

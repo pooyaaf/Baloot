@@ -13,9 +13,9 @@ import Baloot.Route;
 public class AddCommodity extends Command {
     @AcceptMethod(RequestMethod.GET)
     public String handle(CommodityModel model) throws Exception, ProviderNotFound {
-        ContextManager.getProvider(model.providerId);
+        ContextManager.getInstance().getProvider(model.providerId);
         Commodity commodity = new Commodity(model);
-        ContextManager.putCommodity(model.id, commodity);
+        ContextManager.getInstance().putCommodity(model.id, commodity);
         return "commodity added successfully";
     }
 }

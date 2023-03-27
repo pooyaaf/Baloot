@@ -13,7 +13,7 @@ public class AddUser extends Command {
     @AcceptMethod(RequestMethod.GET)
     public String handle(UserModel input) throws Exception {
         User user = new User(input);
-        ContextManager.putUser(input.username, user);
+        ContextManager.getInstance().putUser(input.username, user);
         return  "user added successfully";
     }
 }

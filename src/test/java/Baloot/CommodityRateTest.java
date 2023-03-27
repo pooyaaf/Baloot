@@ -42,7 +42,7 @@ public class CommodityRateTest {
         model.commodityId = commodityId;
         model.rate = 9;
         command.handle(model);
-        Commodity commodity = ContextManager.getCommodity(commodityId);
+        Commodity commodity = ContextManager.getInstance().getCommodity(commodityId);
 
         Double rating = 9.0;
         assertEquals(rating, commodity.getRate());

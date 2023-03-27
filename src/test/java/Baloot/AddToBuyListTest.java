@@ -58,8 +58,8 @@ public class AddToBuyListTest {
 
         command.handle(buyModel);
 
-        Commodity commodity = ContextManager.getCommodity(commodityId);
-        Collection<Commodity> buyList = ContextManager.getUser(username).getBuyList();
+        Commodity commodity = ContextManager.getInstance().getCommodity(commodityId);
+        Collection<Commodity> buyList = ContextManager.getInstance().getUser(username).getBuyList();
         int afterBuyInStuck = commodity.getInStock();
         assertEquals(beforeBuyInStuck, afterBuyInStuck + 1);
         assertEquals(buyList.size(), 1);

@@ -21,7 +21,7 @@ public class GetCommoditiesByCategory extends Command {
         CommodityListModel result = new CommodityListModel();
         result.commoditiesList = new ArrayList<>();
         try {
-            Category category = ContextManager.getCategory(input.categories);
+            Category category = ContextManager.getInstance().getCategory(input.categories);
             Collection<Commodity> commodities = category.getAllCommodity();
             for (Commodity commodity : commodities) {
                 result.commoditiesList.add(commodity.getModel());

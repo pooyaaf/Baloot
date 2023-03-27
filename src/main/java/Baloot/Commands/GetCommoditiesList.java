@@ -14,7 +14,7 @@ import java.util.Collection;
 public class GetCommoditiesList extends Command{
     @AcceptMethod(RequestMethod.GET)
     public CommodityListModel handle(){
-        Collection<Commodity> commodities = ContextManager.getAllCommodities();
+        Collection<Commodity> commodities = ContextManager.getInstance().getAllCommodities();
         CommodityListModel result = new CommodityListModel();
         result.commoditiesList = new ArrayList<>();
         for (Commodity commodity : commodities) {

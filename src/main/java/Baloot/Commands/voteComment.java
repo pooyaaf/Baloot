@@ -21,10 +21,10 @@ public class voteComment extends Command {
         if (!model.isVoteCorrect()) {
             throw new InvalidVoteValue();
         }
-        User user = ContextManager.getUser(model.username);
-        Comment comment = ContextManager.getComment(model.commentId);
+        User user = ContextManager.getInstance().getUser(model.username);
+        Comment comment = ContextManager.getInstance().getComment(model.commentId);
         comment.addVote(model.vote, user.getUsername());
-        Commodity commodity = ContextManager.getCommodity(comment.getCommodityId());
+        Commodity commodity = ContextManager.getInstance().getCommodity(comment.getCommodityId());
         return commodity.getReportModel();
     }
     @AcceptMethod(RequestMethod.GET)

@@ -13,7 +13,7 @@ public class AddProvider extends Command {
     @AcceptMethod(RequestMethod.GET)
     public String handle(ProviderModel model) throws Exception {
         Provider provider = new Provider(model);
-        ContextManager.putProvider(model.id, provider);
+        ContextManager.getInstance().putProvider(model.id, provider);
         return "provider added successfully";
     }
 }

@@ -18,7 +18,7 @@ import Baloot.Route;
 @Route("payment/{user_id}")
 public class Payment extends Command {
     public UserInfoModel handle(UserByIdModel input) throws Exception, CommodityNotFound, UserNotFound, CommodityNotInStuck {
-        User user = ContextManager.getUser(input.user_id);
+        User user = ContextManager.getInstance().getUser(input.user_id);
         try {
             user.payment();
         } catch (CreditNotEnough e) {

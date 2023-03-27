@@ -14,7 +14,7 @@ import Baloot.Model.view.CommodityShortModel;
 public class GetCommodityById extends Command{
     @AcceptMethod(RequestMethod.GET)
     public CommodityShortModel handle(CommodityByIdModel input) throws Exception, CommodityNotFound {
-        Commodity commodity = ContextManager.getCommodity(Integer.parseInt(input.commodity_id));
+        Commodity commodity = ContextManager.getInstance().getCommodity(Integer.parseInt(input.commodity_id));
         return commodity.getReportModel();
     }
 }

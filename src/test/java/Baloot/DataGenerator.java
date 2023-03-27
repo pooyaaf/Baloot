@@ -38,7 +38,7 @@ class DataGenerator {
         userModel.credit = credit;
         userModel.email = email;
         User user = new User(userModel);
-        ContextManager.putUser(username, user);
+        ContextManager.getInstance().putUser(username, user);
     }
 
     static void GenerateProvider(int id, String name, String registryDate) {
@@ -47,7 +47,7 @@ class DataGenerator {
         providerModel.name = name;
         providerModel.registryDate = registryDate;
         Provider provider = new Provider(providerModel);
-        ContextManager.putProvider(id, provider);
+        ContextManager.getInstance().putProvider(id, provider);
 
     }
 
@@ -61,7 +61,7 @@ class DataGenerator {
         commodityModel.name=name;
         commodityModel.price=price;
         Commodity commodity = new Commodity(commodityModel);
-        ContextManager.putCommodity(id,commodity);
+        ContextManager.getInstance().putCommodity(id,commodity);
     }
 
     public static Integer GenerateComment(Integer commodityId, String userEmail, String text) {
@@ -71,7 +71,7 @@ class DataGenerator {
         commentModel.text = text;
         Comment comment = new Comment(commentModel);
         try {
-            ContextManager.putComment(comment.getId(), comment);
+            ContextManager.getInstance().putComment(comment.getId(), comment);
             return comment.getId();
         } catch (Exception e) {
             return null;

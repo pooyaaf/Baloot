@@ -14,7 +14,7 @@ import Baloot.Route;
 public class GetProviderById extends Command{
     @AcceptMethod(RequestMethod.GET)
     public ProviderViewModel handle(ProviderByIdModel input) throws Exception, ProviderNotFound {
-        Provider provider = ContextManager.getProvider(Integer.parseInt(input.provider_id));
+        Provider provider = ContextManager.getInstance().getProvider(Integer.parseInt(input.provider_id));
         return provider.GetProviderViewModel();
     }
 }

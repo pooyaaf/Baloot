@@ -21,8 +21,18 @@ public class ContextManager {
     private static HashMap<Integer, Provider> providers = new HashMap<>();
     private static HashMap<Integer, Commodity> commodities = new HashMap<>();
     private static HashMap<Integer, Comment> comments = new HashMap<>();
+    private static ContextManager instance;
 
-    public static void initialize() {
+    public static ContextManager getInstance()
+    {
+        if(instance == null)
+        {
+            instance = new ContextManager();
+            instance.initialize();
+        }
+        return instance;
+    }
+    public  void initialize() {
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd")
                 .registerTypeAdapterFactory(new IgnoreFailureTypeAdapterFactory())
@@ -66,36 +76,36 @@ public class ContextManager {
         providers.clear();
     }
 
-    public static void putUser(String username, User user) {
+    public  void putUser(String username, User user) {
         users.put(username, user);
     }
 
-    public static User getUser(String username) throws Exception, UserNotFound {
+    public  User getUser(String username) throws Exception, UserNotFound {
         if (!users.containsKey(username)) {
             throw new UserNotFound();
         }
         return users.get(username);
     }
 
-    public static Category getCategory(String category) throws CategoryNotFound {
+    public  Category getCategory(String category) throws CategoryNotFound {
         if (!categories.containsKey(category)) {
             throw new CategoryNotFound();
         }
         return categories.get(category);
     }
 
-    public static void putProvider(Integer id, Provider provider) {
+    public  void putProvider(Integer id, Provider provider) {
         providers.put(id, provider);
     }
 
-    public static Provider getProvider(Integer id) throws Exception, ProviderNotFound {
+    public  Provider getProvider(Integer id) throws Exception, ProviderNotFound {
         if (!providers.containsKey(id)) {
             throw new ProviderNotFound();
         }
         return providers.get(id);
     }
 
-    public static void updateCategories(Commodity commodity) {
+    public  void updateCategories(Commodity commodity) {
         String[] categoriesName = commodity.getCategories();
         for (String categoryName : categoriesName) {
             if (!categories.containsKey(categoryName)) {
@@ -106,7 +116,7 @@ public class ContextManager {
         }
     }
 
-    public static void updateProvider(Commodity commodity) {
+    public  void updateProvider(Commodity commodity) {
         Integer providerId = commodity.getProviderId();
         if (providers.containsKey(providerId)) {
             Provider provider = providers.get(providerId);
@@ -114,24 +124,24 @@ public class ContextManager {
         }
     }
 
-    public static void putCommodity(Integer id, Commodity commodity) {
+    public  void putCommodity(Integer id, Commodity commodity) {
         commodities.put(id, commodity);
         updateCategories(commodity);
         updateProvider(commodity);
     }
 
-    public static Commodity getCommodity(Integer id) throws Exception, CommodityNotFound {
+    public  Commodity getCommodity(Integer id) throws Exception, CommodityNotFound {
         if (!commodities.containsKey(id)) {
             throw new CommodityNotFound();
         }
         return commodities.get(id);
     }
 
-    public static Collection<Commodity> getAllCommodities() {
+    public  Collection<Commodity> getAllCommodities() {
         return commodities.values();
     }
 
-    public static Collection<Commodity> getCommodityByCategory(String category) {
+    public  Collection<Commodity> getCommodityByCategory(String category) {
         ArrayList<Commodity> result = new ArrayList<>();
 
         for (Commodity commodity : commodities.values()) {
@@ -143,7 +153,7 @@ public class ContextManager {
         return result;
     }
 
-    public static void updateCommodity(Comment comment) {
+    public  void updateCommodity(Comment comment) {
         Integer commodityId = comment.getCommodityId();
         if (commodities.containsKey(commodityId)) {
             Commodity commodity = commodities.get(commodityId);
@@ -151,12 +161,12 @@ public class ContextManager {
         }
     }
 
-    public static void putComment(Integer id, Comment comment) {
+    public  void putComment(Integer id, Comment comment) {
         comments.put(id, comment);
         updateCommodity(comment);
     }
 
-    public static Comment getComment(Integer id) throws CommentNotFound {
+    public  Comment getComment(Integer id) throws CommentNotFound {
         if (!comments.containsKey(id)) {
             throw new CommentNotFound();
         }

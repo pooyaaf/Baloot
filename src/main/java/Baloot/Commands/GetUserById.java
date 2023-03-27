@@ -17,7 +17,7 @@ import Baloot.Route;
 public class GetUserById extends Command{
     @AcceptMethod(RequestMethod.GET)
     public UserInfoModel handle(UserByIdModel input) throws Exception, UserNotFound {
-        User user = ContextManager.getUser(input.user_id);
+        User user = ContextManager.getInstance().getUser(input.user_id);
         return user.getUserInfoModel();
     }
 }

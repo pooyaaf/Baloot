@@ -19,8 +19,8 @@ public class RateCommodity extends Command {
         if (model.rate < 1 || model.rate > 10) {
             throw new InvalidRateScore();
         }
-        ContextManager.getUser(model.username);
-        Commodity commodity = ContextManager.getCommodity(model.commodityId);
+        ContextManager.getInstance().getUser(model.username);
+        Commodity commodity = ContextManager.getInstance().getCommodity(model.commodityId);
         commodity.addRate(model.username, model.rate);
         return commodity.getReportModel();
     }
