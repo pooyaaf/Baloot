@@ -2,6 +2,7 @@ package Baloot.Controllers;
 
 import java.io.IOException;
 
+import Baloot.Context.ContextManager;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -20,7 +21,11 @@ public class LoginController extends  HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        UserContext.username = req.getParameter("username");
-        resp.sendRedirect("/");
+        String username = req.getParameter("uesrname");
+        String password = req.getParameter("Password");
+        if (ContextManager.getInstance().isUserPassExist(username, password)) {
+            UserContext.username = username;
+            resp.sendRedirect("/");
+        }
     }
 }
