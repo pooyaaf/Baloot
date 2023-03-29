@@ -108,7 +108,7 @@ public class CommodityShortModel implements Component {
 
     @Override
     public String render() {
-        File in = new File("src/main/resources/templates/Commodity.html");
+        File in = new File("src/main/resources/templates/Commodity.jsp");
         try {
             Document doc = Jsoup.parse(in, "UTF-8");
             doc.append(generateRateScript(commodityModel.id.toString()));

@@ -1,5 +1,7 @@
 <%@ page import="Baloot.Model.CommodityModel" %>
 <%@ page import="Baloot.Model.CommentViewModel" %>
+<%@ page import="Baloot.Context.UserContext" %>
+
 
 <%
   CommodityModel commodity = (CommodityModel) request.getAttribute("commodity");
@@ -21,7 +23,7 @@
   </style>
 </head>
 <body>
-<span>username: Siri</span>
+<span>username: <%=UserContext.username%></span>
 <br>
 <ul>
   <li id="id">Id: <%=commodity.id%> </li>

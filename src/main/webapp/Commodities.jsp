@@ -2,6 +2,7 @@
 <%@ page import="Baloot.Model.view.CommodityListModel" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="Baloot.Context.UserContext" %>
 
 
 <%
@@ -23,7 +24,7 @@
 </head>
 <body>
 <a href="/">Home</a>
-<p id="username">username: siri</p>
+<p id="username">username: <%=UserContext.username%></p>
 <br><br>
 <form action="" method="POST">
     <label>Search:</label>
