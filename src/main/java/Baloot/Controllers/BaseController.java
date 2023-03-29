@@ -10,17 +10,17 @@ import Baloot.Context.UserContext;
 
 public abstract class BaseController extends HttpServlet {
     void get(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-        resp.sendRedirect("/Baloot_war_exploded/home");
+        resp.sendRedirect("/");
     };
 
     void post(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-        resp.sendRedirect("/Baloot_war_exploded/home");
+        resp.sendRedirect("/");
     };
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (UserContext.username == null) {
-            resp.sendRedirect("/Baloot_war_exploded/login");
+            resp.sendRedirect("/login");
         }
         try {
             get(req, resp);
@@ -31,7 +31,7 @@ public abstract class BaseController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (UserContext.username == null) {
-            resp.sendRedirect("/Baloot_war_exploded/login");
+            resp.sendRedirect("/login");
         }
         try {
 

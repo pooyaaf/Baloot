@@ -66,7 +66,7 @@
 
         <td><%=commodities.commoditiesList.get(i).rating%></td>
         <td><%=commodities.commoditiesList.get(i).inStock%></td>
-        <td><a href="/Baloot_war_exploded/commodities/<%=commodities.commoditiesList.get(i).id%>">Link</a></td>
+        <td><a href="/commodities/<%=commodities.commoditiesList.get(i).id%>">Link</a></td>
     </tr>
     <% } %>
 </table>

@@ -14,30 +14,29 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/commodities/*")
-public class CommoditiesController extends BaseController {
-    @Override
-    protected void get(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (req.getPathInfo() == null) {
-            RequestDispatcher requestDispatcher = req.getRequestDispatcher("/Commodities.jsp");
-            requestDispatcher.forward(req, resp);
+public class CommoditiesController extends HttpServlet {
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        if (request.getPathInfo() == null) {
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/Commodities.jsp");
+            requestDispatcher.forward(request, response);
             return;
         }
-        String[] segments = req.getPathInfo().split("/");
+        String[] segments = request.getPathInfo().split("/");
         if (segments.length == 2) {
             try {
                 Integer commodityId = Integer.valueOf(segments[1]);
                 Commodity commodity = ContextManager.getInstance().getCommodity(commodityId);
-                req.setAttribute("commodity", commodity.getModel());
-                RequestDispatcher requestDispatcher = req.getRequestDispatcher("/Commodity.jsp");
-                requestDispatcher.forward(req, resp);
+                request.setAttribute("commodity", commodity.getModel());
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/Commodity.jsp");
+                requestDispatcher.forward(request, response);
             } catch (Exception e) {
-                req.setAttribute("err", e.getClass());
-                RequestDispatcher requestDispatcher = req.getRequestDispatcher("/404.jsp");
-                requestDispatcher.forward(req, resp);
+                request.setAttribute("err", e.getClass());
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/404.jsp");
+                requestDispatcher.forward(request, response);
             } catch (CommodityNotFound e) {
-                req.setAttribute("err", e.getClass());
-                RequestDispatcher requestDispatcher = req.getRequestDispatcher("/404.jsp");
-                requestDispatcher.forward(req, resp);
+                throw new RuntimeException(e);
             }
         }
 

@@ -9,9 +9,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/")
-public class HomeController extends BaseController {
-    @Override
-    public void get(HttpServletRequest request, HttpServletResponse response)
+public class HomeController extends HttpServlet {
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("Home.jsp");
         requestDispatcher.forward(request, response);
