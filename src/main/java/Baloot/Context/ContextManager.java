@@ -32,7 +32,7 @@ public class ContextManager {
         }
         return instance;
     }
-    public  void initialize() {
+    public void initialize() {
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd")
                 .registerTypeAdapterFactory(new IgnoreFailureTypeAdapterFactory())
