@@ -9,8 +9,8 @@ import Baloot.Exception.CommentNotFound;
 import Baloot.Exception.CommodityNotFound;
 import Baloot.Exception.InvalidVoteValue;
 import Baloot.Exception.UserNotFound;
-import Baloot.Model.view.CommodityShortModel;
-import Baloot.Model.view.VoteCommentModel;
+import Baloot.View.CommodityShortModel;
+import Baloot.View.VoteCommentModel;
 import Baloot.RequestMethod;
 import Baloot.Route;
 

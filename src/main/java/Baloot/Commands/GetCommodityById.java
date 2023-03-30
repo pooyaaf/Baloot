@@ -8,7 +8,7 @@ import Baloot.Model.CommodityByIdModel;
 import Baloot.RequestMethod;
 import Baloot.Route;
 
-import Baloot.Model.view.CommodityShortModel;
+import Baloot.View.CommodityShortModel;
 
 @Route("commodities/{commodity_id}")
 public class GetCommodityById extends Command{

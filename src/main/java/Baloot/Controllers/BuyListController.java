@@ -2,10 +2,8 @@ package Baloot.Controllers;
 
 import Baloot.Commands.GetBuyList;
 import Baloot.Commands.RemoveFromBuyList;
-import Baloot.Context.ContextManager;
 import Baloot.Context.UserContext;
-import Baloot.Exception.UserNotFound;
-import Baloot.Model.BuyListModel;
+import Baloot.View.BuyListModel;
 import Baloot.Model.CommodityBuyListModel;
 import Baloot.Model.UserByUsernameModel;
 import jakarta.servlet.RequestDispatcher;
@@ -25,13 +23,15 @@ public class BuyListController extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        UserByUsernameModel model = new UserByUsernameModel();
-        model.username = UserContext.username;
+        if (UserContext.username == null) {
+            response.sendRedirect("/login");
+            return;
+        }
         GetBuyList command = new GetBuyList();
-        BuyListModel buylist = command.handle(model);
+        BuyListModel buyList = command.handle(UserContext.username);
 
 
-        request.setAttribute("buylist", buylist);
+        request.setAttribute("buyList", buyList);
 
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/BuyList.jsp");
         requestDispatcher.forward(request, response);

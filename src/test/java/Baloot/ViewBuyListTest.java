@@ -2,20 +2,16 @@ package Baloot;
 
 import Baloot.Commands.AddCommodityToBuyList;
 import Baloot.Commands.GetBuyList;
-import Baloot.Commands.console.AddToBuyList;
 import Baloot.Context.ContextManager;
-import Baloot.Entity.Commodity;
 import Baloot.Exception.CommodityNotFound;
 import Baloot.Exception.CommodityNotInStuck;
 import Baloot.Exception.UserNotFound;
 import Baloot.Model.*;
-import Baloot.Model.view.CommodityShortModel;
+import Baloot.View.BuyListModel;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-
-import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -46,23 +42,18 @@ public class ViewBuyListTest {
         CommodityBuyListModel commodityBuyListModel = new CommodityBuyListModel();
         commodityBuyListModel.commodityId = commodityId.toString();
         commodityBuyListModel.username = username;
-        UserByUsernameModel userByUsernameModel = new UserByUsernameModel();
-        userByUsernameModel.username = username;
 
         AddCommodityToBuyList command = new AddCommodityToBuyList();
         GetBuyList buyListCommand = new GetBuyList();
 
         command.handle(commodityBuyListModel);
-        BuyListModel buyListModel = buyListCommand.handle(userByUsernameModel);
+        BuyListModel buyListModel = buyListCommand.handle(username);
         assertEquals(1, buyListModel.buyList.size());
     }
 
     @Test(expected = UserNotFound.class)
     public void GetBuyList_UserNotFound_Throws() throws Exception, UserNotFound, CommodityNotFound, CommodityNotInStuck {
-        UserByUsernameModel userByUsernameModel = new UserByUsernameModel();
-        userByUsernameModel.username = username + "NotIn";
-
         GetBuyList buyListCommand = new GetBuyList();
-        buyListCommand.handle(userByUsernameModel);
+        buyListCommand.handle(username + "NotIn");
     }
 }

@@ -5,8 +5,7 @@ import Baloot.Context.ContextManager;
 import Baloot.Entity.Provider;
 import Baloot.Exception.ProviderNotFound;
 import Baloot.Model.ProviderByIdModel;
-import Baloot.Model.ProviderModel;
-import Baloot.Model.view.ProviderViewModel;
+import Baloot.View.ProviderViewModel;
 import Baloot.RequestMethod;
 import Baloot.Route;
 

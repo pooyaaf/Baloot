@@ -2,8 +2,8 @@ package Baloot;
 
 import Baloot.Commands.GetCommoditiesByCategory;
 import Baloot.Model.*;
-import Baloot.Model.view.CommodityListModel;
-import Baloot.Model.view.CommodityShortModel;
+import Baloot.View.CommodityListModel;
+import Baloot.View.CommodityShortModel;
 import org.junit.Before;
 import org.junit.Test;
 

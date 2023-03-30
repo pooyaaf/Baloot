@@ -6,8 +6,7 @@ import Baloot.Entity.Category;
 import Baloot.Entity.Commodity;
 import Baloot.Exception.CategoryNotFound;
 import Baloot.Model.CategoryModel;
-import Baloot.Model.CommoditiesListByCategoryModel;
-import Baloot.Model.view.CommodityListModel;
+import Baloot.View.CommodityListModel;
 import Baloot.RequestMethod;
 import Baloot.Route;
 

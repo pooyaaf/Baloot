@@ -1,8 +1,15 @@
 <%@ page import="Baloot.Context.UserContext" %>
-<%@page import="Baloot.Model.BuyListModel"%>
+<%@page import="Baloot.View.BuyListModel"%>
+<%@ page import="Baloot.Commands.GetBuyList" %>
+<%@ page import="Baloot.View.CommodityShortModel" %>
+<%@ page import="Baloot.Context.ContextManager" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.List" %>
 
 <%
-    BuyListModel buylist = (BuyListModel) request.getAttribute("buylist")
+//    GetBuyList getBuyList = new GetBuyList();
+//    BuyListModel buyList = getBuyList.handle(UserContext.username);
+    BuyListModel buyList = (BuyListModel) request.getAttribute("buyList");
 %>
 
 <html lang="en"><head>
@@ -21,11 +28,11 @@
 <body>
 <ul>
     <li id="username">Username: <%=UserContext.username%></li>
-    <li id="email">Email: <%=buylist.user.email%></li>
-    <li id="birthDate">Birth Date: <%=buylist.user.birthDate%></li>
-    <li id="address"><%=buylist.user.address%></li>
-    <li id="credit">Credit: <%=buylist.user.credit%></li>
-    <li>Current Buy List Price: 64000000</li>
+    <li id="email">Email: <%=buyList.user.email%></li>
+    <li id="birthDate">Birth Date: <%=buyList.user.birthDate%></li>
+    <li id="address"><%=buyList.user.address%></li>
+    <li id="credit">Credit: <%=buyList.user.credit%></li>
+    <li>Current Buy List Price: <%=buyList.buyList.stream().mapToDouble(o -> o.commodityModel.price).sum()%></li>
     <li>
         <a href="/credit">Add Credit</a>
     </li>
@@ -52,37 +59,29 @@
         <th></th>
         <th></th>
     </tr>
+    <% for (CommodityShortModel commodity : buyList.buyList) { %>
     <tr>
-        <td>4231</td>
-        <td>Galaxy S22 Plus</td>
-        <td>Phone Provider No.1</td>
-        <td>43000000</td>
-        <td>Technology, Phone</td>
-        <td>8.7</td>
-        <td>12</td>
-        <td><a href="/commodities/4231">Link</a></td>
+        <td><%=commodity.commodityModel.id%></td>
+        <td><%=commodity.commodityModel.name%></td>
+        <td><%=ContextManager.getInstance().getProvider(commodity.commodityModel.providerId).getName()%></td>
+        <td><%=commodity.commodityModel.price%></td>
+        <% List<String> categoryList = new ArrayList<>();
+            for(String category : commodity.commodityModel.categories) {
+                categoryList.add(category);
+            }
+            String categoryString = String.join(", ", categoryList);
+        %>
+        <td><%=categoryString%></td>
+        <td><%=commodity.commodityModel.rating%></td>
+        <td><%=commodity.commodityModel.inStock%></td>
+        <td><a href="/commodities/<%=commodity.commodityModel.id%>>">Link</a></td>
         <td>
             <form action="" method="POST">
-                <input id="form_commodity_id" type="hidden" name="commodityId" value="4231">
+                <input id="form_commodity_id" type="hidden" name="commodityId" value="<%=commodity.commodityModel.id%>">
                 <button type="submit">Remove</button>
             </form>
         </td>
     </tr>
-    <tr>
-        <th>2341</th>
-        <th>Galaxy S21</th>
-        <th>Phone Provider No.2</th>
-        <th>21000000</th>
-        <th>Technology, Phone</th>
-        <th>8.3</th>
-        <th>17</th>
-        <td><a href="/commodities/2341">Link</a></td>
-        <td>
-            <form action="" method="POST">
-                <input id="form_commodity_id" type="hidden" name="commodityId" value="2341">
-                <button type="submit">Remove</button>
-            </form>
-        </td>
-    </tr>
+    <% } %>
     </tbody></table>
 </body></html>

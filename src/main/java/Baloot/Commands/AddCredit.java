@@ -5,7 +5,7 @@ import Baloot.Context.ContextManager;
 import Baloot.Entity.User;
 import Baloot.Exception.UserNotFound;
 import Baloot.Model.AddCreditModel;
-import Baloot.Model.view.UserInfoModel;
+import Baloot.View.UserInfoModel;
 import Baloot.RequestMethod;
 import Baloot.Route;
 

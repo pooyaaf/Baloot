@@ -5,11 +5,10 @@ import Baloot.Entity.Comment;
 import Baloot.Entity.Commodity;
 import Baloot.Entity.Provider;
 import Baloot.Entity.User;
-import Baloot.Exception.CommodityNotFound;
 import Baloot.Model.CommentModel;
 import Baloot.Model.CommodityModel;
 import Baloot.Model.ProviderModel;
-import Baloot.Model.view.CommodityShortModel;
+import Baloot.View.CommodityShortModel;
 import Baloot.Model.UserModel;
 
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
 package Baloot.Entity;
 
 import Baloot.Model.ProviderModel;
-import Baloot.Model.view.ProviderViewModel;
+import Baloot.View.ProviderViewModel;
 import lombok.Getter;
 import lombok.Setter;
 

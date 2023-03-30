@@ -3,7 +3,7 @@ package Baloot;
 import Baloot.Commands.GetCommodityById;
 import Baloot.Exception.CommodityNotFound;
 import Baloot.Model.CommodityByIdModel;
-import Baloot.Model.view.CommodityShortModel;
+import Baloot.View.CommodityShortModel;
 import org.junit.Before;
 import org.junit.Test;
 

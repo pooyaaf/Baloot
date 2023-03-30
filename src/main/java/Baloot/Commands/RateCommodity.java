@@ -3,13 +3,11 @@ package Baloot.Commands;
 import Baloot.AcceptMethod;
 import Baloot.Context.ContextManager;
 import Baloot.Entity.Commodity;
-import Baloot.Exception.CommentNotFound;
 import Baloot.Exception.CommodityNotFound;
 import Baloot.Exception.InvalidRateScore;
 import Baloot.Exception.UserNotFound;
 import Baloot.Model.RateModel;
-import Baloot.Model.view.CommodityShortModel;
-import Baloot.Model.view.VoteCommentModel;
+import Baloot.View.CommodityShortModel;
 import Baloot.RequestMethod;
 import Baloot.Route;
 

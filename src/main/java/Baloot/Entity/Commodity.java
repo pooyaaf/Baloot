@@ -1,17 +1,14 @@
 package Baloot.Entity;
 
 
-import Baloot.Context.ContextManager;
 import Baloot.Exception.CommodityNotInStuck;
 import Baloot.Model.CommentReportModel;
 import Baloot.Model.CommodityModel;
-import Baloot.Model.view.CommodityListModel;
-import Baloot.Model.view.CommodityShortModel;
+import Baloot.View.CommodityShortModel;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 
 public class Commodity {

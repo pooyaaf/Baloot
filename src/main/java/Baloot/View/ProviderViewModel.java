@@ -1,4 +1,4 @@
-package Baloot.Model.view;
+package Baloot.View;
 
 import Baloot.Model.CommodityModel;
 import Baloot.Model.ProviderModel;

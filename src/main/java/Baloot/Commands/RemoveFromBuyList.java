@@ -7,9 +7,8 @@ import Baloot.Entity.User;
 import Baloot.Exception.CommodityIsNotInBuyList;
 import Baloot.Exception.CommodityNotFound;
 import Baloot.Exception.UserNotFound;
-import Baloot.Model.BuyModel;
 import Baloot.Model.CommodityBuyListModel;
-import Baloot.Model.view.CommodityShortModel;
+import Baloot.View.CommodityShortModel;
 import Baloot.RequestMethod;
 import Baloot.Route;
 

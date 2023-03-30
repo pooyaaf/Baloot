@@ -1,5 +1,5 @@
 <%@ page import="Baloot.Commands.GetCommoditiesList" %>
-<%@ page import="Baloot.Model.view.CommodityListModel" %>
+<%@ page import="Baloot.View.CommodityListModel" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="Baloot.Context.UserContext" %>

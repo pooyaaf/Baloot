@@ -4,7 +4,7 @@ import Baloot.Exception.CommodityIsNotInBuyList;
 import Baloot.Exception.CreditNotEnough;
 import Baloot.Model.CommodityModel;
 import Baloot.Model.UserModel;
-import Baloot.Model.view.UserInfoModel;
+import Baloot.View.UserInfoModel;
 import lombok.Getter;
 import lombok.Setter;
 

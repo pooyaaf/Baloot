@@ -1,22 +1,15 @@
 package Baloot;
 
-import Baloot.Commands.RateCommodity;
 import Baloot.Commands.voteComment;
 import Baloot.Context.ContextManager;
 import Baloot.Exception.CommentNotFound;
 import Baloot.Exception.CommodityNotFound;
-import Baloot.Exception.InvalidRateScore;
 import Baloot.Exception.UserNotFound;
-import Baloot.Model.RateModel;
-import Baloot.Model.view.CommodityShortModel;
-import Baloot.Model.view.VoteCommentModel;
+import Baloot.View.CommodityShortModel;
+import Baloot.View.VoteCommentModel;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import javax.xml.crypto.Data;
-
-import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 

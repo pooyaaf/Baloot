@@ -1,4 +1,4 @@
-package Baloot.Model.view;
+package Baloot.View;
 
 import org.jetbrains.annotations.Nullable;
 

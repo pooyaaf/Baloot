@@ -2,14 +2,10 @@ package Baloot.Commands;
 
 import Baloot.AcceptMethod;
 import Baloot.Context.ContextManager;
-import Baloot.Entity.Commodity;
 import Baloot.Entity.User;
-import Baloot.Exception.CommodityNotFound;
 import Baloot.Exception.UserNotFound;
-import Baloot.Model.CommodityByIdModel;
 import Baloot.Model.UserByIdModel;
-import Baloot.Model.view.CommodityShortModel;
-import Baloot.Model.view.UserInfoModel;
+import Baloot.View.UserInfoModel;
 import Baloot.RequestMethod;
 import Baloot.Route;
 

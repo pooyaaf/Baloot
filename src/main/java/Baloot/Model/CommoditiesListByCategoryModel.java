@@ -1,7 +1,7 @@
 package Baloot.Model;
 
-import Baloot.Model.view.CommodityShortModel;
-import Baloot.Model.view.Component;
+import Baloot.View.CommodityShortModel;
+import Baloot.View.Component;
 
 import java.util.ArrayList;
 

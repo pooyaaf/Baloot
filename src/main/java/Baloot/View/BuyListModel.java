@@ -1,6 +1,7 @@
-package Baloot.Model;
+package Baloot.View;
 
-import Baloot.Model.view.CommodityShortModel;
+import Baloot.Model.UserModel;
+import Baloot.View.CommodityShortModel;
 
 import java.util.ArrayList;
 

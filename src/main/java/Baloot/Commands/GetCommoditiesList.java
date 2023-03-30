@@ -3,7 +3,7 @@ package Baloot.Commands;
 import Baloot.AcceptMethod;
 import Baloot.Context.ContextManager;
 import Baloot.Entity.Commodity;
-import Baloot.Model.view.CommodityListModel;
+import Baloot.View.CommodityListModel;
 import Baloot.RequestMethod;
 import Baloot.Route;
 
