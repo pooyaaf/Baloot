@@ -7,8 +7,6 @@
 <%@ page import="java.util.List" %>
 
 <%
-//    GetBuyList getBuyList = new GetBuyList();
-//    BuyListModel buyList = getBuyList.handle(UserContext.username);
     BuyListModel buyList = (BuyListModel) request.getAttribute("buyList");
 %>
 

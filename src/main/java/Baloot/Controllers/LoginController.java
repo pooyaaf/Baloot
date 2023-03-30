@@ -27,5 +27,9 @@ public class LoginController extends  HttpServlet {
             UserContext.username = username;
             resp.sendRedirect("/");
         }
+        else {
+            RequestDispatcher requestDispatcher = req.getRequestDispatcher("/Login.jsp");
+            requestDispatcher.forward(req, resp);
+        }
     }
 }
