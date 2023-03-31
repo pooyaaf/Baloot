@@ -1,6 +1,6 @@
 package Baloot;
 
-import Baloot.Commands.voteComment;
+import Baloot.Commands.VoteComment;
 import Baloot.Context.ContextManager;
 import Baloot.Exception.CommentNotFound;
 import Baloot.Exception.CommodityNotFound;
@@ -39,7 +39,7 @@ public class CommentVoteTest {
         voteCommentModel.vote = 1;
         voteCommentModel.commentId = commentId;
         voteCommentModel.username = "user1";
-        voteComment command = new voteComment();
+        VoteComment command = new VoteComment();
         CommodityShortModel commodityShortModel = command.handle(voteCommentModel);
         assertEquals(Integer.valueOf(1), commodityShortModel.commentsList.get(0).like);
     }
@@ -50,7 +50,7 @@ public class CommentVoteTest {
         voteCommentModel.vote = -1;
         voteCommentModel.commentId = commentId;
         voteCommentModel.username = "user1";
-        voteComment command = new voteComment();
+        VoteComment command = new VoteComment();
         CommodityShortModel commodityShortModel = command.handle(voteCommentModel);
         assertEquals(Integer.valueOf(1), commodityShortModel.commentsList.get(0).dislike);
     }
@@ -61,7 +61,7 @@ public class CommentVoteTest {
         voteCommentModel.vote = 0;
         voteCommentModel.commentId = -1;
         voteCommentModel.username = "user1";
-        voteComment command = new voteComment();
+        VoteComment command = new VoteComment();
         command.handle(voteCommentModel);
     }
 
@@ -71,7 +71,7 @@ public class CommentVoteTest {
         voteCommentModel.vote = 0;
         voteCommentModel.commentId = commentId;
         voteCommentModel.username = "user1";
-        voteComment command = new voteComment();
+        VoteComment command = new VoteComment();
         CommodityShortModel commodityShortModel = command.handle(voteCommentModel);
         assertEquals(Integer.valueOf(0), commodityShortModel.commentsList.get(0).like);
         assertEquals(Integer.valueOf(0), commodityShortModel.commentsList.get(0).dislike);

@@ -28,7 +28,7 @@ public class CommoditiesController extends HttpServlet {
             try {
                 Integer commodityId = Integer.valueOf(segments[1]);
                 Commodity commodity = ContextManager.getInstance().getCommodity(commodityId);
-                request.setAttribute("commodity", commodity.getModel());
+                request.setAttribute("commodity", commodity.getReportModel());
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/Commodity.jsp");
                 requestDispatcher.forward(request, response);
             } catch (Exception e) {

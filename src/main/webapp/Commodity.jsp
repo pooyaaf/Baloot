@@ -1,10 +1,12 @@
-<%@ page import="Baloot.Model.CommodityModel" %>
-<%@ page import="Baloot.Model.CommentViewModel" %>
 <%@ page import="Baloot.Context.UserContext" %>
+<%@ page import="Baloot.View.CommodityShortModel" %>
+<%@ page import="Baloot.Model.CommentReportModel" %>
+<%@ page import="java.text.Format" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 
 
 <%
-  CommodityModel commodity = (CommodityModel) request.getAttribute("commodity");
+  CommodityShortModel commodity = (CommodityShortModel) request.getAttribute("commodity");
 %>
 
 <!DOCTYPE html>
@@ -26,17 +28,17 @@
 <span>username: <%=UserContext.username%></span>
 <br>
 <ul>
-  <li id="id">Id: <%=commodity.id%> </li>
-  <li id="name">Name: <%=commodity.name%></li>
-  <li id="providerName">Provider Name: <%=commodity.providerId%></li>
-  <li id="price">Price: <%=commodity.price%></li>
+  <li id="id">Id: <%=commodity.commodityModel.id%> </li>
+  <li id="name">Name: <%=commodity.commodityModel.name%></li>
+  <li id="providerName">Provider Name: <%=commodity.commodityModel.providerId%></li>
+  <li id="price">Price: <%=commodity.commodityModel.price%></li>
   <li id="categories">Categories:
-    <% for(String category : commodity.categories) { %>
+    <% for(String category : commodity.commodityModel.categories) { %>
     <%=category%>,
     <% } %>
   </li>
-  <li id="rating">Rating: <%=commodity.rating%></li>
-  <li id="inStock">In Stock: <%=commodity.inStock%></li>
+  <li id="rating">Rating: <%=commodity.commodityModel.rating%></li>
+  <li id="inStock">In Stock: <%=commodity.commodityModel.inStock%></li>
 </ul>
 
 <label>Add Your Comment:</label>
@@ -45,13 +47,13 @@
   <button type="submit">submit</button>
 </form>
 <br>
-<form action="/rateCommodity/<%=commodity.id%>" method="POST">
+<form action="/rateCommodity/<%=commodity.commodityModel.id%>" method="POST">
   <label>Rate(between 1 and 10):</label>
   <input type="number" id="quantity" name="quantity" min="1" max="10">
   <button type="submit">Rate</button>
 </form>
 <br>
-<form action="/addToBuyList/<%=commodity.id%>" method="POST">
+<form action="/addToBuyList/<%=commodity.commodityModel.id%>" method="POST">
   <button type="submit">Add to BuyList</button>
 </form>
 <br />
@@ -64,13 +66,15 @@
     <th>likes</th>
     <th>dislikes</th>
   </tr>
+  <% for(CommentReportModel comment : commodity.commentsList) { %>
   <tr>
-    <td>user1</td>
-    <td>Good</td>
-    <td>2022-07-25</td>
+    <td><%=comment.id%></td>
+    <td><%=comment.text%>></td>
+    <%Format formatter = new SimpleDateFormat("yyyy-MM-dd");%>
+    <td><%=formatter.format(comment.date)%></td>
     <td>
-      <form action="" method="POST">
-        <label>2</label>
+      <form action="/voteComment/<%=comment.id%>" method="POST">
+        <label><%=comment.like%></label>
         <input
                 id="form_comment_id_like"
                 type="hidden"
@@ -81,8 +85,8 @@
       </form>
     </td>
     <td>
-      <form action="" method="POST">
-        <label>1</label>
+      <form action="/voteComment/<%=comment.id%>" method="POST">
+        <label><%=comment.dislike%></label>
         <input
                 id="form_comment_id_dislike"
                 type="hidden"
@@ -93,6 +97,7 @@
       </form>
     </td>
   </tr>
+  <% } %>
 </table>
 <br><br>
 <table>
