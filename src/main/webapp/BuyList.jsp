@@ -24,7 +24,7 @@
 </head>
 <body>
 <ul>
-    <li id="username">Username: <%=UserContext.username%></li>
+    <li id="username">Username: <%=buyList.userModel.username%></li>
     <li id="email">Email: <%=buyList.userModel.email%></li>
     <li id="birthDate">Birth Date: <%=buyList.userModel.birthDate%></li>
     <li id="address"><%=buyList.userModel.address%></li>
@@ -34,9 +34,9 @@
         <a href="/credit">Add Credit</a>
     </li>
     <li>
-        <form action="" method="POST">
+        <form action="/payment" method="POST">
             <label>Submit & Pay</label>
-            <input id="form_payment" type="hidden" name="userId" value="Farhad">
+            <input id="form_payment" type="hidden" name="userId" value="<%=buyList.userModel.username%>">
             <button type="submit">Payment</button>
         </form>
     </li>

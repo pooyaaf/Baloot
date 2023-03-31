@@ -13,6 +13,13 @@ import java.io.IOException;
 
 @WebServlet("/removeFromBuyList/*")
 public class RemoveFromBuyListController extends HttpServlet {
+    @SneakyThrows
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) {
+        if (isNotAuthenticated(response)) return;
+        removeFromBuyList(request.getParameter("commodityId"), response);
+    }
+
     private static boolean isNotAuthenticated(HttpServletResponse response) throws IOException {
         if (UserContext.username == null) {
             response.sendRedirect("/login");
@@ -42,12 +49,5 @@ public class RemoveFromBuyListController extends HttpServlet {
         if (segments.length == 2) {
             removeFromBuyList(segments[1], response);
         }
-    }
-
-    @SneakyThrows
-    @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) {
-        if (isNotAuthenticated(response)) return;
-        removeFromBuyList(request.getParameter("commodityId"), response);
     }
 }
