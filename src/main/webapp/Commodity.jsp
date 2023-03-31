@@ -45,7 +45,7 @@
   <button type="submit">submit</button>
 </form>
 <br>
-<form action="" method="POST">
+<form action="/rateCommodity/<%=commodity.id%>" method="POST">
   <label>Rate(between 1 and 10):</label>
   <input type="number" id="quantity" name="quantity" min="1" max="10">
   <button type="submit">Rate</button>
