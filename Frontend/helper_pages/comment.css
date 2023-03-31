@@ -1,0 +1,135 @@
+.comments {
+    margin-top: 20px;
+    font-family: 'Inter';
+    font-style: normal;
+    
+  }
+  
+  .comments h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 34px;
+    color: #593C1C;
+  }
+  
+  .comments h2 p{
+    display:inline;
+    color: #ccc;
+  }
+
+  .comment {
+    margin-bottom: 20px;
+    background: #FFFFFF;
+    padding: 10px;
+    box-shadow: 0px 4px 4px rgba(208, 208, 208, 0.25);
+
+  }
+  
+  .comment-header {
+    margin-bottom: 10px;
+  }
+
+  .message {
+    
+    margin-bottom: 10px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 32px;
+    line-height: 39px;
+    color: #000000;
+  }
+  .username {
+    font-weight: bold;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 27px;
+    margin-left:50px;
+    color: #919191;
+  }
+  
+  .date {
+    color: #919191;
+    margin-left: 10px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 22px;
+  }
+  
+
+  
+  .helpful {
+    display: flex;
+    align-items: center;
+    float:right;
+    
+  }
+  
+  .helpful-label {
+    margin-right: 10px;
+    color: #593C1C;
+    float:right;
+    margin-bottom:5px;
+  }
+  
+  .like, .dislike {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  
+  .like img, .dislike img {
+    height: 20px;
+  }
+  
+  .submit-opinion {
+    margin-top: 20px;
+  }
+  .submit-opinion input button{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    margin-top: 20px;
+  }
+  
+  .submit-opinion h3 {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 34px;
+
+    color: #593C1C;
+    margin-bottom: 10px;
+  }
+  .submit-opinion input {
+    background: #F5F5F5;
+    border-radius: 15px;
+    width:80%;
+    height: 60px;
+    margin-left:10%;
+  
+}
+.submit-opinion button{
+    background: #593C1C;
+    mix-blend-mode: normal;
+    border-radius: 15px;
+    color: #F7F0E9;
+    padding:15px;
+    text-align: center;
+    width: 7%;
+    height:7%;
+    
+}
+.submit-opinion button:hover{
+    background: #593C1C;
+    opacity:70%;
+
+}
+
+  

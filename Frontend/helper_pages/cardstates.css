@@ -1,0 +1,37 @@
+#you-may-also-like {
+    background-color: #F7F0E9;
+    padding: 50px 0;
+  }
+  
+  #you-may-also-like h2 {
+    font-size: 36px;
+    text-align: center;
+    margin-bottom: 50px;
+  }
+  
+  .card-deck {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .card {
+    width: 30%;
+    margin-bottom: 30px;
+  }
+  
+  .card-img-top {
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .card-title {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .card-text {
+    font-size: 16px;
+    margin-bottom: 0;
+  }
+  

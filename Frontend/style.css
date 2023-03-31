@@ -1,0 +1,25 @@
+* {
+    left: 0px;
+    top: 0px;
+    font-family: 'Inter';
+  }
+  
+  body {
+    font-family: 'Inter';
+    background-color: #f7f0e9;
+    background: #F5F5F5;
+  }
+  
+  header {
+    padding: 10px;
+    color: white;
+  }
+  footer {
+    font-family: 'Inter';
+    background-color: #593c1c;
+    padding: 10px;
+    color: white;
+    text-align: center;
+    height: 60px;
+  }
+    
