@@ -51,7 +51,7 @@
   <button type="submit">Rate</button>
 </form>
 <br>
-<form action="" method="POST">
+<form action="/addToBuyList/<%=commodity.id%>" method="POST">
   <button type="submit">Add to BuyList</button>
 </form>
 <br />
@@ -70,9 +70,9 @@
     <td>2022-07-25</td>
     <td>
       <form action="" method="POST">
-        <label for="">2</label>
+        <label>2</label>
         <input
-                id="form_comment_id"
+                id="form_comment_id_like"
                 type="hidden"
                 name="comment_id"
                 value="1"
@@ -82,9 +82,9 @@
     </td>
     <td>
       <form action="" method="POST">
-        <label for="">1</label>
+        <label>1</label>
         <input
-                id="form_comment_id"
+                id="form_comment_id_dislike"
                 type="hidden"
                 name="comment_id"
                 value="-1"
@@ -116,36 +116,6 @@
     <td>8.3</td>
     <td>17</td>
     <td><a href="/commodities/2341">Link</a></td>
-  </tr>
-  <tr>
-    <td>4231</td>
-    <td>Galaxy S22 Plus</td>
-    <td>Phone Provider No.1</td>
-    <td>43000000</td>
-    <td>Technology, Phone</td>
-    <td>8.7</td>
-    <td>12</td>
-    <td><a href="/commodities/4231">Link</a></td>
-  </tr>
-  <tr>
-    <td>1234</td>
-    <td>Galaxy S22 Ultra</td>
-    <td>Phone Provider No.2</td>
-    <td>50000000</td>
-    <td>Technology, Phone</td>
-    <td>8.9</td>
-    <td>5</td>
-    <td><a href="/commodities/1234">Link</a></td>
-  </tr>
-  <tr>
-    <td>4321</td>
-    <td>Galaxy A53</td>
-    <td>Phone Provider No.2</td>
-    <td>16000000</td>
-    <td>Technology, Phone</td>
-    <td>8.7</td>
-    <td>11</td>
-    <td><a href="/commodities/4321">Link</a></td>
   </tr>
 </table>
 </body>

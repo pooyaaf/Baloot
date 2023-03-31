@@ -8,6 +8,7 @@ import Baloot.Exception.CommodityNotInStuck;
 import Baloot.Exception.UserNotFound;
 import Baloot.Model.*;
 import Baloot.View.BuyListModel;
+import Baloot.View.UserInfoModel;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,8 +48,8 @@ public class ViewBuyListTest {
         GetBuyList buyListCommand = new GetBuyList();
 
         command.handle(commodityBuyListModel);
-        BuyListModel buyListModel = buyListCommand.handle(username);
-        assertEquals(1, buyListModel.buyList.size());
+        UserInfoModel userInfoModel = buyListCommand.handle(username);
+        assertEquals(1, userInfoModel.buyList.size());
     }
 
     @Test(expected = UserNotFound.class)

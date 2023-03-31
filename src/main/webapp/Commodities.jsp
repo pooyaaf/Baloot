@@ -6,7 +6,6 @@
 
 
 <%
-
     GetCommoditiesList action = new GetCommoditiesList();
     CommodityListModel commodities = action.handle();
 %>

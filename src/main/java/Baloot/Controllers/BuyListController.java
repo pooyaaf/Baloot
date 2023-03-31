@@ -6,6 +6,7 @@ import Baloot.Context.UserContext;
 import Baloot.View.BuyListModel;
 import Baloot.Model.CommodityBuyListModel;
 import Baloot.Model.UserByUsernameModel;
+import Baloot.View.UserInfoModel;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -28,7 +29,7 @@ public class BuyListController extends HttpServlet {
             return;
         }
         GetBuyList command = new GetBuyList();
-        BuyListModel buyList = command.handle(UserContext.username);
+        UserInfoModel buyList = command.handle(UserContext.username);
 
 
         request.setAttribute("buyList", buyList);
