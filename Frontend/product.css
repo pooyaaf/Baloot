@@ -7,16 +7,19 @@
     display: flex;
     align-items: center;
   }
-  
+
+
   .logo {
     border-radius: 47px;
-    width:5em;
-    height:5em;
+    width:4em;
+    height:4em;  
   }
   
   .title {
     color: #A97B47;
     margin-left: 10px;
+    display: inline;
+  
   }
   
   .card-container  {

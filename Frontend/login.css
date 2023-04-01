@@ -1,0 +1,121 @@
+body {
+    background-color: #F7F0E9;
+  }
+.card {
+    margin-top: 30%;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0px 4px 4px rgba(208, 208, 208, 0.25);
+    animation-name: slideInUp;
+    animation-duration: 1s;
+}
+
+.card-header {
+    border-radius: 10px 10px 0 0;
+    background-color: #593C1C;
+    color: #fff;
+    animation-name: fadeInLeft;
+    animation-duration: 1s;
+}
+.logo-sign{
+    width:3rem;
+    height: 3rem;
+    display: inline;
+  }
+.form-control {
+    border-radius: 5px;
+}
+
+.btn-primary {
+    background-color: #593C1C;
+    border-color: #a97b47;
+    animation-name: fadeInRight;
+    animation-duration: 1s;
+}
+
+.btn-primary:hover {
+    background-color: #a97b47;
+    border-color: #593C1C;
+    animation-name: pulse;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+
+a {
+    color: #593C1C;
+    animation-name: fadeIn;
+    animation-duration: 1s;
+}
+
+a:hover {
+    color: #a97b47;
+    animation-name: pulse;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+
+.bg-dark {
+    background-color: #F5F5F5;
+}
+
+@keyframes slideInUp {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0%);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0%);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0%);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    from {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
