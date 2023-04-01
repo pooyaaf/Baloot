@@ -14,6 +14,7 @@ public class UserInfoModel implements Component {
     public UserModel userModel;
     public ArrayList<CommodityModel> buyList;
     public ArrayList<CommodityModel> purchasedList;
+    public double buyListPrice;
 
     private String generateRemoveFromBuyListForm(String username, Integer commodityId) {
         return String.format("<form action=\"/removeFromBuyList/%s/%s\" method=\"POST\" >\n" +

@@ -24,10 +24,7 @@ public class BuyListController extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if (UserContext.username == null) {
-            response.sendRedirect("/login");
-            return;
-        }
+        if (BaseController.isNotAuthenticated(response)) return;
         GetBuyList command = new GetBuyList();
         UserInfoModel buyList = command.handle(UserContext.username);
 

@@ -17,17 +17,8 @@ import java.io.IOException;
 @WebServlet("/rateCommodity/*")
 public class RateCommodityController extends HttpServlet {
     @SneakyThrows
-    private static boolean isNotAuthenticated(HttpServletResponse response) {
-        if (UserContext.username == null) {
-            response.sendRedirect("/login");
-            return true;
-        }
-        return false;
-    }
-
-    @SneakyThrows
     private void rateCommodity(Integer commodityId, Integer rate, HttpServletResponse response) {
-        if (isNotAuthenticated(response)) return;
+        if (BaseController.isNotAuthenticated(response)) return;
         RateCommodity command = new RateCommodity();
         RateModel model = new RateModel();
         model.rate = rate;

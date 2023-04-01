@@ -7,8 +7,17 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import Baloot.Context.UserContext;
+import lombok.SneakyThrows;
 
 public abstract class BaseController extends HttpServlet {
+    @SneakyThrows
+    public static boolean isNotAuthenticated(HttpServletResponse response) {
+        if (UserContext.username == null) {
+            response.sendRedirect("/login");
+            return true;
+        }
+        return false;
+    }
     void get(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         resp.sendRedirect("/");
     };

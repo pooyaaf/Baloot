@@ -19,11 +19,7 @@ public class CreditController extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if (UserContext.username == null) {
-            response.sendRedirect("/login");
-            return;
-        }
-
+        if (BaseController.isNotAuthenticated(response)) return;
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/Credit.jsp");
         requestDispatcher.forward(request, response);
     }
@@ -31,10 +27,7 @@ public class CreditController extends HttpServlet {
     @SneakyThrows
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (UserContext.username == null) {
-            response.sendRedirect("/login");
-            return;
-        }
+        if (BaseController.isNotAuthenticated(response)) return;
         AddCreditModel addCreditModel = new AddCreditModel();
         addCreditModel.user_id = UserContext.username;
         addCreditModel.credit = request.getParameter("credit");

@@ -16,17 +16,9 @@ import java.io.IOException;
 
 @WebServlet("/payment")
 public class PaymentController extends HttpServlet {
-    private static boolean isNotAuthenticated(HttpServletResponse response) throws IOException {
-        if (UserContext.username == null) {
-            response.sendRedirect("/login");
-            return true;
-        }
-        return false;
-    }
-
     @SneakyThrows
     private void payment(HttpServletResponse response) {
-        if (isNotAuthenticated(response)) return;
+        if (BaseController.isNotAuthenticated(response)) return;
         Payment command = new Payment();
         UserByIdModel model = new UserByIdModel();
         model.user_id = UserContext.username;

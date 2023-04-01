@@ -29,7 +29,7 @@
     <li id="birthDate">Birth Date: <%=buyList.userModel.birthDate%></li>
     <li id="address"><%=buyList.userModel.address%></li>
     <li id="credit">Credit: <%=buyList.userModel.credit%></li>
-    <li>Current Buy List Price: <%=buyList.buyList.stream().mapToDouble(o -> o.price * o.inStock).sum()%></li>
+    <li>Current Buy List Price: <%=buyList.buyListPrice%></li>
     <li>
         <a href="/credit">Add Credit</a>
     </li>
@@ -81,4 +81,11 @@
     </tr>
     <% } %>
     </tbody></table>
+<br>
+<label>Add Your Discount Code:</label>
+<form action="/addDiscount" method="post">
+    <input type="text" name="discount" value="" />
+    <button type="submit">submit</button>
+</form>
+<br>
 </body></html>

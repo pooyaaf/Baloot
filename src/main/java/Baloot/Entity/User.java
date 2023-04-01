@@ -2,6 +2,7 @@ package Baloot.Entity;
 
 import Baloot.Exception.CommodityIsNotInBuyList;
 import Baloot.Exception.CreditNotEnough;
+import Baloot.Exception.ExpiredDiscount;
 import Baloot.Model.CommodityModel;
 import Baloot.Model.UserModel;
 import Baloot.View.UserInfoModel;
@@ -35,6 +36,8 @@ public class User {
     private HashMap<Integer, Commodity> purchasedList;
     private HashMap<Integer, Integer> buyListInStock;
     private HashMap<Integer, Integer> purchasedListInStock;
+    private HashMap<String, Discount> expiredDiscounts;
+    private Discount activeDiscount;
 
     public User(UserModel model) {
         super();
@@ -48,6 +51,8 @@ public class User {
         purchasedList = new HashMap<>();
         buyListInStock = new HashMap<>();
         purchasedListInStock = new HashMap<>();
+        expiredDiscounts = new HashMap<>();
+        activeDiscount = null;
     }
 
     public void addToBuyList(Commodity commodity) {
@@ -91,6 +96,7 @@ public class User {
 
         userInfoModel.buyList = getBuyListModel();
         userInfoModel.purchasedList = getPurchasedListModel();
+        userInfoModel.buyListPrice = calculatePayment();
         return userInfoModel;
     }
 
@@ -100,18 +106,20 @@ public class User {
         }
     }
 
-    private double calculatePayment() throws CreditNotEnough {
+    private double calculatePayment() {
         double paymentPrice = 0;
         for (Commodity commodity : buyList.values()) {
             paymentPrice += commodity.getPrice() * buyListInStock.get(commodity.getId());
         }
-        if (paymentPrice > credit) {
-            throw new CreditNotEnough();
-        }
-        return paymentPrice;
+        if (activeDiscount == null) return paymentPrice;
+        return paymentPrice * (1 - activeDiscount.toPercent());
     }
 
     public void payment() throws CreditNotEnough {
+        double calculatedPayment = calculatePayment();
+        if (calculatedPayment > credit) {
+            throw new CreditNotEnough();
+        }
         credit -= calculatePayment();
         purchasedList.putAll(buyList);
         for (Integer id : buyListInStock.keySet()) {
@@ -123,7 +131,8 @@ public class User {
             purchasedListInStock.put(id, newInStock);
         }
         buyList.clear();
-        buyListInStock.clear();;
+        buyListInStock.clear();
+        updateUsedDiscounts();
     }
 
     private ArrayList<CommodityModel> getBuyListModel() {
@@ -144,5 +153,16 @@ public class User {
             result.add(commodityModel);
         }
         return result;
+    }
+
+    private void updateUsedDiscounts() {
+        if (activeDiscount == null) return;
+        expiredDiscounts.put(activeDiscount.getDiscountCode(), activeDiscount);
+        activeDiscount = null;
+    }
+
+    public void addDiscount(Discount discount) throws ExpiredDiscount {
+        if (expiredDiscounts.containsKey(discount.getDiscountCode())) throw new ExpiredDiscount();
+        activeDiscount = discount;
     }
 }

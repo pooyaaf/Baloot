@@ -3,9 +3,7 @@ package Baloot.Controllers;
 import Baloot.Commands.AddComment;
 import Baloot.Context.ContextManager;
 import Baloot.Context.UserContext;
-import Baloot.Model.CommentInputModel;
 import Baloot.Model.CommentModel;
-import Baloot.Model.CommentReportModel;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,17 +17,8 @@ import java.util.Date;
 @WebServlet("/addComment/*")
 public class AddCommentController extends HttpServlet {
     @SneakyThrows
-    private static boolean isNotAuthenticated(HttpServletResponse response) {
-        if (UserContext.username == null) {
-            response.sendRedirect("/login");
-            return true;
-        }
-        return false;
-    }
-
-    @SneakyThrows
-    public void addToBuyList(HttpServletRequest request, HttpServletResponse response) {
-        if (isNotAuthenticated(response)) return;
+    public void addComment(HttpServletRequest request, HttpServletResponse response) {
+        if (BaseController.isNotAuthenticated(response)) return;
         if (request.getPathInfo() == null) {
             return;
         }
@@ -49,11 +38,11 @@ public class AddCommentController extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
-        addToBuyList(request, response);
+        addComment(request, response);
     }
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
-        addToBuyList(request, response);
+        addComment(request, response);
     }
 }

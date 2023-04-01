@@ -14,10 +14,7 @@ import lombok.SneakyThrows;
 public class AddToBuyListController extends HttpServlet {
     @SneakyThrows
     public void addToBuyList(HttpServletRequest request, HttpServletResponse response) {
-        if (UserContext.username == null) {
-            response.sendRedirect("/login");
-            return;
-        }
+        if (BaseController.isNotAuthenticated(response)) return;
         if (request.getPathInfo() == null) {
             return;
         }

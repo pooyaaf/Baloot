@@ -16,17 +16,8 @@ import lombok.SneakyThrows;
 @WebServlet("/voteComment/*")
 public class VoteCommentController extends HttpServlet {
     @SneakyThrows
-    private static boolean isNotAuthenticated(HttpServletResponse response) {
-        if (UserContext.username == null) {
-            response.sendRedirect("/login");
-            return true;
-        }
-        return false;
-    }
-
-    @SneakyThrows
     private void voteComment(Integer commentId, Integer vote, HttpServletResponse response) {
-        if (isNotAuthenticated(response)) return;
+        if (BaseController.isNotAuthenticated(response)) return;
         VoteComment command = new VoteComment();
         VoteCommentModel model = new VoteCommentModel();
         model.vote = vote;

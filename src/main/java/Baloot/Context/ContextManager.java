@@ -18,6 +18,7 @@ public class ContextManager {
     private static HashMap<Integer, Provider> providers = new HashMap<>();
     private static HashMap<Integer, Commodity> commodities = new HashMap<>();
     private static HashMap<Integer, Comment> comments = new HashMap<>();
+    private static HashMap<String, Discount> discounts = new HashMap<>();
     private static ContextManager instance;
 
     public static ContextManager getInstance() {
@@ -76,6 +77,13 @@ public class ContextManager {
             commentModel.date = model.date;
             Comment comment = new Comment(commentModel);
             putComment(comment.getId(), comment);
+        }
+
+        String discountsString = Http.Get("discount");
+        DiscountModel[] discountArray = gson.fromJson(discountsString, DiscountModel[].class);
+        for (DiscountModel model : discountArray) {
+            Discount discount = new Discount(model);
+            putDiscount(discount.getDiscountCode(), discount);
         }
     }
 
@@ -193,5 +201,14 @@ public class ContextManager {
             return false;
         }
         return true;
+    }
+
+    public void putDiscount(String id, Discount discount) {
+        discounts.put(id, discount);
+    }
+
+    public Discount getDiscount(String id) throws DiscountNotFound{
+        if (!discounts.containsKey(id)) throw new DiscountNotFound();
+        return discounts.get(id);
     }
 }
