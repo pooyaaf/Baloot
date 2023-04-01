@@ -6,8 +6,7 @@
 
 
 <%
-    GetCommoditiesList action = new GetCommoditiesList();
-    CommodityListModel commodities = action.handle();
+    CommodityListModel commodities = (CommodityListModel) request.getAttribute("commodities");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,7 +24,7 @@
 <a href="/">Home</a>
 <p id="username">username: <%=UserContext.username%></p>
 <br><br>
-<form action="" method="POST">
+<form action="/commodities/search" method="POST">
     <label>Search:</label>
     <input type="text" name="search" value="">
     <button type="submit" name="action" value="search_by_category">Search By Cagtegory</button>
@@ -33,7 +32,7 @@
     <button type="submit" name="action" value="clear">Clear Search</button>
 </form>
 <br><br>
-<form action="" method="POST">
+<form action="/commodities/search" method="POST">
     <label>Sort By:</label>
     <button type="submit" name="action" value="sort_by_rate">Rate</button>
 </form>
