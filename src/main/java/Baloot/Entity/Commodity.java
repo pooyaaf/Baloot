@@ -122,4 +122,13 @@ public class Commodity {
     public boolean checkPriceRange(double start_price, double end_price) {
         return start_price <= price && price <= end_price;
     }
+
+    public boolean isInSimilarCategory(String[] categories) {
+        for (String category : categories) {
+            for (String secondCategory : this.categories) {
+                if (category.equals(secondCategory)) return true;
+            }
+        }
+        return false;
+    }
 }

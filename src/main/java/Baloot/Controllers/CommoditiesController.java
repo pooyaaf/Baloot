@@ -30,7 +30,17 @@ public class CommoditiesController extends HttpServlet {
         }
         return result;
     }
-    
+
+    private CommodityListModel getSuggestedCommoditiesModel(Commodity commodity) {
+        ArrayList<Commodity> suggestedCommodities = ContextManager.getInstance().getSuggestedCommodities(commodity);
+        CommodityListModel commodityListModel = new CommodityListModel();
+        commodityListModel.commoditiesList = new ArrayList<>();
+        for (Commodity suggestedCommodity : suggestedCommodities) {
+            commodityListModel.commoditiesList.add(suggestedCommodity.getModel());
+        }
+        return commodityListModel;
+    }
+
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -46,6 +56,7 @@ public class CommoditiesController extends HttpServlet {
                 Integer commodityId = Integer.valueOf(segments[1]);
                 Commodity commodity = ContextManager.getInstance().getCommodity(commodityId);
                 request.setAttribute("commodity", commodity.getReportModel());
+                request.setAttribute("suggested", getSuggestedCommoditiesModel(commodity));
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/Commodity.jsp");
                 requestDispatcher.forward(request, response);
             } catch (Exception e) {

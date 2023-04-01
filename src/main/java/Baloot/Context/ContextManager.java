@@ -4,13 +4,15 @@ import Baloot.Entity.*;
 import Baloot.Exception.*;
 import Baloot.Model.*;
 import Baloot.Validation.IgnoreFailureTypeAdapterFactory;
+import Baloot.View.CommodityListModel;
 import Baloot.service.Http;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
+import java.lang.reflect.Array;
+import java.util.*;
+
+import static java.lang.Math.max;
 
 public class ContextManager {
     private static HashMap<String, Category> categories = new HashMap<>();
@@ -210,5 +212,27 @@ public class ContextManager {
     public Discount getDiscount(String id) throws DiscountNotFound{
         if (!discounts.containsKey(id)) throw new DiscountNotFound();
         return discounts.get(id);
+    }
+
+    public ArrayList<Commodity> getSuggestedCommodities(Commodity targetCommodity) {
+        HashMap<Integer, Double> scores = new HashMap<>();
+        for (Commodity commodity : commodities.values()) {
+            if (commodity.getId() != targetCommodity.getId()) {
+                double score = commodity.getRating();
+                if (commodity.isInSimilarCategory(targetCommodity.getCategories())) score += 11;
+                scores.put(commodity.getId(), score);
+            }
+        }
+        ArrayList<Map.Entry<Integer, Double>> sortedList = new ArrayList<>(scores.entrySet());
+        Collections.sort(sortedList, new Comparator<HashMap.Entry<Integer, Double>>() {
+            public int compare(HashMap.Entry<Integer, Double> o1, HashMap.Entry<Integer, Double> o2) {
+                return o1.getValue().compareTo(o2.getValue());
+            }
+        });
+        ArrayList<Commodity> sorted = new ArrayList<>();
+        for (Map.Entry<Integer, Double> element : sortedList.subList(max(0, sortedList.size()-5), sortedList.size())) {
+            sorted.add(commodities.get(element.getKey()));
+        }
+        return sorted;
     }
 }

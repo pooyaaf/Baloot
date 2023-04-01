@@ -3,10 +3,16 @@
 <%@ page import="Baloot.Model.CommentReportModel" %>
 <%@ page import="java.text.Format" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="Baloot.Entity.Commodity" %>
+<%@ page import="Baloot.View.CommodityListModel" %>
+<%@ page import="Baloot.Model.CommodityModel" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
 
 
 <%
   CommodityShortModel commodity = (CommodityShortModel) request.getAttribute("commodity");
+  CommodityListModel suggestedCommodities = (CommodityListModel) request.getAttribute("suggested");
 %>
 
 <!DOCTYPE html>
@@ -112,16 +118,25 @@
     <th>In Stock</th>
     <th>Links</th>
   </tr>
+  <% for(CommodityModel suggestedCommodity : suggestedCommodities.commoditiesList) { %>
   <tr>
-    <td>2341</td>
-    <td>Galaxy S22</td>
-    <td>Phone Provider No.1</td>
-    <td>34000000</td>
-    <td>Technology, Phone</td>
-    <td>8.3</td>
-    <td>17</td>
-    <td><a href="/commodities/2341">Link</a></td>
+    <td><%=suggestedCommodity.id%></td>
+    <td><%=suggestedCommodity.name%></td>
+    <td><%=suggestedCommodity.providerId%></td>
+    <td><%=suggestedCommodity.price%></td>
+    <% List<String> categoryList = new ArrayList<>();
+      for(String category : suggestedCommodity.categories) {
+        categoryList.add(category);
+      }
+      String categoryString = String.join(", ", categoryList);
+    %>
+    <td><%= categoryString %></td>
+
+    <td><%=suggestedCommodity.rating%></td>
+    <td><%=suggestedCommodity.inStock%></td>
+    <td><a href="/commodities/<%=suggestedCommodity.id%>">Link</a></td>
   </tr>
+  <% } %>
 </table>
 </body>
 </html>
