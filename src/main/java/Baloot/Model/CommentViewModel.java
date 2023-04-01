@@ -17,7 +17,7 @@ public class CommentViewModel {
     public CommentViewModel(Comment comment) {
         super();
         commentId = comment.getId();
-        userName = comment.getuserName();
+        userName = comment.getUser().getUsername();
         text = comment.getText();
         date = comment.getDate();
         like = comment.getLikes();

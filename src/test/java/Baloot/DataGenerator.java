@@ -5,11 +5,8 @@ import Baloot.Entity.Comment;
 import Baloot.Entity.Commodity;
 import Baloot.Entity.Provider;
 import Baloot.Entity.User;
-import Baloot.Model.CommentModel;
-import Baloot.Model.CommodityModel;
-import Baloot.Model.ProviderModel;
+import Baloot.Model.*;
 import Baloot.View.CommodityShortModel;
-import Baloot.Model.UserModel;
 
 import java.util.ArrayList;
 
@@ -66,7 +63,7 @@ class DataGenerator {
     public static Integer GenerateComment(Integer commodityId, String userEmail, String text) {
         CommentModel commentModel = new CommentModel();
         commentModel.commodityId = commodityId;
-        commentModel.userEmail = userEmail;
+        commentModel.user = null;
         commentModel.text = text;
         Comment comment = new Comment(commentModel);
         try {

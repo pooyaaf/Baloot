@@ -1,9 +1,9 @@
 package Baloot.Entity;
 
+import Baloot.Model.CommentInputModel;
 import Baloot.Model.CommentModel;
 import Baloot.Model.CommentReportModel;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -14,7 +14,8 @@ public class Comment {
     Integer id;
     @Getter
     Integer commodityId;
-    String userEmail;
+    @Getter
+    User user;
     String text;
     Date date;
     HashMap<String, Integer> votes = new HashMap<>();
@@ -23,10 +24,6 @@ public class Comment {
 
     public Integer getId() {
         return id;
-    }
-
-    public String getuserName() {
-        return userEmail;
     }
 
     public String getText() {
@@ -41,7 +38,7 @@ public class Comment {
         super();
         id = idCounter++;
         commodityId = model.commodityId;
-        userEmail = model.userEmail;
+        this.user = model.user;
         text = model.text;
         date = model.date;
     }
@@ -72,7 +69,7 @@ public class Comment {
     public CommentReportModel getReportModel() {
         CommentReportModel commentReportModel = new CommentReportModel();
         commentReportModel.id = id;
-        commentReportModel.userEmail = userEmail;
+        commentReportModel.username = user.getUsername();
         commentReportModel.text = text;
         commentReportModel.date = date;
         commentReportModel.like = likes;

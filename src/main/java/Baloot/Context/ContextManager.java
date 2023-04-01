@@ -2,10 +2,7 @@ package Baloot.Context;
 
 import Baloot.Entity.*;
 import Baloot.Exception.*;
-import Baloot.Model.CommentModel;
-import Baloot.Model.ProviderModel;
-import Baloot.Model.UserModel;
-import Baloot.Model.CommodityModel;
+import Baloot.Model.*;
 import Baloot.Validation.IgnoreFailureTypeAdapterFactory;
 import Baloot.service.Http;
 import com.google.gson.Gson;
@@ -29,6 +26,15 @@ public class ContextManager {
             instance.initialize();
         }
         return instance;
+    }
+
+    private User findUserByEmail(String email) {
+        for (User user : users.values()) {
+            if (user.getEmail() == email) {
+                return user;
+            }
+        }
+        return null;
     }
 
     public void initialize() {
@@ -59,9 +65,16 @@ public class ContextManager {
         }
 
         String commentsString = Http.Get("comments");
-        CommentModel[] commentsArray = gson.fromJson(commentsString, CommentModel[].class);
-        for (CommentModel model : commentsArray) {
-            Comment comment = new Comment(model);
+        CommentInputModel[] commentsArray = gson.fromJson(commentsString, CommentInputModel[].class);
+        for (CommentInputModel model : commentsArray) {
+            User user = findUserByEmail(model.userEmail);
+            if (user == null) continue;
+            CommentModel commentModel = new CommentModel();
+            commentModel.commodityId = model.commodityId;
+            commentModel.text = model.text;
+            commentModel.user = user;
+            commentModel.date = model.date;
+            Comment comment = new Comment(commentModel);
             putComment(comment.getId(), comment);
         }
     }

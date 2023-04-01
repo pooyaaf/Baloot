@@ -42,7 +42,7 @@
 </ul>
 
 <label>Add Your Comment:</label>
-<form action="" method="post">
+<form action="/addComment/<%=commodity.commodityModel.id%>" method="post">
   <input type="text" name="comment" value="" />
   <button type="submit">submit</button>
 </form>
@@ -68,8 +68,8 @@
   </tr>
   <% for(CommentReportModel comment : commodity.commentsList) { %>
   <tr>
-    <td><%=comment.id%></td>
-    <td><%=comment.text%>></td>
+    <td><%=comment.username%></td>
+    <td><%=comment.text%></td>
     <%Format formatter = new SimpleDateFormat("yyyy-MM-dd");%>
     <td><%=formatter.format(comment.date)%></td>
     <td>

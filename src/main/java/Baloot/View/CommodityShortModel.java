@@ -98,7 +98,7 @@ public class CommodityShortModel implements Component {
     private String generateHtmlTableRow(CommentReportModel commentReportModel) {
         Format formatter = new SimpleDateFormat("yyyy-MM-dd");
         String row =
-                "<td>" + commentReportModel.userEmail + "</td>\n" +
+                "<td>" + commentReportModel.username + "</td>\n" +
                         "<td>" + commentReportModel.text + "</td>\n" +
                         "<td>" + formatter.format(commentReportModel.date) + "</td>\n" +
                         "<td>" + generateLikeVoteForm(commentReportModel.like, commentReportModel.id) + "</td>\n" +

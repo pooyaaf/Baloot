@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class CommentReportModel {
     public Integer id;
-    public String userEmail;
+    public String username;
     public String text;
     public Date date;
     public Integer like;
