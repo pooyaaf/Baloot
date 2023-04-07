@@ -26,7 +26,7 @@ public class CommentVoteTest {
         // Generate commodities
         DataGenerator.GenerateCommodity(1, "Product A", 1, 10.0, new String[]{"Phone"}, 4.0, 100);
         // Generate comments
-        commentId = DataGenerator.GenerateComment(1, "user1@gmail.com", "text");
+        commentId = DataGenerator.GenerateComment(1, "user1", "text");
     }
     @After
     public void teardown() {

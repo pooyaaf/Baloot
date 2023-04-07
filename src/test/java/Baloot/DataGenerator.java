@@ -5,6 +5,7 @@ import Baloot.Entity.Comment;
 import Baloot.Entity.Commodity;
 import Baloot.Entity.Provider;
 import Baloot.Entity.User;
+import Baloot.Exception.UserNotFound;
 import Baloot.Model.*;
 import Baloot.View.CommodityShortModel;
 
@@ -60,16 +61,18 @@ class DataGenerator {
         ContextManager.getInstance().putCommodity(id,commodity);
     }
 
-    public static Integer GenerateComment(Integer commodityId, String userEmail, String text) {
-        CommentModel commentModel = new CommentModel();
-        commentModel.commodityId = commodityId;
-        commentModel.user = null;
-        commentModel.text = text;
-        Comment comment = new Comment(commentModel);
+    public static Integer GenerateComment(Integer commodityId, String username, String text) {
         try {
+            CommentModel commentModel = new CommentModel();
+            commentModel.commodityId = commodityId;
+            commentModel.user = ContextManager.getInstance().getUser(username);
+            commentModel.text = text;
+            Comment comment = new Comment(commentModel);
             ContextManager.getInstance().putComment(comment.getId(), comment);
             return comment.getId();
         } catch (Exception e) {
+            return null;
+        } catch (UserNotFound e) {
             return null;
         }
     }
