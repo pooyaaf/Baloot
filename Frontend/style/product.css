@@ -522,7 +522,7 @@
     height: 50px;
   }
   .submit-rating {
-   visibility: hidden;
-  }
+    visibility: hidden;
+   }
 }
 
