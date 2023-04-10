@@ -5,8 +5,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User</title>
-  <link rel="stylesheet" type="text/css" href="style.css">
-  <link rel="stylesheet" href="user.css">
+  <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
+  <link rel="stylesheet" type="text/css" href="./style/style.css">
+  <link rel="stylesheet" href="./style/user.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
 </head>
@@ -25,9 +26,10 @@
         </div>
         <div class="col-6">
           <div class="card-container">
-            <p class="username">Username</p>
-            <p class="card-info"><button>Cart
-                0</button></p>
+            <p class="username">#Marshal</p>
+            <p class="card-info">
+              <button class="cart-btn">Cart 0</button>
+            </p>
           </div>
         </div>
       </div>
@@ -50,8 +52,8 @@
             <label for="currentAmount">$10000000</label>
           </div>
           <div class="form-group">
-            <input type="text" class="form-control" id="amountInput" value="$Amount">
-          </div>
+            <input type="text" class="form-control" id="amountInput" placeholder="$Amount">
+          </div>          
           <button type="submit" class="btn btn-primary btn-block">Add More Credit</button>
         </form>
       </div>
@@ -59,6 +61,7 @@
     <div>
       <div class="cart text-center">
         <p class="text-left section-title"><img src="./Pictures/Cart.png" alt="Cart" class="Cart">  Cart</p>
+        <div class="table-responsive">
         <table class="table">
           <thead>
             <tr>
@@ -91,10 +94,12 @@
             </tr>
           </tbody>
         </table>
+      </div>
         <button type="submit" class="pay-now-button btn">Pay now!</button>
       </div>
       <div class="history">
         <p class="section-title"><img src="./Pictures/History.png" alt="History" class="History">  History</p>
+        <div class="table-responsive">
         <table class="table">
           <thead>
             <tr>
@@ -110,7 +115,7 @@
           </thead>
           <tbody>
             <tr>
-              <td><img src="./Pictures/commodity.png" alt="Product Image" class="table-image"></td>
+              <td><img src="./Pictures/momsSp.png" alt="Product Image" class="table-image"></td>
               <td class="table-td-gray-color">Mom's Spaghetti</td>
               <td class="table-td-gray-color">Food</td>
               <td class="table-td-gray-color">$6000</td>
@@ -120,7 +125,7 @@
               <td class="table-td-gray-color">3</td>
             </tr>
             <tr>
-              <td><img src="./Pictures/commodity.png" alt="Product Image" class="table-image"></td>
+              <td><img src="./Pictures/mic.png" alt="Product Image" class="table-image"></td>
               <td class="table-td-gray-color">Dre's Microphone</td>
               <td class="table-td-gray-color">Technology</td>
               <td class="table-td-gray-color">$42000000</td>
@@ -131,6 +136,7 @@
             </tr>
           </tbody>
         </table>
+      </div>
       </div>
     </div>
   </main>
