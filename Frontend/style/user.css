@@ -102,7 +102,7 @@ td {
     border-radius: 15px;
     text-align: center;
     color: #919191;
-    width: 70%;
+    width: 75%;
     font-family: 'Inter';
     text-align: center;
 }
@@ -110,7 +110,7 @@ td {
 .credit label {
     color: #593C1C;
     width: 100%;
-    font-size: 98px;
+    font-size: 6vw;
 }
 
 .credit button {
@@ -119,7 +119,7 @@ td {
     border-radius: 15px;
     color: #F7F0E9;
     text-align: center;
-    width: 70%;
+    width: 75%;
     font-family: 'Inter';
 }
 
