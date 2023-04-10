@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Created-By: IntelliJ IDEA
-Built-By: user
-Build-Jdk: Oracle OpenJDK version 19
+Built-By: alireza
+Build-Jdk: Eclipse Temurin version 17.0.3
 Implementation-Version: 1.0-SNAPSHOT
 Implementation-Vendor-Id: org.example
 Main-Class: ${start-class}
