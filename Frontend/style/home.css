@@ -196,6 +196,8 @@
   }
 
   .section h2{
+    display: inline-block;
+    margin: 0;
     color: #593C1C;
     font-family: 'Inter';
     font-style: normal;
@@ -203,7 +205,10 @@
     font-size: 32px;
     line-height: 39px;
   }
-  
+
+  .commodities-toggle {
+    display: inline-block;
+  }
   .commodities-toggle label {
     margin: 0;
   }
@@ -212,6 +217,36 @@
     background-color: #A97B47;
   }
   
+  .available-commodities-toggle {
+    display: inline-block;
+    margin-left: 10px;
+  }
+  
+  .overlay {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    display: none;
+    transition: .5s ease;
+  }
+
+  .available-commodities-toggle:hover .overlay {
+    display: inline-block;
+  }
+
+  .available-commodities-toggle:hover .toggle-off {
+    display: none;
+  }
+
+  .sort-options {
+    display: inline-block;
+    margin-left: 30px;
+    margin-right: 10px;
+  }
+
   .sort-options label {
     font-weight: bold;
     margin-right: 10px;

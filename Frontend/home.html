@@ -49,16 +49,19 @@
     <main>
         <section class="commodities">
             <div class="section">
-                <div class="commodities-toggle d-flex align-items-center justify-content-between" style="display: inline-block;">
-                  <h2 style="display: inline-block; margin: 0;">Available Commodities</h2>
-                  <div class="form-check form-switch" style="display: inline-block; margin-left: 10px;">
+                <div class="commodities-toggle d-flex align-items-center justify-content-between">
+                  <h2>Available Commodities</h2>
+                  <div class="available-commodities-toggle form-check form-switch">
                     <a href="#">
-                    <img src="./Pictures/toggle-off.png" />
+                    <img src="./Pictures/toggle-off.png" class="toggle-off"/>
+                    <div class="overlay">
+                      <img src="./Pictures/toggle-on.png" class="toggle-on"/>
+                    </div>
                     </a>
                   </div>
                 </div>
-                <div class="sort-options" style="display: inline-block; margin-left: 30px;">
-                 <label style="display: inline-block; margin-right: 10px;">Sort by:</label>
+                <div class="sort-options">
+                 <label>Sort by:</label>
                  <button class="sort-button" data-sort="name">Name</button>
                  <button class="sort-button" data-sort="price">Price</button>
                 </div>
