@@ -46,7 +46,6 @@ color: var(--color-baloot-light);
 margin: 5px;
 font-family: 'Inter';
 font-size: 42px;
-
 }
 .header__userinfo {
 display: flex;
@@ -91,11 +90,20 @@ font-size: 24px;
 }
 
 .header__search__magnifier {
-position: absolute;
-top: 20px;
-color: var(--color-baloot-bgc-light);
-margin-left: 33rem !important;
-opacity: 0.4;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 15px;
+  height: 30px;
+  width: 30px;
+  pointer-events: none;
+  margin-left: 90%;
+}
+
+.header__search__magnifier img {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
 }
 
 .btn-primary {
@@ -103,6 +111,7 @@ opacity: 0.4;
   border-radius: 15px;
   color: #A97B47;
   margin-left: 10px;
+  
 }
 
 .btn-primary:hover {
@@ -117,54 +126,64 @@ opacity: 0.4;
   color: #A97B47 !important; 
   font-style: normal !important;
   border-radius: 15px !important;
-  width: 5em !important;
+  width: 5.5em !important;
   height: 3em !important;
   border: none  !important;
 }
 
 
-
-@media screen and (max-width: 767px) {
-  .navbar {
+@media only screen and (max-width: 768px) {
+  .header {
+    display: flex;
     flex-direction: column;
+  }
+  .header__logo__image {
+    width:70px;
+    height: 70px;
+  }
+  
+  .header__logo__text {
+  color: var(--color-baloot-light);
+  margin: 5px;
+  font-family: 'Inter';
+  font-size: 23px;
+  }
+  .header__search {
+    display: flex;
     align-items: center;
-  }
-
-  .logo {
-    width: 64px;
-    height: 58px;
-  }
-
-  .title {
-    font-size: 24px;
-    line-height: 29px;
-  }
-
-  .search-container {
-    margin-top: 20px;
-  }
-
-  .form-control {
-    width: fit-content !important;
-    margin-left: 0;
-  }
-
-  .search-form input[type="search"] {
-    width: 100%;
-    font-size: medium;
-  }
-
-  .search-form img {
-    visibility: hidden;
-  }
-
-  .btn-primary {
-    margin-left: 0;
     margin-top: 10px;
     width: 100%;
   }
-}
+  
+  .header__search__options {
+    margin-top: 2%;
+    height: 40px;
+    padding: 0 10px;
+    margin-right: 10px;
+  }
+  
+  .header__search__input {
+    height: 40px;
+    padding: 0 10px;
+    flex: 1;
+    text-align: center;
+  }
+  
+  .header__search__magnifier {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    padding: 10px;
 
+  }
+  .header__search__magnifier img {
+    width: 1.5rem;
+    height: 1.5rem;
+    visibility: hidden;
+  }
+}
 
 
   .commodities {
