@@ -1,34 +1,61 @@
-.header-container {
-    background: #FFFFFF;
-    box-shadow: 0px 4px 4px rgba(208, 208, 208, 0.25);
-  }
+body {
+  font-family: 'Inter';
+  font-style: normal;
+  padding-top: 130px;
   
-  .logo-container {
-    display: flex;
-    align-items: center;
+  --color-baloot-dark: #593c1c;
+  --color-baloot-light: #a97b47;
+  --color-baloot-bgc-light: #F7F0E9;
+  --color-baloot-bgc-dark: #D8C1A8;
+  --color-disable: #909090;
+  }
+  a {
+  text-decoration: none;
+  color: inherit;
   }
 
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px 0;
+  background-color: #ffffff;
+  box-shadow: 0px 4px 4px 0px #D0D0D040;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
 
-  .logo {
-    border-radius: 47px;
-    width:4em;
-    height:4em;  
-  }
-  
-  .title {
-    color: #A97B47;
-    margin-left: 10px;
-    display: inline;
-  
-  }
-  
-  .card-container  {
+.header__logo {
+display: flex;
+align-items: center;
+margin-right: 50%;
+}
+.header__logo__image {
+width: 100px;
+}
+
+.header__logo:hover {
+  transform: scale(1.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.header__logo__text {
+color: var(--color-baloot-light);
+margin: 5px;
+font-family: 'Inter';
+font-size: 42px;
+
+}
+  .user-info  {
     color: #593C1C;
     border-radius: 15px;
     text-align: right;
     padding: 5px 10px;
   }
-  .card-container button {
+  .user-info button {
     background: #F7F0E9;
     color: #593C1C;
     opacity: 0.4;
@@ -45,7 +72,6 @@
   .username {
     display: inline-block;
   }
-  
   
 .product-box {
     display: flex;
