@@ -11,29 +11,22 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 </head>
 <body>
-    <header class="d-flex justify-content-between align-items-center py-3 navbar">
-        
-        <div class="d-flex align-items-center">
-       
-         <a href="./home.html"> <div class="logo mr-3"></div></a>
-         <a href="./home.html"><h1 class="title mb-0">Baloot</h1></a>
-     
+    <header class="header">
+      <div class="header__logo">
+        <img class="header__logo__image" src="Pictures/logo.svg" alt="Baloot" />
+        <div class="header__logo__text text text--xlarge">Baloot</div>
+      </div>
+  
+      <div class="header__search">
+        <select class="header__search__options">
+          <option value="name">name</option>
+          <option value="price">price</option>
+        </select>
+        <input type="text" class="header__search__input" placeholder="search your product ..." />
+        <div class="header__search__magnifier">
+          <img src="Pictures/search.svg" alt="" />
         </div>
-        <div class="search-container">
-            <div class="form-group">
-              <select class="form-control mr-sm-2 form-options">
-                <option selected>name</option>
-                <option value="1">category</option>
-              </select>
-              <form class="search-form">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search your product ... " aria-label="Search">
-                <a href="#">
-               <img src="./Pictures/search.svg" alt="search">
-                </a>
-              </form>
-            </div>
-          </div>
-          
+      </div>
           
         <div class="d-flex align-items-center">
         <a href="./login.html">
