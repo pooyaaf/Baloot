@@ -67,26 +67,26 @@ public class ContextManager {
             putCommodity(model.id, commodity);
         }
 
-        String commentsString = Http.Get("comments");
-        CommentInputModel[] commentsArray = gson.fromJson(commentsString, CommentInputModel[].class);
-        for (CommentInputModel model : commentsArray) {
-            User user = findUserByEmail(model.userEmail);
-            if (user == null) continue;
-            CommentModel commentModel = new CommentModel();
-            commentModel.commodityId = model.commodityId;
-            commentModel.text = model.text;
-            commentModel.user = user;
-            commentModel.date = model.date;
-            Comment comment = new Comment(commentModel);
-            putComment(comment.getId(), comment);
-        }
-
-        String discountsString = Http.Get("discount");
-        DiscountModel[] discountArray = gson.fromJson(discountsString, DiscountModel[].class);
-        for (DiscountModel model : discountArray) {
-            Discount discount = new Discount(model);
-            putDiscount(discount.getDiscountCode(), discount);
-        }
+//        String commentsString = Http.Get("comments");
+//        CommentInputModel[] commentsArray = gson.fromJson(commentsString, CommentInputModel[].class);
+//        for (CommentInputModel model : commentsArray) {
+//            User user = findUserByEmail(model.userEmail);
+//            if (user == null) continue;
+//            CommentModel commentModel = new CommentModel();
+//            commentModel.commodityId = model.commodityId;
+//            commentModel.text = model.text;
+//            commentModel.user = user;
+//            commentModel.date = model.date;
+//            Comment comment = new Comment(commentModel);
+//            putComment(comment.getId(), comment);
+//        }
+//
+//        String discountsString = Http.Get("discount");
+//        DiscountModel[] discountArray = gson.fromJson(discountsString, DiscountModel[].class);
+//        for (DiscountModel model : discountArray) {
+//            Discount discount = new Discount(model);
+//            putDiscount(discount.getDiscountCode(), discount);
+//        }
     }
 
 
@@ -125,6 +125,10 @@ public class ContextManager {
             throw new ProviderNotFound();
         }
         return providers.get(id);
+    }
+
+    public Collection<Provider> getAllProviders() {
+        return providers.values();
     }
 
     public void updateCategories(Commodity commodity) {

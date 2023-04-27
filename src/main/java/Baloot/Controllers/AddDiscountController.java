@@ -1,41 +1,34 @@
 package Baloot.Controllers;
 
-import Baloot.Commands.AddComment;
 import Baloot.Context.ContextManager;
 import Baloot.Context.UserContext;
 import Baloot.Entity.Discount;
 import Baloot.Entity.User;
-import Baloot.Model.CommentModel;
-import Baloot.Model.DiscountModel;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.SneakyThrows;
+import Baloot.Exception.DiscountNotFound;
+import Baloot.Exception.ExpiredDiscount;
+import Baloot.Exception.UserNotFound;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
-
-@WebServlet("/addDiscount/*")
-public class AddDiscountController extends HttpServlet {
-    @SneakyThrows
-    public void addDiscount(HttpServletRequest request, HttpServletResponse response) {
-        if (BaseController.isNotAuthenticated(response)) return;
-        User user = ContextManager.getInstance().getUser(UserContext.username);
-
-        Discount discount = ContextManager.getInstance().getDiscount(request.getParameter("discount"));
-        user.addDiscount(discount);
-        response.sendRedirect("/buyList");
-    }
-
-    @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) {
-        addDiscount(request, response);
-    }
-
-    @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) {
-        addDiscount(request, response);
+@RestController
+@AllArgsConstructor
+@RequestMapping("/addDiscount")
+public class AddDiscountController {
+    @PostMapping
+    public void addDiscount(@RequestParam("discount") String discount_amount) {
+        if (Authentication.isNotAuthenticated()) return;
+        try {
+            User user = ContextManager.getInstance().getUser(UserContext.username);
+            Discount discount = ContextManager.getInstance().getDiscount(discount_amount);
+            user.addDiscount(discount);
+        }
+        catch (Exception | UserNotFound | DiscountNotFound | ExpiredDiscount e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
 }

@@ -1,38 +1,36 @@
 package Baloot.Controllers;
 
+import Baloot.Commands.AddCredit;
 import Baloot.Commands.Payment;
-import Baloot.Commands.RemoveFromBuyList;
 import Baloot.Context.UserContext;
-import Baloot.Entity.User;
-import Baloot.Model.CommodityBuyListModel;
+import Baloot.Exception.CommodityNotFound;
+import Baloot.Exception.CommodityNotInStuck;
+import Baloot.Exception.UserNotAuthenticated;
+import Baloot.Exception.UserNotFound;
+import Baloot.Model.AddCreditModel;
 import Baloot.Model.UserByIdModel;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.SneakyThrows;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.io.IOException;
-
-@WebServlet("/payment")
-public class PaymentController extends HttpServlet {
-    @SneakyThrows
-    private void payment(HttpServletResponse response) {
-        if (BaseController.isNotAuthenticated(response)) return;
-        Payment command = new Payment();
-        UserByIdModel model = new UserByIdModel();
-        model.user_id = UserContext.username;
-        command.handle(model);
-        response.sendRedirect("/buyList");
-    }
-
-    @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) {
-        payment(response);
-    }
-
-    @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) {
-        payment(response);
+@RestController
+@AllArgsConstructor
+@RequestMapping("/payment")
+public class PaymentController {
+    @PostMapping
+    public void payment() {
+        try {
+            if (Authentication.isNotAuthenticated()) throw new UserNotAuthenticated();
+            Payment command = new Payment();
+            UserByIdModel model = new UserByIdModel();
+            model.user_id = UserContext.username;
+            command.handle(model);
+        } catch (UserNotFound | CommodityNotFound | CommodityNotInStuck | UserNotAuthenticated | Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
 }

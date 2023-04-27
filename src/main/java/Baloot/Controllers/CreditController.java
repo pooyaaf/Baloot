@@ -1,41 +1,35 @@
 package Baloot.Controllers;
 
+
 import Baloot.Commands.AddCredit;
+import Baloot.Context.ContextManager;
 import Baloot.Context.UserContext;
+import Baloot.Exception.UserNotAuthenticated;
+import Baloot.Exception.UserNotFound;
 import Baloot.Model.AddCreditModel;
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.SneakyThrows;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.io.IOException;
-
-@WebServlet("/credit")
-public class CreditController extends HttpServlet {
-    @SneakyThrows
-    @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        if (BaseController.isNotAuthenticated(response)) return;
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("/Credit.jsp");
-        requestDispatcher.forward(request, response);
+@RestController
+@AllArgsConstructor
+@RequestMapping("/credit")
+public class CreditController {
+    @PostMapping
+    public void addCredit(@RequestParam("credit") String credit) {
+        try {
+            if (Authentication.isNotAuthenticated()) throw new UserNotAuthenticated();
+            AddCreditModel addCreditModel = new AddCreditModel();
+            addCreditModel.user_id = UserContext.username;
+            addCreditModel.credit = credit;
+            AddCredit command = new AddCredit();
+            command.handle(addCreditModel);
+        } catch (UserNotFound | UserNotAuthenticated | Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
-
-    @SneakyThrows
-    @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (BaseController.isNotAuthenticated(response)) return;
-        AddCreditModel addCreditModel = new AddCreditModel();
-        addCreditModel.user_id = UserContext.username;
-        addCreditModel.credit = request.getParameter("credit");
-        AddCredit command = new AddCredit();
-        command.handle(addCreditModel);
-
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("/Credit.jsp");
-        requestDispatcher.forward(request, response);
-    }
-
 }

@@ -1,53 +1,37 @@
 package Baloot.Controllers;
 
 import Baloot.Commands.GetBuyList;
-import Baloot.Commands.RemoveFromBuyList;
+import Baloot.Context.ContextManager;
+import Baloot.Context.Filter.FilterManager;
 import Baloot.Context.UserContext;
-import Baloot.View.BuyListModel;
-import Baloot.Model.CommodityBuyListModel;
-import Baloot.Model.UserByUsernameModel;
+import Baloot.Entity.Commodity;
+import Baloot.Exception.UserNotAuthenticated;
+import Baloot.Exception.UserNotFound;
+import Baloot.View.CommodityListModel;
 import Baloot.View.UserInfoModel;
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.SneakyThrows;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 
-@WebServlet("/buyList")
-public class BuyListController extends HttpServlet {
-
-    @SneakyThrows
-    @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        if (BaseController.isNotAuthenticated(response)) return;
-        GetBuyList command = new GetBuyList();
-        UserInfoModel buyList = command.handle(UserContext.username);
-
-
-        request.setAttribute("buyList", buyList);
-
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("/BuyList.jsp");
-        requestDispatcher.forward(request, response);
-    }
-
-    @SneakyThrows
-    @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String action = request.getParameter("action");
-        Integer commodityId = Integer.valueOf(request.getParameter("commodity_id"));
-        if(action.equals("remove"))
-        {
-            CommodityBuyListModel model = new CommodityBuyListModel();
-            model.username = UserContext.username;
-            model.commodityId = String.valueOf(commodityId);
-            RemoveFromBuyList command = new RemoveFromBuyList();
-            command.handle(model);
-            response.sendRedirect("/BuyList.jsp");
+@RestController
+@AllArgsConstructor
+@RequestMapping("/buyList")
+public class BuyListController {
+    @GetMapping
+    public UserInfoModel all() {
+        try {
+            if (Authentication.isNotAuthenticated()) throw new UserNotAuthenticated();
+            GetBuyList command = new GetBuyList();
+            return command.handle(UserContext.username);
+        }
+        catch (UserNotFound | UserNotAuthenticated | Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
