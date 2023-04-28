@@ -4,6 +4,7 @@ import Baloot.Commands.AddCommodityToBuyList;
 import Baloot.Context.UserContext;
 import Baloot.Exception.CommodityNotFound;
 import Baloot.Exception.CommodityNotInStuck;
+import Baloot.Exception.UserNotAuthenticated;
 import Baloot.Exception.UserNotFound;
 import Baloot.Model.CommodityBuyListModel;
 import lombok.AllArgsConstructor;
@@ -20,14 +21,14 @@ import org.springframework.web.server.ResponseStatusException;
 public class AddToBuyListController {
     @PostMapping("/{commodityId}")
     public void addToBuyList(@PathVariable String commodityId) {
-        if (Authentication.isNotAuthenticated()) return;
         try {
+            if (Authentication.isNotAuthenticated()) throw new UserNotAuthenticated();
             AddCommodityToBuyList command = new AddCommodityToBuyList();
             CommodityBuyListModel model = new CommodityBuyListModel();
             model.commodityId = commodityId;
             model.username = UserContext.username;
             command.handle(model);
-        } catch (UserNotFound | CommodityNotFound | CommodityNotInStuck | Exception e) {
+        } catch (UserNotFound | CommodityNotFound | CommodityNotInStuck | UserNotAuthenticated | Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }

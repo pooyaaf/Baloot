@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/login")
 public class LoginController {
     @PostMapping
-    public void login(@RequestParam("uesrname") String username, @RequestParam("Password") String password) {
+    public void login(@RequestParam("username") String username, @RequestParam("password") String password) {
         if (ContextManager.getInstance().isUserPassExist(username, password)) {
             UserContext.username = username;
         }
