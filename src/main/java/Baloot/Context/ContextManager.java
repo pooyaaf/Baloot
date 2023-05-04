@@ -60,33 +60,19 @@ public class ContextManager {
             putProvider(model.id, provider);
         }
 
-        String commodities = Http.Get("commodities");
+        String commodities = Http.Get("v2/commodities");
         CommodityModel[] commodityArray = gson.fromJson(commodities, CommodityModel[].class);
         for (CommodityModel model : commodityArray) {
             Commodity commodity = new Commodity(model);
             putCommodity(model.id, commodity);
         }
 
-//        String commentsString = Http.Get("comments");
-//        CommentInputModel[] commentsArray = gson.fromJson(commentsString, CommentInputModel[].class);
-//        for (CommentInputModel model : commentsArray) {
-//            User user = findUserByEmail(model.userEmail);
-//            if (user == null) continue;
-//            CommentModel commentModel = new CommentModel();
-//            commentModel.commodityId = model.commodityId;
-//            commentModel.text = model.text;
-//            commentModel.user = user;
-//            commentModel.date = model.date;
-//            Comment comment = new Comment(commentModel);
-//            putComment(comment.getId(), comment);
-//        }
-//
-//        String discountsString = Http.Get("discount");
-//        DiscountModel[] discountArray = gson.fromJson(discountsString, DiscountModel[].class);
-//        for (DiscountModel model : discountArray) {
-//            Discount discount = new Discount(model);
-//            putDiscount(discount.getDiscountCode(), discount);
-//        }
+        String discountsString = Http.Get("discount");
+        DiscountModel[] discountArray = gson.fromJson(discountsString, DiscountModel[].class);
+        for (DiscountModel model : discountArray) {
+            Discount discount = new Discount(model);
+            putDiscount(discount.getDiscountCode(), discount);
+        }
     }
 
 

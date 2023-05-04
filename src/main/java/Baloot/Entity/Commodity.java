@@ -33,6 +33,9 @@ public class Commodity {
     @Getter
     @Setter
     private int inStock;
+    @Getter
+    @Setter
+    private String image;
     HashMap<String, Integer> userRates = new HashMap<>();
     private HashMap<Integer, Comment> comments;
 
@@ -45,6 +48,7 @@ public class Commodity {
         categories = model.categories;
         rating = model.rating;
         inStock = model.inStock;
+        image = model.image;
         comments = new HashMap<>();
     }
 
@@ -57,6 +61,7 @@ public class Commodity {
         model.categories = categories;
         model.rating = rating;
         model.inStock = inStock;
+        model.image = image;
         return model;
     }
 
@@ -71,6 +76,7 @@ public class Commodity {
         model.commodityModel.categories = categories;
         model.commodityModel.rating = rating;
         model.commodityModel.inStock = inStock;
+        model.commodityModel.image = image;
         model.commentsList = getCommentsList();
         return model;
     }
