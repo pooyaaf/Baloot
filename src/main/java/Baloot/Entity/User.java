@@ -139,7 +139,7 @@ public class User {
         ArrayList<CommodityModel> result = new ArrayList<>();
         for (Commodity commodity : buyList.values()) {
             CommodityModel commodityModel = commodity.getModel();
-            commodityModel.inStock = buyListInStock.get(commodity.getId());
+            commodityModel.inCart = buyListInStock.get(commodity.getId());
             result.add(commodityModel);
         }
         return result;
@@ -149,7 +149,7 @@ public class User {
         ArrayList<CommodityModel> result = new ArrayList<>();
         for (Commodity commodity : purchasedList.values()) {
             CommodityModel commodityModel = commodity.getModel();
-            commodityModel.inStock = purchasedListInStock.get(commodity.getId());
+            commodityModel.inCart = purchasedListInStock.get(commodity.getId());
             result.add(commodityModel);
         }
         return result;

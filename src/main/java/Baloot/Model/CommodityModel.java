@@ -10,5 +10,6 @@ public class CommodityModel {
     public String[] categories;
     public double rating;
     public Integer inStock;
+    public Integer inCart;
     public String image;
 }
