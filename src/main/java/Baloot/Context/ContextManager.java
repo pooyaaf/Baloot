@@ -53,7 +53,7 @@ public class ContextManager {
             putUser(model.username, user);
         }
 
-        String providers = Http.Get("providers");
+        String providers = Http.Get("v2/providers");
         ProviderModel[] providersArray = gson.fromJson(providers, ProviderModel[].class);
         for (ProviderModel model : providersArray) {
             Provider provider = new Provider(model);
