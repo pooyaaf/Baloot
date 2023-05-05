@@ -6,7 +6,7 @@ public class CommentReportModel {
     public Integer id;
     public String username;
     public String text;
-    public Date date;
+    public String date;
     public Integer like;
     public Integer dislike;
 }

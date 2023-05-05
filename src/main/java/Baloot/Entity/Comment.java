@@ -5,6 +5,8 @@ import Baloot.Model.CommentModel;
 import Baloot.Model.CommentReportModel;
 import lombok.Getter;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -71,7 +73,8 @@ public class Comment {
         commentReportModel.id = id;
         commentReportModel.username = user.getUsername();
         commentReportModel.text = text;
-        commentReportModel.date = date;
+        Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+        commentReportModel.date = formatter.format(date);
         commentReportModel.like = likes;
         commentReportModel.dislike = dislikes;
         return commentReportModel;
