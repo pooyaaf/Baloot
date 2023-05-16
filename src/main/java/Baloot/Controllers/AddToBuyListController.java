@@ -1,41 +1,35 @@
 package Baloot.Controllers;
 
 import Baloot.Commands.AddCommodityToBuyList;
-import Baloot.Commands.RemoveFromBuyList;
 import Baloot.Context.UserContext;
+import Baloot.Exception.CommodityNotFound;
+import Baloot.Exception.CommodityNotInStuck;
+import Baloot.Exception.UserNotAuthenticated;
+import Baloot.Exception.UserNotFound;
 import Baloot.Model.CommodityBuyListModel;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.SneakyThrows;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
-@WebServlet("/addToBuyList/*")
-public class AddToBuyListController extends HttpServlet {
-    @SneakyThrows
-    public void addToBuyList(HttpServletRequest request, HttpServletResponse response) {
-        if (BaseController.isNotAuthenticated(response)) return;
-        if (request.getPathInfo() == null) {
-            return;
-        }
-        String[] segments = request.getPathInfo().split("/");
-        if (segments.length == 2) {
+@RestController
+@AllArgsConstructor
+@RequestMapping("/addToBuyList")
+public class AddToBuyListController {
+    @PostMapping("/{commodityId}")
+    public void addToBuyList(@PathVariable String commodityId) {
+        try {
+            if (Authentication.isNotAuthenticated()) throw new UserNotAuthenticated();
             AddCommodityToBuyList command = new AddCommodityToBuyList();
             CommodityBuyListModel model = new CommodityBuyListModel();
-            model.commodityId = segments[1];
+            model.commodityId = commodityId;
             model.username = UserContext.username;
             command.handle(model);
-            response.sendRedirect("/commodities/" + model.commodityId);
+        } catch (UserNotFound | CommodityNotFound | CommodityNotInStuck | UserNotAuthenticated | Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
-    }
-
-    @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) {
-        addToBuyList(request, response);
-    }
-
-    @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) {
-        addToBuyList(request, response);
     }
 }

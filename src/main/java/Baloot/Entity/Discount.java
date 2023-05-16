@@ -16,5 +16,10 @@ public class Discount {
     public double toPercent() {
         return (double) discount / 100;
     }
-
+    public DiscountModel getModel() {
+        DiscountModel model = new DiscountModel();
+        model.discountCode = discountCode;
+        model.discount = discount;
+        return model;
+    }
 }

@@ -1,26 +1,38 @@
 package Baloot.Controllers;
 
-
-import Baloot.Commands.GetCommoditiesList;
 import Baloot.Context.ContextManager;
 import Baloot.Context.Filter.FilterManager;
+import Baloot.Context.UserContext;
 import Baloot.Entity.Commodity;
+import Baloot.Entity.User;
 import Baloot.Exception.CommodityNotFound;
+import Baloot.View.CommodityFullModel;
 import Baloot.View.CommodityListModel;
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
-@WebServlet("/commodities/*")
-public class CommoditiesController extends HttpServlet {
-    private CommodityListModel getCommoditiesModel() {
+@RestController
+@AllArgsConstructor
+@RequestMapping("/commodities")
+public class CommoditiesController {
+    private CommodityListModel getSuggestedCommoditiesModel(Commodity commodity) {
+        ArrayList<Commodity> suggestedCommodities = ContextManager.getInstance().getSuggestedCommodities(commodity);
+        CommodityListModel commodityListModel = new CommodityListModel();
+        commodityListModel.commoditiesList = new ArrayList<>();
+        for (Commodity suggestedCommodity : suggestedCommodities) {
+            commodityListModel.commoditiesList.add(suggestedCommodity.getModel());
+        }
+        return commodityListModel;
+    }
+    @GetMapping
+    public CommodityListModel all() {
         Collection<Commodity> commodities = ContextManager.getInstance().getAllCommodities();
         ArrayList<Commodity> filtered = FilterManager.getInstance().filter(commodities);
         CommodityListModel result = new CommodityListModel();
@@ -31,42 +43,30 @@ public class CommoditiesController extends HttpServlet {
         return result;
     }
 
-    private CommodityListModel getSuggestedCommoditiesModel(Commodity commodity) {
-        ArrayList<Commodity> suggestedCommodities = ContextManager.getInstance().getSuggestedCommodities(commodity);
-        CommodityListModel commodityListModel = new CommodityListModel();
-        commodityListModel.commoditiesList = new ArrayList<>();
-        for (Commodity suggestedCommodity : suggestedCommodities) {
-            commodityListModel.commoditiesList.add(suggestedCommodity.getModel());
+    @GetMapping("/{id}")
+    public CommodityFullModel one(@PathVariable Integer id){
+        try {
+            Commodity commodity = ContextManager.getInstance().getCommodity(id);
+            CommodityFullModel commodityFullModel = new CommodityFullModel();
+            commodityFullModel.commodityShortModel = commodity.getReportModel();
+            commodityFullModel.suggestedCommoditiesModel = getSuggestedCommoditiesModel(commodity);
+            return commodityFullModel;
         }
-        return commodityListModel;
+        catch (Exception | CommodityNotFound e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        if (request.getPathInfo() == null) {
-            request.setAttribute("commodities", getCommoditiesModel());
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/Commodities.jsp");
-            requestDispatcher.forward(request, response);
-            return;
+    @PostMapping("/search")
+    public void search(@RequestParam("search") String search_fields, @RequestParam("action") String action) {
+        if (action.equals("search_by_category")) {
+            FilterManager.getInstance().addSearchByCategory(search_fields);
+        } else if (action.equals("search_by_name")) {
+            FilterManager.getInstance().addSearchByName(search_fields);
+        } else if (action.equals("clear")) {
+            FilterManager.getInstance().reset();
+        } else if (action.equals("sort_by_rate")) {
+            FilterManager.getInstance().setSort();
         }
-        String[] segments = request.getPathInfo().split("/");
-        if (segments.length == 2) {
-            try {
-                Integer commodityId = Integer.valueOf(segments[1]);
-                Commodity commodity = ContextManager.getInstance().getCommodity(commodityId);
-                request.setAttribute("commodity", commodity.getReportModel());
-                request.setAttribute("suggested", getSuggestedCommoditiesModel(commodity));
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/Commodity.jsp");
-                requestDispatcher.forward(request, response);
-            } catch (Exception e) {
-                request.setAttribute("err", e.getClass());
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/404.jsp");
-                requestDispatcher.forward(request, response);
-            } catch (CommodityNotFound e) {
-                throw new RuntimeException(e);
-            }
-        }
-
     }
 }
