@@ -31,6 +31,19 @@ public class BalootRepository {
                 "    image VARCHAR(500),\n" +
                 "    PRIMARY KEY(id)\n" +
                 ");");
+
+        stmt.addBatch("CREATE TABLE IF NOT EXISTS Commodity (\n" +
+                "    id INT,\n" +
+                "    name VARCHAR(100),\n" +
+                "    providerId INT,\n" +
+                "    price FLOAT,\n"+
+                "    categories VARCHAR(100),\n"+
+                "    rating FLOAT,\n" +
+                "    inStock INT,\n" +
+                "    image VARCHAR(500),\n" +
+                "    PRIMARY KEY(id)\n" +
+                ");");
+
         int[] updateCounts = stmt.executeBatch();
         stmt.close();
         con.close();
