@@ -24,7 +24,7 @@ public class BalootRepository {
         con.setAutoCommit(false);
         Statement stmt = con.createStatement();
 //        TODO: complete table creation
-        stmt.addBatch("CREATE TABLE IF NOT EXISTS Provider (\n" +
+        stmt.addBatch("CREATE TABLE IF NOT EXISTS Providers (\n" +
                 "    id INT,\n" +
                 "    name VARCHAR(100),\n" +
                 "    registryDate VARCHAR(100),\n" +
@@ -32,7 +32,7 @@ public class BalootRepository {
                 "    PRIMARY KEY(id)\n" +
                 ");");
 
-        stmt.addBatch("CREATE TABLE IF NOT EXISTS Commodity (\n" +
+        stmt.addBatch("CREATE TABLE IF NOT EXISTS Commodities (\n" +
                 "    id INT,\n" +
                 "    name VARCHAR(100),\n" +
                 "    providerId INT,\n" +
@@ -42,6 +42,16 @@ public class BalootRepository {
                 "    inStock INT,\n" +
                 "    image VARCHAR(500),\n" +
                 "    PRIMARY KEY(id)\n" +
+                ");");
+
+        stmt.addBatch("CREATE TABLE IF NOT EXISTS Users(\n" +
+                "    username VARCHAR(100),\n" +
+                "    password VARCHAR(100),\n" +
+                "    email VARCHAR(100),\n" +
+                "    birthDate VARCHAR(100),\n" +
+                "    address VARCHAR(500),\n" +
+                "    credit INT,\n" +
+                "    PRIMARY KEY(username)\n" +
                 ");");
 
         int[] updateCounts = stmt.executeBatch();
