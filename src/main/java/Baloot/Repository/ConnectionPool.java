@@ -6,7 +6,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class ConnectionPool {
+public class ConnectionPool  {
     private static BasicDataSource ds = new BasicDataSource();
     private final static String dbURL = "jdbc:mysql://localhost:3306/balootdb";
     private final static String dbUserName = "root";
