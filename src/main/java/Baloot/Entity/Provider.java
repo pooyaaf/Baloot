@@ -5,9 +5,12 @@ import Baloot.View.ProviderViewModel;
 import lombok.Getter;
 import lombok.Setter;
 
+
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+
 
 public class Provider {
     @Getter
