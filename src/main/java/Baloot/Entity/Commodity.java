@@ -5,40 +5,65 @@ import Baloot.Exception.CommodityNotInStuck;
 import Baloot.Model.CommentReportModel;
 import Baloot.Model.CommodityModel;
 import Baloot.View.CommodityShortModel;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import javax.persistence.*;
+import java.util.*;
 
 
+@Entity
+@Table(name = "commodity")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Commodity {
     @Getter
     @Setter
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Getter
     @Setter
+    @Column(name = "name")
+
     private String name;
     @Getter
     @Setter
+    @Column(name = "provider_id")
     private int providerId;
     @Getter
     @Setter
+    @Column(name = "price")
     private double price;
+    private String categories;
     @Getter
     @Setter
-    private String[] categories;
-    @Getter
-    @Setter
+    @Column(name = "rating")
     private double rating;
     @Getter
     @Setter
+    @Column(name = "inStock")
     private int inStock;
     @Getter
     @Setter
+    @Column(name = "image")
     private String image;
-    HashMap<String, Integer> userRates = new HashMap<>();
-    private HashMap<Integer, Comment> comments;
+
+
+    @OneToMany(mappedBy = "commodityId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Map<Integer, Comment> comments;
+
+    @OneToMany(mappedBy = "commodityId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Rate> rates;
+
+    public void setCategories(String[] array) {
+        this.categories = String.join(",", array);
+    }
+
+    public String[] getCategories() {
+        return categories.split(",");
+    }
 
     public Commodity(CommodityModel model) {
         super();
@@ -46,11 +71,12 @@ public class Commodity {
         name = model.name;
         providerId = model.providerId;
         price = model.price;
-        categories = model.categories;
+        this.setCategories(model.categories);
         rating = model.rating;
         inStock = model.inStock;
         image = model.image;
         comments = new HashMap<>();
+        rates = new HashSet<>();
     }
 
     public CommodityModel getModel() {
@@ -59,7 +85,7 @@ public class Commodity {
         model.name = name;
         model.providerId = providerId;
         model.price = price;
-        model.categories = categories;
+        model.categories = this.getCategories();
         model.rating = rating;
         model.inStock = inStock;
         model.image = image;
@@ -74,7 +100,7 @@ public class Commodity {
         model.commodityModel.name = name;
         model.commodityModel.providerId = providerId;
         model.commodityModel.price = price;
-        model.commodityModel.categories = categories;
+        model.commodityModel.categories = this.getCategories();
         model.commodityModel.rating = rating;
         model.commodityModel.inStock = inStock;
         model.commodityModel.image = image;
@@ -83,12 +109,12 @@ public class Commodity {
     }
 
     public void addRate(String username, Integer rate) {
-        userRates.put(username, rate);
+        rates.add(new Rate(this.id, username, rate));
         Double mean = 0.0;
-        for (Integer val : userRates.values()) {
-            mean += val;
+        for (Rate val : rates) {
+            mean += val.rateNumber;
         }
-        rating = mean / userRates.size();
+        rating = mean / rates.size();
     }
 
     public void increaseInStuck() {
@@ -106,11 +132,13 @@ public class Commodity {
     }
 
     public Boolean isInCategory(String targetCategory) {
-        for (String category : categories) {
-            if (category.equals(targetCategory)) {
-                return true;
-            }
-        }
+        // TODO
+
+//        for (String category : categories) {
+//            if (category.equals(targetCategory)) {
+//                return true;
+//            }
+//        }
         return false;
     }
 
@@ -131,11 +159,13 @@ public class Commodity {
     }
 
     public boolean isInSimilarCategory(String[] categories) {
-        for (String category : categories) {
-            for (String secondCategory : this.categories) {
-                if (category.equals(secondCategory)) return true;
-            }
-        }
+        // TODO
+
+//        for (String category : categories) {
+//            for (String secondCategory : this.categories) {
+//                if (category.equals(secondCategory)) return true;
+//            }
+//        }
         return false;
     }
 }

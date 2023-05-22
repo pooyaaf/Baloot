@@ -3,24 +3,35 @@ package Baloot.Entity;
 import Baloot.Model.CommentInputModel;
 import Baloot.Model.CommentModel;
 import Baloot.Model.CommentReportModel;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
+@Entity
+@Table(name = "comment")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment {
     private static Integer idCounter = 1;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
     @Getter
     Integer commodityId;
     @Getter
-    User user;
+    String username;
     String text;
     Date date;
-    HashMap<String, Integer> votes = new HashMap<>();
+    @OneToMany(mappedBy = "commentId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Vote> votes;
     Integer likes = 0;
     Integer dislikes = 0;
 
@@ -40,20 +51,26 @@ public class Comment {
         super();
         id = idCounter++;
         commodityId = model.commodityId;
-        this.user = model.user;
+        username = model.user.getUsername();
         text = model.text;
         date = model.date;
+        votes = new HashSet<>();
     }
 
     public void addVote(Integer vote, String userName) {
-        if (votes.containsKey(userName)) {
-            Integer preVote = votes.get(userName);
-            if (preVote == 1)
-                likes--;
-            if (preVote == -1)
-                dislikes--;
+        for (Vote voteObj : votes) {
+            if (voteObj.getUsername().equals(userName)) {
+                Integer preVote = voteObj.getVoteNumber();
+                if (preVote == 1) {
+                    likes--;
+                }
+                if (preVote == -1) {
+                    dislikes--;
+                }
+            }
         }
-        votes.put(userName, vote);
+        Vote newVote = new Vote(this.id, userName, vote);
+        votes.add(newVote);
         if (vote == 1)
             likes++;
         if (vote == -1)
@@ -71,7 +88,7 @@ public class Comment {
     public CommentReportModel getReportModel() {
         CommentReportModel commentReportModel = new CommentReportModel();
         commentReportModel.id = id;
-        commentReportModel.username = user.getUsername();
+        commentReportModel.username = username;
         commentReportModel.text = text;
         Format formatter = new SimpleDateFormat("yyyy-MM-dd");
         commentReportModel.date = formatter.format(date);

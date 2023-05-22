@@ -2,30 +2,46 @@ package Baloot.Entity;
 
 import Baloot.Model.ProviderModel;
 import Baloot.View.ProviderViewModel;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
-
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 
+@Entity
+@Table(name = "provider")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Provider {
     @Getter
     @Setter
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Getter
     @Setter
+    @Column(name = "name")
+
     private String name;
     @Getter
     @Setter
+    @Column(name = "registery_date")
+
     private String registryDate;
     @Getter
     @Setter
+    @Column(name = "image")
+
     private String image;
-    private HashMap<Integer, Commodity> commodities;
+
+    @OneToMany(mappedBy = "providerId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Map<Integer, Commodity> commodities;
 
     public Provider(ProviderModel model) {
         super();
