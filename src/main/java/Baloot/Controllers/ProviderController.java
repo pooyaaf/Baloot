@@ -2,15 +2,13 @@ package Baloot.Controllers;
 
 import Baloot.Commands.GetProviderById;
 import Baloot.Context.ContextManager;
-import Baloot.Context.Filter.FilterManager;
-import Baloot.Entity.Commodity;
 import Baloot.Entity.Provider;
 import Baloot.Exception.ProviderNotFound;
 import Baloot.Model.ProviderByIdModel;
-import Baloot.View.CommodityFullModel;
-import Baloot.View.CommodityListModel;
+import Baloot.Repository.ProviderRepository;
 import Baloot.View.ProviderViewModel;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,9 +20,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @RestController
-@AllArgsConstructor
 @RequestMapping("/providers")
 public class ProviderController {
+    private final ProviderRepository providerRepository;
+
+    public ProviderController(ProviderRepository providerRepository) {
+        this.providerRepository = providerRepository;
+    }
+
+    // TODO
     @GetMapping
     public Iterable<ProviderViewModel> all() {
         Collection<Provider> providers = ContextManager.getInstance().getAllProviders();
@@ -41,9 +45,9 @@ public class ProviderController {
             GetProviderById getProviderById = new GetProviderById();
             ProviderByIdModel model = new ProviderByIdModel();
             model.provider_id = id;
-            return getProviderById.handle(model);
+            return providerRepository.findById(Integer.valueOf(id)).get().GetProviderViewModel();
         }
-        catch (ProviderNotFound | Exception e) {
+        catch ( Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
