@@ -118,7 +118,7 @@ public class ContextManager {
     }
 
     public void updateCategories(Commodity commodity) {
-        String[] categoriesName = commodity.getCategories();
+        List<String> categoriesName = commodity.getCategories();
         for (String categoryName : categoriesName) {
             if (!categories.containsKey(categoryName)) {
                 categories.put(categoryName, new Category(categoryName));
@@ -127,6 +127,7 @@ public class ContextManager {
             category.addCommodity(commodity);
         }
     }
+
 
     public void updateProvider(Commodity commodity) {
         Integer providerId = commodity.getProviderId();
