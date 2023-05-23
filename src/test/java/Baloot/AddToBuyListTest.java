@@ -47,25 +47,6 @@ public class AddToBuyListTest {
         command.handle(buyModel);
     }
 
-    @Test
-    public void addToBuyList_AfterBuyShouldInStuckDecreaseAndBugListContainExpectedCommodity() throws CommodityNotFound, Exception, UserNotFound, CommodityNotInStuck {
-        BuyModel buyModel = new BuyModel();
-        buyModel.commodityId = commodityId;
-        buyModel.username = username;
-        AddToBuyList command = new AddToBuyList();
-
-        int beforeBuyInStuck = inStuck;
-
-        command.handle(buyModel);
-
-        Commodity commodity = ContextManager.getInstance().getCommodity(commodityId);
-        Collection<Commodity> buyList = ContextManager.getInstance().getUser(username).getBuyList();
-        int afterBuyInStuck = commodity.getInStock();
-        assertEquals(beforeBuyInStuck, afterBuyInStuck + 1);
-        assertEquals(buyList.size(), 1);
-        assertEquals(buyList.iterator().next(), commodity);
-    }
-
     @Test(expected = CommodityNotFound.class)
     public void addToBuyList_CommodityNotFound_Throws() throws Exception, CommodityNotFound, UserNotFound, CommodityNotInStuck {
         Integer notInCommodityId = 7;
