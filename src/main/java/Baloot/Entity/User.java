@@ -12,6 +12,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.checkerframework.common.aliasing.qual.Unique;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -31,6 +32,7 @@ public class User {
     private String password;
     @Setter
     @Getter
+    @Unique
     private String email;
     @Setter
     @Getter
@@ -41,7 +43,8 @@ public class User {
     @Setter
     @Getter
     private int credit;
-    @OneToMany(mappedBy = "username", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinColumn(name = "username")
     private Set<BuyList> buyLists;
 
     @OneToMany(mappedBy = "username", cascade = CascadeType.ALL, orphanRemoval = true)
