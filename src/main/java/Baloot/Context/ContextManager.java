@@ -4,6 +4,8 @@ import Baloot.Entity.*;
 import Baloot.Exception.*;
 import Baloot.Model.*;
 import Baloot.Repository.CommodityRepository;
+import Baloot.Repository.ProviderRepository;
+import Baloot.Repository.UserRepository;
 import Baloot.Validation.IgnoreFailureTypeAdapterFactory;
 import Baloot.View.CommodityListModel;
 import Baloot.View.ProviderViewModel;
@@ -13,6 +15,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.SneakyThrows;
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.checkerframework.common.aliasing.qual.Unique;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Array;
 import java.sql.Connection;
@@ -23,12 +28,22 @@ import java.util.*;
 
 import static java.lang.Math.max;
 
+@Component
 public class ContextManager {
     private static final BasicDataSource ds = new BasicDataSource();
     private final static String dbURL = "jdbc:mysql://localhost:3306/balootdb?sessionVariables=sql_mode='NO_ENGINE_SUBSTITUTION'&jdbcCompliantTruncation=false&allowMultiQueries=true";
     private final static String dbUserName = "root";
     private final static String dbPassword = "toor";
     public static CommodityRepository commodityRepository;
+    public static  ProviderRepository providerRepository;
+    public static UserRepository userRepository;
+    @Autowired
+    public ContextManager(ProviderRepository providerRepository,UserRepository userRepository,CommodityRepository commodityRepository) {
+        this.providerRepository = providerRepository;
+        this.userRepository = userRepository;
+        // TODO : Below should be uncommited when other puts be ok
+//        this.commodityRepository=commodityRepository;
+    }
 
     static {
         try {
@@ -69,7 +84,7 @@ public class ContextManager {
 
     public static ContextManager getInstance() {
         if (instance == null) {
-            instance = new ContextManager();
+            instance = new ContextManager(providerRepository,userRepository,commodityRepository);
             instance.initialize();
         }
         return instance;
@@ -130,41 +145,42 @@ public class ContextManager {
 
     @SneakyThrows
     public void putUser(String username, User user) {
-        Connection con = getConnection();
-        UserInfoModel model = user.getUserInfoModel();
-        StringBuilder builder = new StringBuilder();
-
-        builder.append("INSERT INTO `balootdb`.`user` (");
-        builder.append("`username`, `activediscountcode`, `address`, `birthdate`, `credit`, `email`, `password`)");
-        builder.append(" VALUES ");
-        builder.append(String.format("('%s', '%s', '%s', '%s', %d, '%s', '%s')",
-                model.userModel.username,
-                model.userModel.activediscountcode,
-                model.userModel.address,
-                model.userModel.birthDate,
-                model.userModel.credit,
-                model.userModel.email,
-                model.userModel.password
-        ));
-        Statement stmt = con.createStatement();
-        try {
-            stmt.execute(builder.toString());
-        } catch (Exception e) {
-            builder = new StringBuilder();
-            builder.append("UPDATE `balootdb`.`user` ");
-            builder.append(String.format("SET `activediscountcode` = '%s', `address` = '%s', `birthdate` = '%s', `credit` = %d, `email` = '%s', `password` = '%s' ",
-                    model.userModel.activediscountcode,
-                    model.userModel.address,
-                    model.userModel.birthDate,
-                    model.userModel.credit,
-                    model.userModel.email,
-                    model.userModel.password));
-            builder.append(String.format("WHERE `username` = '%s'", model.userModel.username));
-            stmt.execute(builder.toString());
-        } finally {
-            con.close();
-            stmt.close();
-        }
+//        Connection con = getConnection();
+//        UserInfoModel model = user.getUserInfoModel();
+//        StringBuilder builder = new StringBuilder();
+//
+//        builder.append("INSERT INTO `balootdb`.`user` (");
+//        builder.append("`username`, `activediscountcode`, `address`, `birthdate`, `credit`, `email`, `password`)");
+//        builder.append(" VALUES ");
+//        builder.append(String.format("('%s', '%s', '%s', '%s', %d, '%s', '%s')",
+//                model.userModel.username,
+//                model.userModel.activediscountcode,
+//                model.userModel.address,
+//                model.userModel.birthDate,
+//                model.userModel.credit,
+//                model.userModel.email,
+//                model.userModel.password
+//        ));
+//        Statement stmt = con.createStatement();
+//        try {
+//            stmt.execute(builder.toString());
+//        } catch (Exception e) {
+//            builder = new StringBuilder();
+//            builder.append("UPDATE `balootdb`.`user` ");
+//            builder.append(String.format("SET `activediscountcode` = '%s', `address` = '%s', `birthdate` = '%s', `credit` = %d, `email` = '%s', `password` = '%s' ",
+//                    model.userModel.activediscountcode,
+//                    model.userModel.address,
+//                    model.userModel.birthDate,
+//                    model.userModel.credit,
+//                    model.userModel.email,
+//                    model.userModel.password));
+//            builder.append(String.format("WHERE `username` = '%s'", model.userModel.username));
+//            stmt.execute(builder.toString());
+//        } finally {
+//            con.close();
+//            stmt.close();
+//        }
+        userRepository.save(user);
     }
 
 
@@ -185,30 +201,30 @@ public class ContextManager {
     @SneakyThrows
     public void putProvider(Integer id, Provider provider) {
 //        providers.put(id, provider);
-        Connection con = getConnection();
-        ProviderViewModel model = provider.GetProviderViewModel();
-        StringBuilder builder = new StringBuilder();
-
-        builder.append("INSERT INTO `balootdb`.`provider`( \n");
-        builder.append("`id`,`image`, `name`,`registrydate`)");
-        builder.append("VALUES");
-        builder.append(String.format("(%d, \"%s\", \"%s\", \"%s\")",
-                model.providerModel.id,
-                model.providerModel.image,
-                model.providerModel.name,
-                model.providerModel.registryDate
-                ));
-        builder.append("ON DUPLICATE KEY UPDATE ");
-        builder.append(
-                "`id`=VALUES(`id`), `image`=VALUES(`image`), `name`=VALUES(`name`), `registrydate`=VALUES(`registrydate`);\n");
-
-        System.err.println(builder.toString());
-        Statement stmt = con.createStatement();
-        stmt.execute(builder.toString());
-
-        con.close();
-        stmt.close();
-
+//        Connection con = getConnection();
+//        ProviderViewModel model = provider.GetProviderViewModel();
+//        StringBuilder builder = new StringBuilder();
+//
+//        builder.append("INSERT INTO `balootdb`.`provider`( \n");
+//        builder.append("`id`,`image`, `name`,`registrydate`)");
+//        builder.append("VALUES");
+//        builder.append(String.format("(%d, \"%s\", \"%s\", \"%s\")",
+//                model.providerModel.id,
+//                model.providerModel.image,
+//                model.providerModel.name,
+//                model.providerModel.registryDate
+//                ));
+//        builder.append("ON DUPLICATE KEY UPDATE ");
+//        builder.append(
+//                "`id`=VALUES(`id`), `image`=VALUES(`image`), `name`=VALUES(`name`), `registrydate`=VALUES(`registrydate`);\n");
+//
+//        System.err.println(builder.toString());
+//        Statement stmt = con.createStatement();
+//        stmt.execute(builder.toString());
+//
+//        con.close();
+//        stmt.close();
+        providerRepository.save(provider);
     }
 
     public Provider getProvider(Integer id) throws Exception, ProviderNotFound {
@@ -244,7 +260,7 @@ public class ContextManager {
     }
 
     public void updateCategories(Commodity commodity) {
-        List<String> categoriesName = commodity.getCategories();
+        List<String> categoriesName = List.of(commodity.getCategories());
         for (String categoryName : categoriesName) {
             if (!categories.containsKey(categoryName)) {
                 categories.put(categoryName, new Category(categoryName));
@@ -338,7 +354,7 @@ public class ContextManager {
         for (Commodity commodity : commodities.values()) {
             if (commodity.getId() != targetCommodity.getId()) {
                 double score = commodity.getRating();
-                if (commodity.isInSimilarCategory(targetCommodity.getCategories())) score += 11;
+                if (commodity.isInSimilarCategory(List.of(targetCommodity.getCategories()))) score += 11;
                 scores.put(commodity.getId(), score);
             }
         }

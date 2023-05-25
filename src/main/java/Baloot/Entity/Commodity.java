@@ -30,15 +30,13 @@ public class Commodity {
     private String name;
     @Getter
     @Setter
-    private int providerId;
+    private Integer providerId;
     @Getter
     @Setter
     @Column(name = "price")
     private double price;
-    @ElementCollection
-    @CollectionTable(name = "CommodityCategories", joinColumns = @JoinColumn(name = "CommodityId"))
-    @Column(name = "Name")
-    private List<String> categories;
+
+    private String categories;
     @Getter
     @Setter
     @Column(name = "rating")
@@ -61,27 +59,27 @@ public class Commodity {
     @JoinColumn(name = "commodityId")
     private Set<Rate> rates;
 
-//    public void setCategories(String[] array) {
-//        this.categories = String.join(",", array);
-//    }
-//
-//    public String[] getCategories() {
-//        return categories.split(",");
-//    }
-    public void setCategories(List<String> categories) {
-        this.categories = categories;
+    public void setCategories(String[] array) {
+        this.categories = String.join(",", array);
     }
 
-    public List<String> getCategories() {
-        return categories;
+    public String[] getCategories() {
+        return categories.split(",");
     }
+//    public void setCategories(List<String> categories) {
+//        this.categories = categories;
+//    }
+
+//    public List<String> getCategories() {
+//        return categories;
+//    }
     public Commodity(CommodityModel model) {
         super();
         id = model.id;
         name = model.name;
         providerId = model.providerId;
         price = model.price;
-        categories = new ArrayList<>(Arrays.asList(model.categories));
+        setCategories(model.categories);
         rating = model.rating;
         inStock = model.inStock;
         image = model.image;
@@ -95,7 +93,7 @@ public class Commodity {
         model.name = name;
         model.providerId = providerId;
         model.price = price;
-        model.categories = categories.toArray(new String[0]);
+        model.categories = getCategories();
         model.rating = rating;
         model.inStock = inStock;
         model.image = image;
@@ -110,7 +108,7 @@ public class Commodity {
         model.commodityModel.name = name;
         model.commodityModel.providerId = providerId;
         model.commodityModel.price = price;
-        model.commodityModel.categories = categories.toArray(new String[0]);
+        model.commodityModel.categories = getCategories();
         model.commodityModel.rating = rating;
         model.commodityModel.inStock = inStock;
         model.commodityModel.image = image;
@@ -142,12 +140,13 @@ public class Commodity {
     }
 
     public Boolean isInCategory(String targetCategory) {
-        for (String category : categories) {
-            if (category.equals(targetCategory)) {
-                return true;
-            }
-        }
-        return false;
+//        for (String category : categories) {
+//            if (category.equals(targetCategory)) {
+//                return true;
+//            }
+//        }
+//        return false;
+        return true;
     }
 
     public void putComment(Comment comment) {
@@ -167,11 +166,12 @@ public class Commodity {
     }
 
     public boolean isInSimilarCategory(List<String>  categories) {
-        for (String category : categories) {
-            for (String secondCategory : this.categories) {
-                if (category.equals(secondCategory)) return true;
-            }
-        }
-        return false;
+//        for (String category : categories) {
+//            for (String secondCategory : this.categories) {
+//                if (category.equals(secondCategory)) return true;
+//            }
+//        }
+//        return false;
+        return true;
     }
 }
