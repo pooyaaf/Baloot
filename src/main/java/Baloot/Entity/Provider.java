@@ -23,21 +23,16 @@ public class Provider {
     @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     @Getter
     @Setter
-    @Column(name = "name")
-
     private String name;
     @Getter
     @Setter
-    @Column(name = "registery_date")
-
-    private String registryDate;
+    @Column(name="registrydate")
+    private String registrydate;
     @Getter
     @Setter
-    @Column(name = "image")
-
     private String image;
 
     @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
@@ -48,7 +43,7 @@ public class Provider {
         super();
         id = model.id;
         name = model.name;
-        registryDate = model.registryDate;
+        registrydate = model.registryDate;
         image = model.image;
         commodities = new HashMap<>();
     }
@@ -66,7 +61,7 @@ public class Provider {
         providerViewModel.providerModel = new ProviderModel();
         providerViewModel.providerModel.id = id;
         providerViewModel.providerModel.name = name;
-        providerViewModel.providerModel.registryDate = registryDate;
+        providerViewModel.providerModel.registryDate = registrydate;
         providerViewModel.providerModel.image = image;
         providerViewModel.commoditiesList = new ArrayList<>();
         for (Commodity commodity : commodities.values()) {

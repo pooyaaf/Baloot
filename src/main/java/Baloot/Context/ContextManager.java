@@ -6,9 +6,11 @@ import Baloot.Model.*;
 import Baloot.Repository.CommodityRepository;
 import Baloot.Validation.IgnoreFailureTypeAdapterFactory;
 import Baloot.View.CommodityListModel;
+import Baloot.View.ProviderViewModel;
 import Baloot.service.Http;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import lombok.SneakyThrows;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.lang.reflect.Array;
@@ -142,8 +144,33 @@ public class ContextManager {
         return categories.get(category);
     }
 
+    @SneakyThrows
     public void putProvider(Integer id, Provider provider) {
-        providers.put(id, provider);
+//        providers.put(id, provider);
+        Connection con = getConnection();
+        ProviderViewModel model = provider.GetProviderViewModel();
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("INSERT INTO `balootdb`.`provider`( \n");
+        builder.append("`id`,`image`, `name`,`registrydate`)");
+        builder.append("VALUES");
+        builder.append(String.format("(%d, \"%s\", \"%s\", \"%s\")",
+                model.providerModel.id,
+                model.providerModel.image,
+                model.providerModel.name,
+                model.providerModel.registryDate
+                ));
+        builder.append("ON DUPLICATE KEY UPDATE ");
+        builder.append(
+                "`id`=VALUES(`id`), `image`=VALUES(`image`), `name`=VALUES(`name`), `registrydate`=VALUES(`registrydate`);\n");
+
+        System.err.println(builder.toString());
+        Statement stmt = con.createStatement();
+        stmt.execute(builder.toString());
+
+        con.close();
+        stmt.close();
+
     }
 
     public Provider getProvider(Integer id) throws Exception, ProviderNotFound {
