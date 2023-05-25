@@ -7,9 +7,11 @@ import Baloot.Context.UserContext;
 import Baloot.Entity.Commodity;
 import Baloot.Exception.UserNotAuthenticated;
 import Baloot.Exception.UserNotFound;
+import Baloot.Repository.BuyListRepository;
 import Baloot.View.CommodityListModel;
 import Baloot.View.UserInfoModel;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +25,8 @@ import java.util.Collection;
 @AllArgsConstructor
 @RequestMapping("/buyList")
 public class BuyListController {
+    @Autowired
+    BuyListRepository repository;
     @GetMapping
     public UserInfoModel all() {
         try {
