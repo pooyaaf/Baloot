@@ -7,6 +7,7 @@ import Baloot.Repository.CommodityRepository;
 import Baloot.Validation.IgnoreFailureTypeAdapterFactory;
 import Baloot.View.CommodityListModel;
 import Baloot.View.ProviderViewModel;
+import Baloot.View.UserInfoModel;
 import Baloot.service.Http;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -127,9 +128,45 @@ public class ContextManager {
         providers.clear();
     }
 
+    @SneakyThrows
     public void putUser(String username, User user) {
-        users.put(username, user);
+        Connection con = getConnection();
+        UserInfoModel model = user.getUserInfoModel();
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("INSERT INTO `balootdb`.`user` (");
+        builder.append("`username`, `activediscountcode`, `address`, `birthdate`, `credit`, `email`, `password`)");
+        builder.append(" VALUES ");
+        builder.append(String.format("('%s', '%s', '%s', '%s', %d, '%s', '%s')",
+                model.userModel.username,
+                model.userModel.activediscountcode,
+                model.userModel.address,
+                model.userModel.birthDate,
+                model.userModel.credit,
+                model.userModel.email,
+                model.userModel.password
+        ));
+        Statement stmt = con.createStatement();
+        try {
+            stmt.execute(builder.toString());
+        } catch (Exception e) {
+            builder = new StringBuilder();
+            builder.append("UPDATE `balootdb`.`user` ");
+            builder.append(String.format("SET `activediscountcode` = '%s', `address` = '%s', `birthdate` = '%s', `credit` = %d, `email` = '%s', `password` = '%s' ",
+                    model.userModel.activediscountcode,
+                    model.userModel.address,
+                    model.userModel.birthDate,
+                    model.userModel.credit,
+                    model.userModel.email,
+                    model.userModel.password));
+            builder.append(String.format("WHERE `username` = '%s'", model.userModel.username));
+            stmt.execute(builder.toString());
+        } finally {
+            con.close();
+            stmt.close();
+        }
     }
+
 
     public User getUser(String username) throws Exception, UserNotFound {
         if (!users.containsKey(username)) {

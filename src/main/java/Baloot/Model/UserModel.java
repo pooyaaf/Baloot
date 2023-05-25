@@ -13,6 +13,7 @@ public class UserModel {
     public String email;
     public String birthDate;
     public String address;
+    public String activediscountcode;
     public int credit;
 
 }

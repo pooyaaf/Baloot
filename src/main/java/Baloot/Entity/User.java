@@ -36,7 +36,8 @@ public class User {
     private String email;
     @Setter
     @Getter
-    private String birthDate;
+    @Column(name="birthdate")
+    private String birthdate;
     @Setter
     @Getter
     private String address;
@@ -54,18 +55,19 @@ public class User {
     @JoinColumn(name = "user")
     private Set<UserExpiredDiscount> expiredDiscounts;
 
-    private String activeDiscountCode;
+    @Column(name="activediscountcode")
+    private String activediscountcode;
 
     public User(UserModel model) {
         super();
         username = model.username;
         password = model.password;
         email = model.email;
-        birthDate = model.birthDate;
+        birthdate = model.birthDate;
         address = model.address;
         credit = model.credit;
         expiredDiscounts = new HashSet<>();
-        activeDiscountCode = null;
+        activediscountcode = null;
         buyLists = new HashSet();
         purchasedLists = new HashSet<BuyList>();
     }
@@ -101,7 +103,7 @@ public class User {
         userInfoModel.userModel.username = username;
         userInfoModel.userModel.password = password;
         userInfoModel.userModel.credit = credit;
-        userInfoModel.userModel.birthDate = birthDate;
+        userInfoModel.userModel.birthDate = birthdate;
         userInfoModel.userModel.email = email;
         userInfoModel.userModel.address = address;
 
@@ -110,6 +112,7 @@ public class User {
         userInfoModel.buyListPrice = calculatePayment();
         return userInfoModel;
     }
+
 
     public void addCredit(int credit) {
         if (credit > 0) {
@@ -122,9 +125,9 @@ public class User {
         for (BuyList buyList : buyLists) {
             paymentPrice += buyList.getCommodity().getPrice() * buyList.getInStock();
         }
-        if (activeDiscountCode == null) return paymentPrice;
+        if (activediscountcode == null) return paymentPrice;
         try {
-            return paymentPrice * (1 - ContextManager.getInstance().getDiscount(activeDiscountCode).toPercent());
+            return paymentPrice * (1 - ContextManager.getInstance().getDiscount(activediscountcode).toPercent());
         } catch (DiscountNotFound e) {
             throw new RuntimeException(e);
         }
@@ -169,14 +172,14 @@ public class User {
     }
 
     private void updateUsedDiscounts() {
-        if (activeDiscountCode == null) return;
-        expiredDiscounts.add(new UserExpiredDiscount(this, activeDiscountCode));
-        activeDiscountCode = null;
+        if (activediscountcode == null) return;
+        expiredDiscounts.add(new UserExpiredDiscount(this, activediscountcode));
+        activediscountcode = null;
     }
 
     public void addDiscount(Discount discount) throws ExpiredDiscount {
         Optional<UserExpiredDiscount> optionalDiscount = expiredDiscounts.stream().filter(obj -> obj.getDiscountCode().equals(discount.getDiscountCode())).findFirst();
         if (!optionalDiscount.isEmpty()) throw new ExpiredDiscount();
-        activeDiscountCode = discount.getDiscountCode();
+        activediscountcode = discount.getDiscountCode();
     }
 }
