@@ -15,6 +15,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.lang.reflect.Array;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
@@ -174,10 +175,31 @@ public class ContextManager {
     }
 
     public Provider getProvider(Integer id) throws Exception, ProviderNotFound {
-        if (!providers.containsKey(id)) {
+        Connection con = getConnection();
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("SELECT `id`,`image`,`name`,`registrydate` FROM `balootdb`.`provider` \n");
+        builder.append(String.format("WHERE id=%d", id));
+
+        Statement stmt = con.createStatement();
+        ResultSet result = stmt.executeQuery(builder.toString());
+
+        if (!result.next()) {
+            con.close();
+            stmt.close();
             throw new ProviderNotFound();
         }
-        return providers.get(id);
+        ProviderModel model = new ProviderModel();
+        model.id = result.getInt("id");
+        model.name = result.getString("name");
+        model.image = result.getString("image");
+        model.registryDate = result.getString("registrydate");
+
+
+        con.close();
+        stmt.close();
+
+        return new Provider(model);
     }
 
     public Collection<Provider> getAllProviders() {
