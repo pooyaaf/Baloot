@@ -48,8 +48,9 @@ public class User {
     @JoinColumn(name = "username")
     private Set<BuyList> buyLists;
 
-    @OneToMany(mappedBy = "username", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<BuyList> purchasedLists;
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinColumn(name = "username")
+    private Set<PurchasedList> purchasedLists;
 
     @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "user")
@@ -69,7 +70,7 @@ public class User {
         expiredDiscounts = new HashSet<>();
         activediscountcode = null;
         buyLists = new HashSet();
-        purchasedLists = new HashSet<BuyList>();
+        purchasedLists = new HashSet();
     }
 
     public void addToBuyList(Commodity commodity) {
@@ -140,11 +141,13 @@ public class User {
         }
         credit -= calculatePayment();
         for (BuyList buyList : buyLists) {
-            Optional<BuyList> optionalBuyList = purchasedLists.stream().filter(obj -> obj.getCommodity().getId() == buyList.getCommodity().getId()).findFirst();
+            Optional<PurchasedList> optionalBuyList = purchasedLists.stream().filter(obj -> obj.getCommodity().getId() == buyList.getCommodity().getId()).findFirst();
             if (!optionalBuyList.isEmpty())
                 optionalBuyList.get().setInStock(optionalBuyList.get().getInStock() + buyList.getInStock());
-            else
-                purchasedLists.add(buyList);
+            else {
+                PurchasedList purchasedList = new PurchasedList(buyList.getCommodity(), buyList.getUsername(), buyList.getInStock());
+                purchasedLists.add(purchasedList);
+            }
         }
         buyLists.clear();
         updateUsedDiscounts();
@@ -163,9 +166,9 @@ public class User {
 
     private ArrayList<CommodityModel> getPurchasedListModel() {
         ArrayList<CommodityModel> result = new ArrayList<>();
-        for (BuyList buyList : purchasedLists) {
-            CommodityModel commodityModel = buyList.getCommodity().getModel();
-            commodityModel.inCart = buyList.getInStock();
+        for (PurchasedList purchasedList : purchasedLists) {
+            CommodityModel commodityModel = purchasedList.getCommodity().getModel();
+            commodityModel.inCart = purchasedList.getInStock();
             result.add(commodityModel);
         }
         return result;
