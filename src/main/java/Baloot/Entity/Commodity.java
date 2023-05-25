@@ -36,6 +36,8 @@ public class Commodity {
     @Column(name = "price")
     private double price;
     @ElementCollection
+    @CollectionTable(name = "CommodityCategories", joinColumns = @JoinColumn(name = "CommodityId"))
+    @Column(name = "Name")
     private List<String> categories;
     @Getter
     @Setter

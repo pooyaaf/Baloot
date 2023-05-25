@@ -6,9 +6,11 @@ import Baloot.Context.UserContext;
 import Baloot.Entity.Commodity;
 import Baloot.Entity.User;
 import Baloot.Exception.CommodityNotFound;
+import Baloot.Repository.CommodityRepository;
 import Baloot.View.CommodityFullModel;
 import Baloot.View.CommodityListModel;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -22,6 +24,8 @@ import java.util.stream.StreamSupport;
 @AllArgsConstructor
 @RequestMapping("/commodities")
 public class CommoditiesController {
+    @Autowired
+    CommodityRepository repository;
     private CommodityListModel getSuggestedCommoditiesModel(Commodity commodity) {
         ArrayList<Commodity> suggestedCommodities = ContextManager.getInstance().getSuggestedCommodities(commodity);
         CommodityListModel commodityListModel = new CommodityListModel();
@@ -44,15 +48,15 @@ public class CommoditiesController {
     }
 
     @GetMapping("/{id}")
-    public CommodityFullModel one(@PathVariable Integer id){
+    public CommodityFullModel one(@PathVariable Integer providerId){
         try {
-            Commodity commodity = ContextManager.getInstance().getCommodity(id);
+            Commodity commodity = repository.findById(providerId).get();
             CommodityFullModel commodityFullModel = new CommodityFullModel();
             commodityFullModel.commodityShortModel = commodity.getReportModel();
             commodityFullModel.suggestedCommoditiesModel = getSuggestedCommoditiesModel(commodity);
             return commodityFullModel;
         }
-        catch (Exception | CommodityNotFound e) {
+        catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
