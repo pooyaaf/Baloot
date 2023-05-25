@@ -24,7 +24,7 @@ import static java.lang.Math.max;
 
 public class ContextManager {
     private static final BasicDataSource ds = new BasicDataSource();
-    private final static String dbURL = "jdbc:mysql://localhost:3306/balootdb?allowMultiQueries=true";
+    private final static String dbURL = "jdbc:mysql://localhost:3306/balootdb?sessionVariables=sql_mode='NO_ENGINE_SUBSTITUTION'&jdbcCompliantTruncation=false&allowMultiQueries=true";
     private final static String dbUserName = "root";
     private final static String dbPassword = "toor";
     public static CommodityRepository commodityRepository;
