@@ -50,7 +50,8 @@ public class User {
     @OneToMany(mappedBy = "username", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<BuyList> purchasedLists;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user")
     private Set<UserExpiredDiscount> expiredDiscounts;
 
     private String activeDiscountCode;

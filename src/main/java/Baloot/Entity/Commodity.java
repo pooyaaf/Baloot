@@ -30,7 +30,6 @@ public class Commodity {
     private String name;
     @Getter
     @Setter
-    @Column(name = "provider_id")
     private int providerId;
     @Getter
     @Setter
@@ -52,10 +51,12 @@ public class Commodity {
     private String image;
 
 
-    @OneToMany(mappedBy = "commodityId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinColumn(name = "commodityId")
     private Map<Integer, Comment> comments;
 
-    @OneToMany(mappedBy = "commodityId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinColumn(name = "commodityId")
     private Set<Rate> rates;
 
 //    public void setCategories(String[] array) {

@@ -40,7 +40,8 @@ public class Provider {
 
     private String image;
 
-    @OneToMany(mappedBy = "providerId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinColumn(name = "providerId")
     private Map<Integer, Commodity> commodities;
 
     public Provider(ProviderModel model) {
