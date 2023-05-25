@@ -31,7 +31,7 @@ public class ProviderController {
     // TODO
     @GetMapping
     public Iterable<ProviderViewModel> all() {
-        Collection<Provider> providers = ContextManager.getInstance().getAllProviders();
+        Iterable<Provider> providers = ContextManager.getInstance().getAllProviders();
         ArrayList providerViewModelList = new ArrayList<>();
         for (Provider provider : providers) {
             providerViewModelList.add(provider.GetProviderViewModel());

@@ -4,26 +4,23 @@ import Baloot.Model.CommentModel;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 
 @Entity
 @Table(name = "rate")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@IdClass(RateId.class)
+@Getter
+@Setter
 public class Rate {
-    @Getter
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer rateId;
     int commodityId;
-    @Getter
-    @Id
     String username;
-    @Getter
     Integer rateNumber;
     public Rate(int commodityId, String username, Integer rateNumber) {
         this.commodityId = commodityId;

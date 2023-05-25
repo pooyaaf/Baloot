@@ -3,24 +3,21 @@ package Baloot.Entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "vote")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@IdClass(VoteId.class)
+@Getter
+@Setter
 public class Vote {
-    @Getter
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer voteID;
     Integer commentId;
-    @Getter
-    @Id
     String username;
-    @Getter
     Integer voteNumber;
     public Vote(Integer commentId, String username, Integer voteNumber) {
         this.commentId = commentId;
