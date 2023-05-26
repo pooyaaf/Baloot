@@ -204,7 +204,7 @@ public class ContextManager {
     }
 
     public void updateCategories(Commodity commodity) {
-        List<String> categoriesName = List.of(commodity.getCategories());
+        List<String> categoriesName = commodity.getCategories();
         for (String categoryName : categoriesName) {
             if (!categories.containsKey(categoryName)) {
                 categories.put(categoryName, new Category(categoryName));
@@ -278,7 +278,7 @@ public class ContextManager {
         for (Commodity commodity : commodities.values()) {
             if (commodity.getId() != targetCommodity.getId()) {
                 double score = commodity.getRating();
-                if (commodity.isInSimilarCategory(List.of(targetCommodity.getCategories()))) score += 11;
+                if (commodity.isInSimilarCategory(targetCommodity.getCategories())) score += 11;
                 scores.put(commodity.getId(), score);
             }
         }

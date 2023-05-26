@@ -36,7 +36,10 @@ public class Commodity {
     @Column(name = "price")
     private double price;
 
-    private String categories;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "categories", joinColumns = @JoinColumn(name = "commodity_id"))
+    @Column(name = "category")
+    private List<String> categories = new ArrayList<>();
     @Getter
     @Setter
     @Column(name = "rating")
@@ -54,20 +57,20 @@ public class Commodity {
     @JoinColumn(name = "commodity")
     private Set<Rate> rates;
 
-    public void setCategories(String[] array) {
-        this.categories = String.join(",", array);
-    }
-
-    public String[] getCategories() {
-        return categories.split(",");
-    }
-//    public void setCategories(List<String> categories) {
-//        this.categories = categories;
+//    public void setCategories(String[] array) {
+//        this.categories = String.join(",", array);
 //    }
 
-//    public List<String> getCategories() {
-//        return categories;
+//    public String[] getCategories() {
+//        return categories.split(",");
 //    }
+    public void setCategories(List<String> categories) {
+        this.categories = categories;
+    }
+
+    public List<String> getCategories() {
+        return categories;
+    }
     @SneakyThrows
     public Commodity(CommodityModel model) {
         super();
@@ -75,7 +78,7 @@ public class Commodity {
         name = model.name;
         provider = ContextManager.getInstance().getProvider(model.providerId);
         price = model.price;
-        setCategories(model.categories);
+        categories = List.of(model.categories);
         rating = model.rating;
         inStock = model.inStock;
         image = model.image;
@@ -88,7 +91,7 @@ public class Commodity {
         model.name = name;
         model.providerId = provider.getId();
         model.price = price;
-        model.categories = getCategories();
+        model.categories = categories.toArray(new String[0]);
         model.rating = rating;
         model.inStock = inStock;
         model.image = image;
@@ -103,7 +106,7 @@ public class Commodity {
         model.commodityModel.name = name;
         model.commodityModel.providerId = provider.getId();
         model.commodityModel.price = price;
-        model.commodityModel.categories = getCategories();
+        model.commodityModel.categories = categories.toArray(new String[0]);
         model.commodityModel.rating = rating;
         model.commodityModel.inStock = inStock;
         model.commodityModel.image = image;
