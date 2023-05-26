@@ -4,9 +4,12 @@ import Baloot.Commands.GetBuyList;
 import Baloot.Context.ContextManager;
 import Baloot.Context.Filter.FilterManager;
 import Baloot.Context.UserContext;
+import Baloot.Entity.BuyList;
 import Baloot.Entity.Commodity;
+import Baloot.Entity.User;
 import Baloot.Exception.UserNotAuthenticated;
 import Baloot.Exception.UserNotFound;
+import Baloot.Model.CommodityModel;
 import Baloot.Repository.BuyListRepository;
 import Baloot.View.CommodityListModel;
 import Baloot.View.UserInfoModel;
@@ -20,6 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -27,12 +31,26 @@ import java.util.Collection;
 public class BuyListController {
     @Autowired
     BuyListRepository repository;
+
+    ArrayList<CommodityModel> getBuyList(User user) {
+        List<BuyList> buyLists = (List<BuyList>) repository.findAllByBuyListId_User(user);
+        ArrayList<CommodityModel> model = new ArrayList<CommodityModel>();
+        for (BuyList buyList : buyLists) {
+            CommodityModel commodityModel = buyList.getCommodity().getModel();
+            commodityModel.inCart = buyList.getInStock();
+            model.add(commodityModel);
+        }
+        return model;
+    }
     @GetMapping
     public UserInfoModel all() {
         try {
             if (Authentication.isNotAuthenticated()) throw new UserNotAuthenticated();
             GetBuyList command = new GetBuyList();
-            return command.handle(UserContext.username);
+            User user = ContextManager.getInstance().getUser(UserContext.username);
+            UserInfoModel userInfoModel = user.getUserInfoModel();
+            userInfoModel.buyList = getBuyList(user);
+            return userInfoModel;
         }
         catch (UserNotFound | UserNotAuthenticated | Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());

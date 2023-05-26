@@ -5,12 +5,16 @@ import Baloot.Entity.*;
 import Baloot.Exception.CommodityIsNotInBuyList;
 import Baloot.Repository.BuyListRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class BuyListService {
     private final BuyListRepository repository;
     public void addBuyList(User user, Commodity commodity) {
@@ -35,7 +39,7 @@ public class BuyListService {
         BuyList buyList = optionalBuyList.get();
         Integer inStock = buyList.getInStock();
         if (inStock == 1) {
-            repository.deleteById(buyList.getBuyListId());
+            repository.deleteBuyListByBuyListId(buyList.getBuyListId());
         }
         else {
             buyList.setInStock(buyList.getInStock() - 1);
