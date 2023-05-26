@@ -9,12 +9,9 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Setter
-@Data
 public class BuyList {
     @EmbeddedId
     private BuyListId buyListId;
-
-
 
     Integer inStock;
     public BuyList(Commodity commodity, User user, Integer inStock) {
