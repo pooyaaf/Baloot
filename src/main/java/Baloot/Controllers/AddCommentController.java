@@ -7,6 +7,7 @@ import Baloot.Entity.Discount;
 import Baloot.Entity.User;
 import Baloot.Exception.*;
 import Baloot.Model.CommentModel;
+import Baloot.service.CommentService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

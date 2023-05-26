@@ -33,7 +33,7 @@ public class FilterManager {
         this.isSorted = true;
     }
 
-    private ArrayList<Commodity> filterByName(Collection<Commodity> commodities) {
+    private ArrayList<Commodity> filterByName(Iterable<Commodity> commodities) {
         ArrayList<Commodity> filtered = new ArrayList<>();
         for (Commodity commodity : commodities) {
             if (commodity.getName().contains(commodityName)) {
@@ -43,7 +43,7 @@ public class FilterManager {
         return filtered;
     }
 
-    public ArrayList<Commodity> filter(Collection<Commodity> commodities) {
+    public ArrayList<Commodity> filter(Iterable<Commodity> commodities) {
         ArrayList<Commodity> filtered = new ArrayList<>();
         try {
             if (category != null) {

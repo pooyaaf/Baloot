@@ -9,6 +9,7 @@ import Baloot.Exception.CommodityNotFound;
 import Baloot.Repository.CommodityRepository;
 import Baloot.View.CommodityFullModel;
 import Baloot.View.CommodityListModel;
+//import Baloot.service.CommentService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,8 @@ import java.util.stream.StreamSupport;
 @AllArgsConstructor
 @RequestMapping("/commodities")
 public class CommoditiesController {
+//    private final CommentService commentService;
+
     @Autowired
     CommodityRepository repository;
     private CommodityListModel getSuggestedCommoditiesModel(Commodity commodity) {
@@ -37,7 +40,7 @@ public class CommoditiesController {
     }
     @GetMapping
     public CommodityListModel all() {
-        Collection<Commodity> commodities = ContextManager.getInstance().getAllCommodities();
+        Iterable<Commodity> commodities = ContextManager.getInstance().getAllCommodities();
         ArrayList<Commodity> filtered = FilterManager.getInstance().filter(commodities);
         CommodityListModel result = new CommodityListModel();
         result.commoditiesList = new ArrayList<>();
@@ -48,15 +51,16 @@ public class CommoditiesController {
     }
 
     @GetMapping("/{id}")
-    public CommodityFullModel one(@PathVariable Integer providerId){
+    public CommodityFullModel one(@PathVariable Integer id){
         try {
-            Commodity commodity = repository.findById(providerId).get();
+            Commodity commodity = ContextManager.getInstance().getCommodity(id);
             CommodityFullModel commodityFullModel = new CommodityFullModel();
+//            commodityFullModel.commodityShortModel.commentsList = commentService.getCommentsOfCommodity(id);
             commodityFullModel.commodityShortModel = commodity.getReportModel();
             commodityFullModel.suggestedCommoditiesModel = getSuggestedCommoditiesModel(commodity);
             return commodityFullModel;
         }
-        catch (Exception e) {
+        catch (Exception | CommodityNotFound e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }

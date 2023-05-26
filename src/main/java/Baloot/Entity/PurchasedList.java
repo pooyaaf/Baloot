@@ -1,44 +1,33 @@
 package Baloot.Entity;
 
-import Baloot.Context.ContextManager;
-import Baloot.Exception.CommodityNotFound;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "purchasedList")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@IdClass(PurchasedListId.class)
+@Getter
+@Setter
+@Data
 public class PurchasedList {
-    @Getter
-    @Id
-    Integer commodityId;
-    @Getter
-    @Id
-    String username;
-    @Getter
-    @Setter
+    @EmbeddedId
+    private BuyListId buyListId;
+
+
+
     Integer inStock;
-    public PurchasedList(Commodity commodity, String username, Integer inStock) {
-        this.username = username;
+    public PurchasedList(Commodity commodity, User user, Integer inStock) {
+        this.buyListId.setCommodity(commodity);
+        this.buyListId.setUser(user);
         this.inStock = inStock;
-        this.commodityId = commodity.getId();
+    }
+
+    public String getUsername() {
+        return buyListId.getUser().getUsername();
     }
 
     public Commodity getCommodity() {
-        try {
-            return ContextManager.getInstance().getCommodity(commodityId);
-        } catch (Exception | CommodityNotFound e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        }
+        return buyListId.getCommodity();
     }
 }

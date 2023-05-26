@@ -19,11 +19,12 @@ public class Rate {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer rateId;
-    int commodityId;
+    @ManyToOne
+    private Commodity commodity;
     String username;
     Integer rateNumber;
-    public Rate(int commodityId, String username, Integer rateNumber) {
-        this.commodityId = commodityId;
+    public Rate(Commodity commodity, String username, Integer rateNumber) {
+        this.commodity = commodity;
         this.username = username;
         this.rateNumber = rateNumber;
     }

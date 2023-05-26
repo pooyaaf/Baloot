@@ -1,11 +1,13 @@
 package Baloot.Entity;
 
+import Baloot.Context.ContextManager;
 import Baloot.Model.CommentInputModel;
 import Baloot.Model.CommentModel;
 import Baloot.Model.CommentReportModel;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 
 import javax.persistence.*;
 import java.text.Format;
@@ -18,16 +20,20 @@ import java.util.Set;
 @Entity
 @Table(name = "comment")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class Comment {
     private static Integer idCounter = 1;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
-    @Getter
-    Integer commodityId;
-    @Getter
-    String username;
+    @ManyToOne
+    @JoinColumn(name = "commodityId", nullable = false)
+    private Commodity commodity;
+
+    @ManyToOne
+    @JoinColumn(name = "username", nullable = false)
+    private User user;
     String text;
     Date date;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "voteID.comment")
@@ -47,11 +53,12 @@ public class Comment {
         return date;
     }
 
+    @SneakyThrows
     public Comment(CommentModel model) {
         super();
         id = idCounter++;
-        commodityId = model.commodityId;
-        username = model.user.getUsername();
+        commodity = ContextManager.getInstance().getCommodity(model.commodityId);
+        user = ContextManager.getInstance().getUser(model.user.getUsername());
         text = model.text;
         date = model.date;
         votes = new HashSet<>();
@@ -69,7 +76,7 @@ public class Comment {
                 }
             }
         }
-        Vote newVote = new Vote(vote);
+        Vote newVote = new Vote(this, user, vote);
         votes.add(newVote);
         if (vote == 1)
             likes++;
@@ -88,7 +95,7 @@ public class Comment {
     public CommentReportModel getReportModel() {
         CommentReportModel commentReportModel = new CommentReportModel();
         commentReportModel.id = id;
-        commentReportModel.username = username;
+        commentReportModel.username = user.getUsername();
         commentReportModel.text = text;
         Format formatter = new SimpleDateFormat("yyyy-MM-dd");
         commentReportModel.date = formatter.format(date);
@@ -97,4 +104,11 @@ public class Comment {
         return commentReportModel;
     }
 
+    public String getUsername() {
+        return user.getUsername();
+    }
+
+    public Integer getCommodityId() {
+        return commodity.getId();
+    }
 }

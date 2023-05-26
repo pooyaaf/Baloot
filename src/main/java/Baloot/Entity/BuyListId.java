@@ -1,28 +1,24 @@
 package Baloot.Entity;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.io.Serializable;
-import java.util.Objects;
 
+@NoArgsConstructor
+@Getter
+@Setter
+@Embeddable
 public class BuyListId implements Serializable {
-    private Integer commodityId;
+    @ManyToOne(targetEntity = User.class)
+    @JoinColumn(name = "username")
+    private User user;
 
-    private String username;
-
-    public BuyListId(Integer commodityId, String username) {
-        this.commodityId = commodityId;
-        this.username = username;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BuyListId buyListId = (BuyListId) o;
-        return Objects.equals(commodityId, buyListId.commodityId) && Objects.equals(username, buyListId.username);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(commodityId, username);
-    }
+    @ManyToOne(targetEntity = Commodity.class)
+    @JoinColumn(name = "commodityId")
+    private Commodity commodity;
 }

@@ -3,10 +3,7 @@ package Baloot.Context;
 import Baloot.Entity.*;
 import Baloot.Exception.*;
 import Baloot.Model.*;
-import Baloot.Repository.CommentRepository;
-import Baloot.Repository.CommodityRepository;
-import Baloot.Repository.ProviderRepository;
-import Baloot.Repository.UserRepository;
+import Baloot.Repository.*;
 import Baloot.Validation.IgnoreFailureTypeAdapterFactory;
 import Baloot.View.CommodityListModel;
 import Baloot.View.ProviderViewModel;
@@ -40,12 +37,15 @@ public class ContextManager {
     public static UserRepository userRepository;
 
     public static CommentRepository commentRepository;
+    public static DiscountRepository discountRepository;
 
     @Autowired
-    public ContextManager(ProviderRepository providerRepository,UserRepository userRepository,CommodityRepository commodityRepository) {
+    public ContextManager(ProviderRepository providerRepository,UserRepository userRepository,CommodityRepository commodityRepository, DiscountRepository discountRepository, CommentRepository commentRepository) {
         this.providerRepository = providerRepository;
         this.userRepository = userRepository;
         this.commodityRepository=commodityRepository;
+        this.discountRepository = discountRepository;
+        this.commentRepository = commentRepository;
     }
 
     static {
@@ -87,7 +87,7 @@ public class ContextManager {
 
     public static ContextManager getInstance() {
         if (instance == null) {
-            instance = new ContextManager(providerRepository,userRepository,commodityRepository);
+            instance = new ContextManager(providerRepository,userRepository,commodityRepository,discountRepository,commentRepository);
             instance.initialize();
         }
         return instance;
@@ -103,6 +103,8 @@ public class ContextManager {
     }
 
     public void initialize() {
+        /// TODO: Remove
+        UserContext.username = "amir";
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd")
                 .registerTypeAdapterFactory(new IgnoreFailureTypeAdapterFactory())
@@ -148,50 +150,14 @@ public class ContextManager {
 
     @SneakyThrows
     public void putUser(String username, User user) {
-//        Connection con = getConnection();
-//        UserInfoModel model = user.getUserInfoModel();
-//        StringBuilder builder = new StringBuilder();
-//
-//        builder.append("INSERT INTO `balootdb`.`user` (");
-//        builder.append("`username`, `activediscountcode`, `address`, `birthdate`, `credit`, `email`, `password`)");
-//        builder.append(" VALUES ");
-//        builder.append(String.format("('%s', '%s', '%s', '%s', %d, '%s', '%s')",
-//                model.userModel.username,
-//                model.userModel.activediscountcode,
-//                model.userModel.address,
-//                model.userModel.birthDate,
-//                model.userModel.credit,
-//                model.userModel.email,
-//                model.userModel.password
-//        ));
-//        Statement stmt = con.createStatement();
-//        try {
-//            stmt.execute(builder.toString());
-//        } catch (Exception e) {
-//            builder = new StringBuilder();
-//            builder.append("UPDATE `balootdb`.`user` ");
-//            builder.append(String.format("SET `activediscountcode` = '%s', `address` = '%s', `birthdate` = '%s', `credit` = %d, `email` = '%s', `password` = '%s' ",
-//                    model.userModel.activediscountcode,
-//                    model.userModel.address,
-//                    model.userModel.birthDate,
-//                    model.userModel.credit,
-//                    model.userModel.email,
-//                    model.userModel.password));
-//            builder.append(String.format("WHERE `username` = '%s'", model.userModel.username));
-//            stmt.execute(builder.toString());
-//        } finally {
-//            con.close();
-//            stmt.close();
-//        }
         userRepository.save(user);
     }
 
 
     public User getUser(String username) throws Exception, UserNotFound {
-        if (!users.containsKey(username)) {
-            throw new UserNotFound();
-        }
-        return users.get(username);
+        Optional<User> userOptional =  userRepository.findById(username);
+        if (userOptional.isEmpty()) throw new UserNotFound();
+        return userOptional.get();
     }
 
     public Category getCategory(String category) throws CategoryNotFound {
@@ -207,35 +173,36 @@ public class ContextManager {
     }
 
     public Provider getProvider(Integer id) throws Exception, ProviderNotFound {
-        Connection con = getConnection();
-        StringBuilder builder = new StringBuilder();
-
-        builder.append("SELECT `id`,`image`,`name`,`registrydate` FROM `balootdb`.`provider` \n");
-        builder.append(String.format("WHERE id=%d", id));
-
-        Statement stmt = con.createStatement();
-        ResultSet result = stmt.executeQuery(builder.toString());
-
-        if (!result.next()) {
-            con.close();
-            stmt.close();
-            throw new ProviderNotFound();
-        }
-        ProviderModel model = new ProviderModel();
-        model.id = result.getInt("id");
-        model.name = result.getString("name");
-        model.image = result.getString("image");
-        model.registryDate = result.getString("registrydate");
-
-
-        con.close();
-        stmt.close();
-
-        return new Provider(model);
+//        Connection con = getConnection();
+//        StringBuilder builder = new StringBuilder();
+//
+//        builder.append("SELECT `id`,`image`,`name`,`registrydate` FROM `balootdb`.`provider` \n");
+//        builder.append(String.format("WHERE id=%d", id));
+//
+//        Statement stmt = con.createStatement();
+//        ResultSet result = stmt.executeQuery(builder.toString());
+//
+//        if (!result.next()) {
+//            con.close();
+//            stmt.close();
+//            throw new ProviderNotFound();
+//        }
+//        ProviderModel model = new ProviderModel();
+//        model.id = result.getInt("id");
+//        model.name = result.getString("name");
+//        model.image = result.getString("image");
+//        model.registryDate = result.getString("registrydate");
+//
+//
+//        con.close();
+//        stmt.close();
+        Optional<Provider> providerOptional = providerRepository.findById(id);
+        if (providerOptional.isEmpty()) throw new ProviderNotFound();
+        return providerOptional.get();
     }
 
-    public Collection<Provider> getAllProviders() {
-        return providers.values();
+    public Iterable<Provider> getAllProviders() {
+        return providerRepository.findAll();
     }
 
     public void updateCategories(Commodity commodity) {
@@ -250,31 +217,26 @@ public class ContextManager {
     }
 
 
+    @SneakyThrows
     public void updateProvider(Commodity commodity) {
         Integer providerId = commodity.getProviderId();
-        if (providers.containsKey(providerId)) {
-            Provider provider = providers.get(providerId);
-            provider.addCommodity(commodity);
-        }
+        getProvider(providerId).addCommodity(commodity);
     }
 
     public void  putCommodity(Integer id, Commodity commodity) {
 
         commodityRepository.save(commodity);
-//        commodities.put(id, commodity);
-//        updateCategories(commodity);
-//        updateProvider(commodity);
+        updateProvider(commodity);
     }
 
     public Commodity getCommodity(Integer id) throws Exception, CommodityNotFound {
-        if (!commodities.containsKey(id)) {
-            throw new CommodityNotFound();
-        }
-          return commodityRepository.findById(id).get();
+        Optional<Commodity> commodityOptional = commodityRepository.findById(id);
+        if (commodityOptional.isEmpty()) throw new CommodityNotFound();
+        return commodityOptional.get();
     }
 
-    public Collection<Commodity> getAllCommodities() {
-        return commodities.values();
+    public Iterable<Commodity> getAllCommodities() {
+        return commodityRepository.findAll();
     }
 
     public Collection<Commodity> getCommodityByCategory(String category) {
@@ -289,44 +251,39 @@ public class ContextManager {
         return result;
     }
 
+    @SneakyThrows
     public void updateCommodity(Comment comment) {
-        Integer commodityId = comment.getCommodityId();
-        if (commodities.containsKey(commodityId)) {
-            Commodity commodity = commodities.get(commodityId);
-            //commodity.putComment(comment);
-            commentRepository.save(comment);
-        }
+        Optional<Commodity> commodityOptional = commodityRepository.findById(comment.getCommodityId());
+        if (commodityOptional.isEmpty()) throw new CommodityNotFound();
+        commodityOptional.get().putComment(comment);
     }
 
     public void putComment(Integer id, Comment comment) {
-        comments.put(id, comment);
+        commentRepository.save(comment);
         updateCommodity(comment);
     }
 
     public Comment getComment(Integer id) throws CommentNotFound {
-        if (!comments.containsKey(id)) {
-            throw new CommentNotFound();
-        }
-        return comments.get(id);
+        Optional<Comment> commentOptional = commentRepository.findById(id);
+        if (commentOptional.isEmpty()) throw new CommentNotFound();
+        return commentOptional.get();
     }
 
     public boolean isUserPassExist(String username, String password) {
-        if (!users.containsKey(username)) {
-            return false;
-        }
-        if (!users.get(username).getPassword().equals(password)) {
-            return false;
-        }
+        Optional<User> optionalUser = userRepository.findById(username);
+        if (optionalUser.isEmpty()) return false;
+        if (!optionalUser.get().getPassword().equals(password)) return false;
         return true;
     }
 
     public void putDiscount(String id, Discount discount) {
-        discounts.put(id, discount);
+        discountRepository.save(discount);
     }
 
     public Discount getDiscount(String id) throws DiscountNotFound{
-        if (!discounts.containsKey(id)) throw new DiscountNotFound();
-        return discounts.get(id);
+        Optional<Discount> optionalDiscount = discountRepository.findById(id);
+        if (optionalDiscount.isEmpty()) throw new DiscountNotFound();
+        return optionalDiscount.get();
     }
 
     public ArrayList<Commodity> getSuggestedCommodities(Commodity targetCommodity) {

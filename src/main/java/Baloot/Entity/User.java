@@ -78,7 +78,7 @@ public class User {
             if (!optionalBuyList.isEmpty())
                 optionalBuyList.get().setInStock(optionalBuyList.get().getInStock() + 1);
             else
-                buyLists.add(new BuyList(commodity, username, 1));
+                buyLists.add(new BuyList(commodity, this, 1));
     }
 
     public void removeFromBuyList(Commodity commodity) throws CommodityIsNotInBuyList {
@@ -145,7 +145,7 @@ public class User {
             if (!optionalBuyList.isEmpty())
                 optionalBuyList.get().setInStock(optionalBuyList.get().getInStock() + buyList.getInStock());
             else {
-                PurchasedList purchasedList = new PurchasedList(buyList.getCommodity(), buyList.getUsername(), buyList.getInStock());
+                PurchasedList purchasedList = new PurchasedList(buyList.getCommodity(), this, buyList.getInStock());
                 purchasedLists.add(purchasedList);
             }
         }

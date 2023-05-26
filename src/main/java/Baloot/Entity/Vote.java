@@ -17,8 +17,9 @@ public class Vote {
 
 
     Integer voteNumber;
-    public Vote( Integer voteNumber) {
-
+    public Vote(Comment comment, User user, Integer voteNumber) {
+        voteID.setComment(comment);
+        voteID.setUser(user);
         this.voteNumber = voteNumber;
     }
 

@@ -15,7 +15,7 @@ import java.util.Collection;
 public class GetCommoditiesByPriceRange extends Command {
     @AcceptMethod(RequestMethod.GET)
     public CommodityListModel handle(CommoditiesListByPriceRangeModel input){
-        Collection<Commodity> commodities = ContextManager.getInstance().getAllCommodities();
+        Iterable<Commodity> commodities = ContextManager.getInstance().getAllCommodities();
         CommodityListModel result = new CommodityListModel();
         result.commoditiesList = new ArrayList<>();
         for (Commodity commodity : commodities) {

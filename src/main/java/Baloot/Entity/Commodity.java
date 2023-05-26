@@ -6,6 +6,7 @@ import Baloot.Exception.CommodityNotInStuck;
 import Baloot.Model.CommentReportModel;
 import Baloot.Model.CommodityModel;
 import Baloot.View.CommodityShortModel;
+import Baloot.service.CommentService;
 import lombok.*;
 
 import javax.persistence.*;
@@ -49,13 +50,12 @@ public class Commodity {
     @Column(name = "image")
     private String image;
 
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinColumn(name = "commodity")
+    private List<Comment> comments;
 
     @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinColumn(name = "commodityId")
-    private Map<Integer, Comment> comments;
-
-    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinColumn(name = "commodityId")
+    @JoinColumn(name = "commodity")
     private Set<Rate> rates;
 
     public void setCategories(String[] array) {
@@ -77,13 +77,13 @@ public class Commodity {
         super();
         id = model.id;
         name = model.name;
-        ContextManager.getInstance().getProvider(model.providerId);
+        provider = ContextManager.getInstance().getProvider(model.providerId);
         price = model.price;
         setCategories(model.categories);
         rating = model.rating;
         inStock = model.inStock;
         image = model.image;
-        comments = new HashMap<>();
+        comments = new ArrayList<>();
         rates = new HashSet<>();
     }
 
@@ -112,12 +112,12 @@ public class Commodity {
         model.commodityModel.rating = rating;
         model.commodityModel.inStock = inStock;
         model.commodityModel.image = image;
-        model.commentsList = getCommentsList();
+//        model.commentsList = getCommentsList();
         return model;
     }
 
     public void addRate(String username, Integer rate) {
-        rates.add(new Rate(this.id, username, rate));
+        rates.add(new Rate(this, username, rate));
         Double mean = 0.0;
         for (Rate val : rates) {
             mean += val.rateNumber;
@@ -150,16 +150,20 @@ public class Commodity {
     }
 
     public void putComment(Comment comment) {
-        comments.put(comment.getId(), comment);
+        System.out.println(comments.size());
+        comments.add(comment);
+        System.out.println("@@@@@@@@@@@@@@@@@@@");
+        System.out.println(comments.size());
     }
 
-    public ArrayList<CommentReportModel> getCommentsList() {
-        ArrayList<CommentReportModel> result = new ArrayList<>();
-        for (Comment comment : comments.values()) {
-            result.add(comment.getReportModel());
-        }
-        return result;
-    }
+//    public ArrayList<CommentReportModel> getCommentsList() {
+//        ArrayList<CommentReportModel> result = new ArrayList<>();
+//        System.out.println(comments.size());
+//        for (Comment comment : comments.stream().toList()) {
+//            result.add(comment.getReportModel());
+//        }
+//        return result;
+//    }
 
     public boolean checkPriceRange(double start_price, double end_price) {
         return start_price <= price && price <= end_price;
