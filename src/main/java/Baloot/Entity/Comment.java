@@ -36,8 +36,6 @@ public class Comment {
     private User user;
     String text;
     Date date;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "voteID.comment")
-    private Set<Vote> votes;
     Integer likes = 0;
     Integer dislikes = 0;
 
@@ -61,7 +59,6 @@ public class Comment {
         user = ContextManager.getInstance().getUser(model.user.getUsername());
         text = model.text;
         date = model.date;
-        votes = new HashSet<>();
     }
 
     public void updateVotes(Integer likes, Integer dislike) {

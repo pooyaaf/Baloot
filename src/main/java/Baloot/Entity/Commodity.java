@@ -110,12 +110,10 @@ public class Commodity {
         model.commodityModel.rating = rating;
         model.commodityModel.inStock = inStock;
         model.commodityModel.image = image;
-//        model.commentsList = getCommentsList();
         return model;
     }
 
-    public void addRate(String username, Integer rate) {
-        rates.add(new Rate(this, username, rate));
+    public void addRate(List<Rate> rates) {
         Double mean = 0.0;
         for (Rate val : rates) {
             mean += val.rateNumber;

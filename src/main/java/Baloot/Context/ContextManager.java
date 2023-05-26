@@ -222,7 +222,6 @@ public class ContextManager {
     }
 
     public void  putCommodity(Integer id, Commodity commodity) {
-
         commodityRepository.save(commodity);
         updateProvider(commodity);
     }

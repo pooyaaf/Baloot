@@ -14,13 +14,7 @@ import Baloot.Route;
 @Route("rateCommodity/{username}/{commodityId}/{rate}")
 public class RateCommodity extends Command {
     public CommodityShortModel handle(RateModel model) throws Exception, UserNotFound, CommodityNotFound {
-        if (model.rate < 1 || model.rate > 10) {
-            throw new InvalidRateScore();
-        }
-        ContextManager.getInstance().getUser(model.username);
-        Commodity commodity = ContextManager.getInstance().getCommodity(model.commodityId);
-        commodity.addRate(model.username, model.rate);
-        return commodity.getReportModel();
+        return null;
     }
 
     @AcceptMethod(RequestMethod.GET)

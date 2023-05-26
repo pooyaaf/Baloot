@@ -38,12 +38,10 @@ public class BuyListService {
         if (optionalBuyList.isEmpty()) throw new CommodityIsNotInBuyList();
         BuyList buyList = optionalBuyList.get();
         Integer inStock = buyList.getInStock();
+        buyList.setInStock(buyList.getInStock() - 1);
+        repository.save(buyList);
         if (inStock == 1) {
             repository.deleteBuyListByBuyListId(buyList.getBuyListId());
-        }
-        else {
-            buyList.setInStock(buyList.getInStock() - 1);
-            repository.save(buyList);
         }
     }
 }
