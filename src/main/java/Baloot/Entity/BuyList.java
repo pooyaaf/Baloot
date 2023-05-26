@@ -18,6 +18,7 @@ public class BuyList {
 
     Integer inStock;
     public BuyList(Commodity commodity, User user, Integer inStock) {
+        this.buyListId = new BuyListId();
         this.buyListId.setCommodity(commodity);
         this.buyListId.setUser(user);
         this.inStock = inStock;

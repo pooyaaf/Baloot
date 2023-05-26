@@ -12,22 +12,23 @@ import javax.persistence.*;
 @Data
 public class PurchasedList {
     @EmbeddedId
-    private BuyListId buyListId;
+    private PurchasedListId purchasedListId;
 
 
 
     Integer inStock;
     public PurchasedList(Commodity commodity, User user, Integer inStock) {
-        this.buyListId.setCommodity(commodity);
-        this.buyListId.setUser(user);
+        this.purchasedListId = new PurchasedListId();
+        this.purchasedListId.setCommodity(commodity);
+        this.purchasedListId.setUser(user);
         this.inStock = inStock;
     }
 
     public String getUsername() {
-        return buyListId.getUser().getUsername();
+        return purchasedListId.getUser().getUsername();
     }
 
     public Commodity getCommodity() {
-        return buyListId.getCommodity();
+        return purchasedListId.getCommodity();
     }
 }

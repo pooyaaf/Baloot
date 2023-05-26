@@ -31,7 +31,7 @@ public class ContextManager {
     private static final BasicDataSource ds = new BasicDataSource();
     private final static String dbURL = "jdbc:mysql://localhost:3306/balootdb?sessionVariables=sql_mode='NO_ENGINE_SUBSTITUTION'&jdbcCompliantTruncation=false&allowMultiQueries=true";
     private final static String dbUserName = "root";
-    private final static String dbPassword = "toor";
+    private final static String dbPassword = "alibatman";
     public static CommodityRepository commodityRepository;
     public static  ProviderRepository providerRepository;
     public static UserRepository userRepository;
