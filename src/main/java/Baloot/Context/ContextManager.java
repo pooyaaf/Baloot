@@ -101,8 +101,6 @@ public class ContextManager {
     }
 
     public void initialize() {
-        /// TODO: Remove
-        UserContext.username = "amir";
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd")
                 .registerTypeAdapterFactory(new IgnoreFailureTypeAdapterFactory())
