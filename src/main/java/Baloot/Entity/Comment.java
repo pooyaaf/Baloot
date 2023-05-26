@@ -64,24 +64,9 @@ public class Comment {
         votes = new HashSet<>();
     }
 
-    public void addVote(Integer vote, String userName) {
-        for (Vote voteObj : votes) {
-            if (voteObj.getUsername().equals(userName)) {
-                Integer preVote = voteObj.getVoteNumber();
-                if (preVote == 1) {
-                    likes--;
-                }
-                if (preVote == -1) {
-                    dislikes--;
-                }
-            }
-        }
-        Vote newVote = new Vote(this, user, vote);
-        votes.add(newVote);
-        if (vote == 1)
-            likes++;
-        if (vote == -1)
-            dislikes++;
+    public void updateVotes(Integer likes, Integer dislike) {
+        this.likes = likes;
+        this.dislikes = dislike;
     }
 
     public Integer getLikes() {
