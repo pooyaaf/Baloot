@@ -9,13 +9,16 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-//@Service
-//@RequiredArgsConstructor
+@Service
+@RequiredArgsConstructor
 public class CommentService {
-//    private final CommentRepository repository;
-
-//    public ArrayList<CommentReportModel> getCommentsOfCommodity(Integer commodityId){
+    private final CommentRepository repository;
+    public void addComment(Comment comment) {
+        repository.save(comment);
+    }
+    public ArrayList<CommentReportModel> getCommentsOfCommodity(Integer commodityId){
 //        List<Comment> comments = (List<Comment>) repository.findAllByCommodityId(commodityId);
 //        return new ArrayList<>(comments.stream().map(o -> o.getReportModel()).toList());
-//    }
+        return new ArrayList<>();
+    }
 }

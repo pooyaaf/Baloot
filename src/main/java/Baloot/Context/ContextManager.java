@@ -36,16 +36,14 @@ public class ContextManager {
     public static  ProviderRepository providerRepository;
     public static UserRepository userRepository;
 
-    public static CommentRepository commentRepository;
     public static DiscountRepository discountRepository;
 
     @Autowired
-    public ContextManager(ProviderRepository providerRepository,UserRepository userRepository,CommodityRepository commodityRepository, DiscountRepository discountRepository, CommentRepository commentRepository) {
+    public ContextManager(ProviderRepository providerRepository,UserRepository userRepository,CommodityRepository commodityRepository, DiscountRepository discountRepository) {
         this.providerRepository = providerRepository;
         this.userRepository = userRepository;
         this.commodityRepository=commodityRepository;
         this.discountRepository = discountRepository;
-        this.commentRepository = commentRepository;
     }
 
     static {
@@ -87,7 +85,7 @@ public class ContextManager {
 
     public static ContextManager getInstance() {
         if (instance == null) {
-            instance = new ContextManager(providerRepository,userRepository,commodityRepository,discountRepository,commentRepository);
+            instance = new ContextManager(providerRepository,userRepository,commodityRepository,discountRepository);
             instance.initialize();
         }
         return instance;
@@ -251,23 +249,12 @@ public class ContextManager {
         return result;
     }
 
-    @SneakyThrows
-    public void updateCommodity(Comment comment) {
-        Optional<Commodity> commodityOptional = commodityRepository.findById(comment.getCommodityId());
-        if (commodityOptional.isEmpty()) throw new CommodityNotFound();
-        commodityOptional.get().putComment(comment);
-    }
-
-    public void putComment(Integer id, Comment comment) {
-        commentRepository.save(comment);
-        updateCommodity(comment);
-    }
-
-    public Comment getComment(Integer id) throws CommentNotFound {
-        Optional<Comment> commentOptional = commentRepository.findById(id);
-        if (commentOptional.isEmpty()) throw new CommentNotFound();
-        return commentOptional.get();
-    }
+//    @SneakyThrows
+//    public void updateCommodity(Comment comment) {
+//        Optional<Commodity> commodityOptional = commodityRepository.findById(comment.getCommodityId());
+//        if (commodityOptional.isEmpty()) throw new CommodityNotFound();
+//        commodityOptional.get().putComment(comment);
+//    }
 
     public boolean isUserPassExist(String username, String password) {
         Optional<User> optionalUser = userRepository.findById(username);

@@ -52,10 +52,6 @@ public class Commodity {
 
     @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "commodity")
-    private List<Comment> comments;
-
-    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinColumn(name = "commodity")
     private Set<Rate> rates;
 
     public void setCategories(String[] array) {
@@ -83,7 +79,6 @@ public class Commodity {
         rating = model.rating;
         inStock = model.inStock;
         image = model.image;
-        comments = new ArrayList<>();
         rates = new HashSet<>();
     }
 
@@ -147,13 +142,6 @@ public class Commodity {
 //        }
 //        return false;
         return true;
-    }
-
-    public void putComment(Comment comment) {
-        System.out.println(comments.size());
-        comments.add(comment);
-        System.out.println("@@@@@@@@@@@@@@@@@@@");
-        System.out.println(comments.size());
     }
 
 //    public ArrayList<CommentReportModel> getCommentsList() {

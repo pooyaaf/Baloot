@@ -22,10 +22,11 @@ public class VoteComment extends Command {
             throw new InvalidVoteValue();
         }
         User user = ContextManager.getInstance().getUser(model.username);
-        Comment comment = ContextManager.getInstance().getComment(model.commentId);
-        comment.addVote(model.vote, user.getUsername());
-        Commodity commodity = ContextManager.getInstance().getCommodity(comment.getCommodityId());
-        return commodity.getReportModel();
+//        Comment comment = ContextManager.getInstance().getComment(model.commentId);
+//        comment.addVote(model.vote, user.getUsername());
+//        Commodity commodity = ContextManager.getInstance().getCommodity(comment.getCommodityId());
+//        return commodity.getReportModel();
+        return null;
     }
     @AcceptMethod(RequestMethod.GET)
     public CommodityShortModel handleGet(VoteCommentModel model) throws Exception, UserNotFound, CommodityNotFound, CommentNotFound {
