@@ -6,10 +6,12 @@ import Baloot.Context.UserContext;
 import Baloot.Entity.Commodity;
 import Baloot.Entity.User;
 import Baloot.Exception.CommodityNotFound;
+import Baloot.Model.CommentReportModel;
 import Baloot.Repository.CommodityRepository;
 import Baloot.View.CommodityFullModel;
 import Baloot.View.CommodityListModel;
 //import Baloot.service.CommentService;
+import Baloot.service.CommentService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -25,7 +28,8 @@ import java.util.stream.StreamSupport;
 @AllArgsConstructor
 @RequestMapping("/commodities")
 public class CommoditiesController {
-//    private final CommentService commentService;
+    @Autowired
+    private final CommentService commentService;
 
     @Autowired
     CommodityRepository repository;
@@ -55,8 +59,8 @@ public class CommoditiesController {
         try {
             Commodity commodity = ContextManager.getInstance().getCommodity(id);
             CommodityFullModel commodityFullModel = new CommodityFullModel();
-//            commodityFullModel.commodityShortModel.commentsList = commentService.getCommentsOfCommodity(id);
             commodityFullModel.commodityShortModel = commodity.getReportModel();
+            commodityFullModel.commodityShortModel.commentsList = commentService.getCommentsOfCommodity(commodity);
             commodityFullModel.suggestedCommoditiesModel = getSuggestedCommoditiesModel(commodity);
             return commodityFullModel;
         }
