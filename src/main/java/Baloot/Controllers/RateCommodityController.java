@@ -1,7 +1,7 @@
 package Baloot.Controllers;
 
 
-import Baloot.Commands.Payment;
+
 import Baloot.Commands.RateCommodity;
 import Baloot.Context.ContextManager;
 import Baloot.Context.UserContext;

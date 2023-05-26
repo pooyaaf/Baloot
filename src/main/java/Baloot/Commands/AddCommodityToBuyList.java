@@ -18,7 +18,7 @@ public class AddCommodityToBuyList extends Command{
         Commodity commodity = ContextManager.getInstance().getCommodity(Integer.parseInt(input.commodityId));
         User user = ContextManager.getInstance().getUser(input.username);
         commodity.decreaseInStuck();
-        user.addToBuyList(commodity);
+
 
         return commodity.getReportModel();
     }

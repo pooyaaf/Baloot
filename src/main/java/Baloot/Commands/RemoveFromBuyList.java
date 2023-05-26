@@ -18,7 +18,6 @@ public class RemoveFromBuyList extends Command {
         Commodity commodity = ContextManager.getInstance().getCommodity(Integer.parseInt(input.commodityId));
         User user = ContextManager.getInstance().getUser(input.username);
         commodity.increaseInStuck();
-        user.removeFromBuyList(commodity);
         return commodity.getReportModel();
     }
 

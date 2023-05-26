@@ -11,6 +11,7 @@ import Baloot.Exception.UserNotAuthenticated;
 import Baloot.Exception.UserNotFound;
 import Baloot.Model.CommodityModel;
 import Baloot.Repository.BuyListRepository;
+import Baloot.Repository.PurchasedListRepository;
 import Baloot.View.CommodityListModel;
 import Baloot.View.UserInfoModel;
 import lombok.AllArgsConstructor;
@@ -30,7 +31,10 @@ import java.util.List;
 @RequestMapping("/buyList")
 public class BuyListController {
     @Autowired
-    BuyListRepository repository;
+    private final BuyListRepository repository;
+
+    @Autowired
+    private final PurchasedListRepository purchasedListRepository;
 
     ArrayList<CommodityModel> getBuyList(User user) {
         List<BuyList> buyLists = (List<BuyList>) repository.findAllByBuyListId_User(user);
@@ -46,9 +50,8 @@ public class BuyListController {
     public UserInfoModel all() {
         try {
             if (Authentication.isNotAuthenticated()) throw new UserNotAuthenticated();
-            GetBuyList command = new GetBuyList();
             User user = ContextManager.getInstance().getUser(UserContext.username);
-            UserInfoModel userInfoModel = user.getUserInfoModel();
+            UserInfoModel userInfoModel = user.getUserInfoModel(repository.findAllByBuyListId_User(user), purchasedListRepository.findAllByPurchasedListId_User(user));
             userInfoModel.buyList = getBuyList(user);
             return userInfoModel;
         }

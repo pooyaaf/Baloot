@@ -44,4 +44,15 @@ public class BuyListService {
             repository.deleteBuyListByBuyListId(buyList.getBuyListId());
         }
     }
+
+    public Iterable<BuyList> getBuyList(User user) {return repository.findAllByBuyListId_User(user);}
+
+    public void clearUserBuyList(User user) {
+        Iterable<BuyList> buyLists = repository.findAllByBuyListId_User(user);
+        for (BuyList buyList : buyLists) {
+            buyList.setInStock(0);
+            repository.save(buyList);
+            repository.deleteBuyListByBuyListId(buyList.getBuyListId());
+        }
+    }
 }

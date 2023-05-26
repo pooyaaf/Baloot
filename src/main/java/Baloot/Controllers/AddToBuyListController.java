@@ -39,6 +39,7 @@ public class AddToBuyListController {
             commodity.decreaseInStuck();
             commodityRepository.save(commodity);
 //            user.addToBuyList(commodity);
+            user.setBuyListPrice(user.calculatePayment(buyListService.getBuyList(user)));
             buyListService.addBuyList(user, commodity);
         } catch (UserNotFound | CommodityNotFound | CommodityNotInStuck | UserNotAuthenticated | Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());

@@ -10,5 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BuyListRepository  extends CrudRepository<BuyList, BuyListId> {
     void deleteBuyListByBuyListId(BuyListId buyListId);
+    void deleteBuyListByBuyListId_User(User user);
     Iterable<BuyList> findAllByBuyListId_User(User user);
 }

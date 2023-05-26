@@ -13,8 +13,7 @@ import Baloot.Route;
 public class AddCredit extends Command {
     @AcceptMethod(RequestMethod.GET)
     public UserInfoModel handle(AddCreditModel input) throws Exception, UserNotFound {
-        User user = ContextManager.getInstance().getUser(input.user_id);
-        user.addCredit(Integer.parseInt(input.credit));
-        return user.getUserInfoModel();
+        return null;
+
     }
 }
