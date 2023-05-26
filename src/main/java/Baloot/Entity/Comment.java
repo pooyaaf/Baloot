@@ -30,8 +30,7 @@ public class Comment {
     String username;
     String text;
     Date date;
-    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinColumn(name = "commentId")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "voteID.comment")
     private Set<Vote> votes;
     Integer likes = 0;
     Integer dislikes = 0;
@@ -70,7 +69,7 @@ public class Comment {
                 }
             }
         }
-        Vote newVote = new Vote(this.id, userName, vote);
+        Vote newVote = new Vote(vote);
         votes.add(newVote);
         if (vote == 1)
             likes++;

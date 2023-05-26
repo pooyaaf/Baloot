@@ -35,8 +35,8 @@ public class Provider {
     @Setter
     private String image;
 
-    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinColumn(name = "providerId")
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinColumn(name = "provider")
     private Map<Integer, Commodity> commodities;
 
     public Provider(ProviderModel model) {

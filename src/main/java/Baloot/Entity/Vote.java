@@ -1,9 +1,6 @@
 package Baloot.Entity;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -12,16 +9,20 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Setter
+@Data
 public class Vote {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer voteID;
-    Integer commentId;
-    String username;
+    @EmbeddedId
+    private VoteId voteID;
+
+
+
     Integer voteNumber;
-    public Vote(Integer commentId, String username, Integer voteNumber) {
-        this.commentId = commentId;
-        this.username = username;
+    public Vote( Integer voteNumber) {
+
         this.voteNumber = voteNumber;
+    }
+
+    public String getUsername() {
+        return voteID.getUser().getUsername();
     }
 }

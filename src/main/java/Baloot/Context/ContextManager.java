@@ -3,6 +3,7 @@ package Baloot.Context;
 import Baloot.Entity.*;
 import Baloot.Exception.*;
 import Baloot.Model.*;
+import Baloot.Repository.CommentRepository;
 import Baloot.Repository.CommodityRepository;
 import Baloot.Repository.ProviderRepository;
 import Baloot.Repository.UserRepository;
@@ -33,16 +34,18 @@ public class ContextManager {
     private static final BasicDataSource ds = new BasicDataSource();
     private final static String dbURL = "jdbc:mysql://localhost:3306/balootdb?sessionVariables=sql_mode='NO_ENGINE_SUBSTITUTION'&jdbcCompliantTruncation=false&allowMultiQueries=true";
     private final static String dbUserName = "root";
-    private final static String dbPassword = "alibatman";
+    private final static String dbPassword = "toor";
     public static CommodityRepository commodityRepository;
     public static  ProviderRepository providerRepository;
     public static UserRepository userRepository;
+
+    public static CommentRepository commentRepository;
+
     @Autowired
     public ContextManager(ProviderRepository providerRepository,UserRepository userRepository,CommodityRepository commodityRepository) {
         this.providerRepository = providerRepository;
         this.userRepository = userRepository;
-        // TODO : Below should be uncommited when other puts be ok
-//        this.commodityRepository=commodityRepository;
+        this.commodityRepository=commodityRepository;
     }
 
     static {
@@ -67,7 +70,7 @@ public class ContextManager {
         try {
             Connection connection = getConnection();
             Statement statement = connection.createStatement();
-            statement.execute("ALTER DATABASE IEMDB CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+            statement.execute("ALTER DATABASE balootdb CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
             connection.close();
             statement.close();
         } catch (SQLException e) {
@@ -200,30 +203,6 @@ public class ContextManager {
 
     @SneakyThrows
     public void putProvider(Integer id, Provider provider) {
-//        providers.put(id, provider);
-//        Connection con = getConnection();
-//        ProviderViewModel model = provider.GetProviderViewModel();
-//        StringBuilder builder = new StringBuilder();
-//
-//        builder.append("INSERT INTO `balootdb`.`provider`( \n");
-//        builder.append("`id`,`image`, `name`,`registrydate`)");
-//        builder.append("VALUES");
-//        builder.append(String.format("(%d, \"%s\", \"%s\", \"%s\")",
-//                model.providerModel.id,
-//                model.providerModel.image,
-//                model.providerModel.name,
-//                model.providerModel.registryDate
-//                ));
-//        builder.append("ON DUPLICATE KEY UPDATE ");
-//        builder.append(
-//                "`id`=VALUES(`id`), `image`=VALUES(`image`), `name`=VALUES(`name`), `registrydate`=VALUES(`registrydate`);\n");
-//
-//        System.err.println(builder.toString());
-//        Statement stmt = con.createStatement();
-//        stmt.execute(builder.toString());
-//
-//        con.close();
-//        stmt.close();
         providerRepository.save(provider);
     }
 
@@ -280,11 +259,11 @@ public class ContextManager {
     }
 
     public void  putCommodity(Integer id, Commodity commodity) {
-        // TODO : Below should be uncommited when other puts be ok
-//        commodityRepository.save(commodity);
-        commodities.put(id, commodity);
-        updateCategories(commodity);
-        updateProvider(commodity);
+
+        commodityRepository.save(commodity);
+//        commodities.put(id, commodity);
+//        updateCategories(commodity);
+//        updateProvider(commodity);
     }
 
     public Commodity getCommodity(Integer id) throws Exception, CommodityNotFound {
@@ -314,7 +293,8 @@ public class ContextManager {
         Integer commodityId = comment.getCommodityId();
         if (commodities.containsKey(commodityId)) {
             Commodity commodity = commodities.get(commodityId);
-            commodity.putComment(comment);
+            //commodity.putComment(comment);
+            commentRepository.save(comment);
         }
     }
 

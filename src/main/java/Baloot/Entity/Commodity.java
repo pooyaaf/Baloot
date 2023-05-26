@@ -1,14 +1,12 @@
 package Baloot.Entity;
 
 
+import Baloot.Context.ContextManager;
 import Baloot.Exception.CommodityNotInStuck;
 import Baloot.Model.CommentReportModel;
 import Baloot.Model.CommodityModel;
 import Baloot.View.CommodityShortModel;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.*;
@@ -30,7 +28,8 @@ public class Commodity {
     private String name;
     @Getter
     @Setter
-    private Integer providerId;
+    @ManyToOne(cascade = CascadeType.PERSIST, targetEntity = Provider.class)
+    private Provider provider;
     @Getter
     @Setter
     @Column(name = "price")
@@ -73,11 +72,12 @@ public class Commodity {
 //    public List<String> getCategories() {
 //        return categories;
 //    }
+    @SneakyThrows
     public Commodity(CommodityModel model) {
         super();
         id = model.id;
         name = model.name;
-        providerId = model.providerId;
+        ContextManager.getInstance().getProvider(model.providerId);
         price = model.price;
         setCategories(model.categories);
         rating = model.rating;
@@ -91,7 +91,7 @@ public class Commodity {
         CommodityModel model = new CommodityModel();
         model.id = id;
         model.name = name;
-        model.providerId = providerId;
+        model.providerId = provider.getId();
         model.price = price;
         model.categories = getCategories();
         model.rating = rating;
@@ -106,7 +106,7 @@ public class Commodity {
         model.commodityModel = new CommodityModel();
         model.commodityModel.id = id;
         model.commodityModel.name = name;
-        model.commodityModel.providerId = providerId;
+        model.commodityModel.providerId = provider.getId();
         model.commodityModel.price = price;
         model.commodityModel.categories = getCategories();
         model.commodityModel.rating = rating;
@@ -173,5 +173,9 @@ public class Commodity {
 //        }
 //        return false;
         return true;
+    }
+
+    public Integer getProviderId() {
+        return provider.getId();
     }
 }
