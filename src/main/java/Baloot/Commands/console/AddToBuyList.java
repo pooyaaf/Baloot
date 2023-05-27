@@ -16,10 +16,7 @@ import Baloot.Exception.UserNotFound;
 public class AddToBuyList extends Command {
     @AcceptMethod(RequestMethod.GET)
     public String handle(BuyModel input) throws Exception, UserNotFound, CommodityNotFound, CommodityNotInStuck {
-        Commodity commodity = ContextManager.getInstance().getCommodity(input.commodityId);
-        User user = ContextManager.getInstance().getUser(input.username);
-        commodity.decreaseInStuck();
-        user.addToBuyList(commodity);
+
 
         return "commodity was added to buy list successfully";
     }

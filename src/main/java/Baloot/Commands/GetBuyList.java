@@ -18,6 +18,6 @@ public class GetBuyList extends Command{
     @AcceptMethod(RequestMethod.GET)
     public UserInfoModel handle(String username) throws Exception, UserNotFound {
         User user = ContextManager.getInstance().getUser(username);
-        return user.getUserInfoModel();
+        return null;
     }
 }

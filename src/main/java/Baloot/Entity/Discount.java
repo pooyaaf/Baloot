@@ -1,10 +1,20 @@
 package Baloot.Entity;
 
 import Baloot.Model.DiscountModel;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "discount")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Discount {
     @Getter
+    @Id
     private String discountCode;
     @Getter
     private Integer discount;

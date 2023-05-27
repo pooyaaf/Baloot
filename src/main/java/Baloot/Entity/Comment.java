@@ -1,26 +1,41 @@
 package Baloot.Entity;
 
+import Baloot.Context.ContextManager;
 import Baloot.Model.CommentInputModel;
 import Baloot.Model.CommentModel;
 import Baloot.Model.CommentReportModel;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 
+import javax.persistence.*;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
+@Entity
+@Table(name = "comment")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class Comment {
     private static Integer idCounter = 1;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
-    @Getter
-    Integer commodityId;
-    @Getter
-    User user;
+    @ManyToOne
+    @JoinColumn(name = "commodityId", nullable = false)
+    private Commodity commodity;
+
+    @ManyToOne
+    @JoinColumn(name = "username", nullable = false)
+    private User user;
     String text;
     Date date;
-    HashMap<String, Integer> votes = new HashMap<>();
     Integer likes = 0;
     Integer dislikes = 0;
 
@@ -36,28 +51,19 @@ public class Comment {
         return date;
     }
 
+    @SneakyThrows
     public Comment(CommentModel model) {
         super();
         id = idCounter++;
-        commodityId = model.commodityId;
-        this.user = model.user;
+        commodity = ContextManager.getInstance().getCommodity(model.commodityId);
+        user = ContextManager.getInstance().getUser(model.user.getUsername());
         text = model.text;
         date = model.date;
     }
 
-    public void addVote(Integer vote, String userName) {
-        if (votes.containsKey(userName)) {
-            Integer preVote = votes.get(userName);
-            if (preVote == 1)
-                likes--;
-            if (preVote == -1)
-                dislikes--;
-        }
-        votes.put(userName, vote);
-        if (vote == 1)
-            likes++;
-        if (vote == -1)
-            dislikes++;
+    public void updateVotes(Integer likes, Integer dislike) {
+        this.likes = likes;
+        this.dislikes = dislike;
     }
 
     public Integer getLikes() {
@@ -80,4 +86,11 @@ public class Comment {
         return commentReportModel;
     }
 
+    public String getUsername() {
+        return user.getUsername();
+    }
+
+    public Integer getCommodityId() {
+        return commodity.getId();
+    }
 }

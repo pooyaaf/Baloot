@@ -13,6 +13,5 @@ import Baloot.Model.CommentModel;
 public class AddComment extends Command{
     public void handle(CommentModel input) throws Exception, CommodityNotFound, UserNotFound, CommodityNotInStuck {
         Comment comment = new Comment(input);
-        ContextManager.getInstance().putComment(comment.getId(), comment);
     }
 }

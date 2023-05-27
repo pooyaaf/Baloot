@@ -1,88 +1,75 @@
 package Baloot.Entity;
 
+import Baloot.Context.ContextManager;
 import Baloot.Exception.CommodityIsNotInBuyList;
 import Baloot.Exception.CreditNotEnough;
 import Baloot.Exception.ExpiredDiscount;
+import Baloot.Exception.DiscountNotFound;
 import Baloot.Model.CommodityModel;
 import Baloot.Model.UserModel;
 import Baloot.View.UserInfoModel;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.checkerframework.common.aliasing.qual.Unique;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
+import javax.persistence.*;
+import java.util.*;
 
+@Entity
+@Table(name = "user")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
     @Setter
     @Getter
+    @Id
     private String username;
     @Setter
     @Getter
     private String password;
     @Setter
     @Getter
+    @Unique
     private String email;
     @Setter
     @Getter
-    private String birthDate;
+    @Column(name="birthdate")
+    private String birthdate;
     @Setter
     @Getter
     private String address;
     @Setter
     @Getter
     private int credit;
-    private HashMap<Integer, Commodity> buyList;
-    private HashMap<Integer, Commodity> purchasedList;
-    private HashMap<Integer, Integer> buyListInStock;
-    private HashMap<Integer, Integer> purchasedListInStock;
-    private HashMap<String, Discount> expiredDiscounts;
-    private Discount activeDiscount;
+
+    @Setter
+    @Getter
+    private double buyListPrice;
+
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user")
+    private Set<UserExpiredDiscount> expiredDiscounts;
+
+    @Column(name="activediscountcode")
+    private String activediscountcode;
 
     public User(UserModel model) {
         super();
         username = model.username;
         password = model.password;
         email = model.email;
-        birthDate = model.birthDate;
+        birthdate = model.birthDate;
         address = model.address;
         credit = model.credit;
-        buyList = new HashMap<>();
-        purchasedList = new HashMap<>();
-        buyListInStock = new HashMap<>();
-        purchasedListInStock = new HashMap<>();
-        expiredDiscounts = new HashMap<>();
-        activeDiscount = null;
+        expiredDiscounts = new HashSet<>();
+        activediscountcode = null;
+        buyListPrice = 0;
     }
 
-    public void addToBuyList(Commodity commodity) {
-        if (buyListInStock.containsKey(commodity.getId())) {
-            buyListInStock.put(commodity.getId(), buyListInStock.get(commodity.getId()) + 1);
-        }
-        else {
-            buyListInStock.put(commodity.getId(), 1);
-            buyList.put(commodity.getId(), commodity);
-        }
-    }
-
-    public void removeFromBuyList(Commodity commodity) throws CommodityIsNotInBuyList {
-        if (!buyList.containsKey(commodity.getId()))
-            throw new CommodityIsNotInBuyList();
-        Integer inStockBuyList = buyListInStock.get(commodity.getId());
-        if (inStockBuyList == 1) {
-            buyListInStock.remove(commodity.getId());
-            buyList.remove(commodity.getId());
-        }
-        else {
-            buyListInStock.put(commodity.getId(), buyListInStock.get(commodity.getId()) - 1);
-        }
-    }
-
-    public Collection<Commodity> getBuyList() {
-        return buyList.values();
-    }
-
-    public UserInfoModel getUserInfoModel() {
+    public UserInfoModel getUserInfoModel(Iterable<BuyList> buyLists, Iterable<PurchasedList> purchasedLists) {
         UserInfoModel userInfoModel = new UserInfoModel();
         userInfoModel.userModel = new UserModel();
         userInfoModel.buyList = new ArrayList<>();
@@ -90,15 +77,16 @@ public class User {
         userInfoModel.userModel.username = username;
         userInfoModel.userModel.password = password;
         userInfoModel.userModel.credit = credit;
-        userInfoModel.userModel.birthDate = birthDate;
+        userInfoModel.userModel.birthDate = birthdate;
         userInfoModel.userModel.email = email;
         userInfoModel.userModel.address = address;
 
-        userInfoModel.buyList = getBuyListModel();
-        userInfoModel.purchasedList = getPurchasedListModel();
-        userInfoModel.buyListPrice = calculatePayment();
+        userInfoModel.buyList = getBuyListModel(buyLists);
+        userInfoModel.purchasedList = getPurchasedListModel(purchasedLists);
+        userInfoModel.buyListPrice = buyListPrice;
         return userInfoModel;
     }
+
 
     public void addCredit(int credit) {
         if (credit > 0) {
@@ -106,63 +94,68 @@ public class User {
         }
     }
 
-    private double calculatePayment() {
+    public double calculatePayment(Iterable<BuyList> buyLists) {
         double paymentPrice = 0;
-        for (Commodity commodity : buyList.values()) {
-            paymentPrice += commodity.getPrice() * buyListInStock.get(commodity.getId());
+        for (BuyList buyList : buyLists) {
+            paymentPrice += buyList.getCommodity().getPrice() * buyList.getInStock();
         }
-        if (activeDiscount == null) return paymentPrice;
-        return paymentPrice * (1 - activeDiscount.toPercent());
+        if (activediscountcode == null) return paymentPrice;
+        try {
+            return paymentPrice * (1 - ContextManager.getInstance().getDiscount(activediscountcode).toPercent());
+        } catch (DiscountNotFound e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public void payment() throws CreditNotEnough {
-        double calculatedPayment = calculatePayment();
+    public void payment(Iterable<BuyList> buyLists) throws CreditNotEnough {
+        double calculatedPayment = calculatePayment(buyLists);
         if (calculatedPayment > credit) {
             throw new CreditNotEnough();
         }
-        credit -= calculatePayment();
-        purchasedList.putAll(buyList);
-        for (Integer id : buyListInStock.keySet()) {
-            Integer newInStock = 0;
-            if (purchasedListInStock.containsKey(id)) {
-                newInStock += purchasedListInStock.get(id);
-            }
-            newInStock += buyListInStock.get(id);
-            purchasedListInStock.put(id, newInStock);
-        }
-        buyList.clear();
-        buyListInStock.clear();
+        credit -= calculatePayment(buyLists);
+//        for (BuyList buyList : buyLists) {
+//            Optional<PurchasedList> optionalBuyList = purchasedLists.stream().filter(obj -> obj.getCommodity().getId() == buyList.getCommodity().getId()).findFirst();
+//            if (!optionalBuyList.isEmpty())
+//                optionalBuyList.get().setInStock(optionalBuyList.get().getInStock() + buyList.getInStock());
+//            else {
+//                PurchasedList purchasedList = new PurchasedList(buyList.getCommodity(), this, buyList.getInStock());
+//                purchasedLists.add(purchasedList);
+//            }
+//        }
+//        buyLists.clear();
         updateUsedDiscounts();
     }
 
-    private ArrayList<CommodityModel> getBuyListModel() {
+    private ArrayList<CommodityModel> getBuyListModel(Iterable<BuyList> buyLists) {
         ArrayList<CommodityModel> result = new ArrayList<>();
-        for (Commodity commodity : buyList.values()) {
+        for (BuyList buyList : buyLists) {
+            Commodity commodity = buyList.getCommodity();
             CommodityModel commodityModel = commodity.getModel();
-            commodityModel.inCart = buyListInStock.get(commodity.getId());
+            commodityModel.inCart = buyList.getInStock();
             result.add(commodityModel);
         }
         return result;
     }
 
-    private ArrayList<CommodityModel> getPurchasedListModel() {
+    private ArrayList<CommodityModel> getPurchasedListModel(Iterable<PurchasedList> purchasedLists) {
         ArrayList<CommodityModel> result = new ArrayList<>();
-        for (Commodity commodity : purchasedList.values()) {
-            CommodityModel commodityModel = commodity.getModel();
-            commodityModel.inCart = purchasedListInStock.get(commodity.getId());
+        for (PurchasedList purchasedList : purchasedLists) {
+            CommodityModel commodityModel = purchasedList.getCommodity().getModel();
+            commodityModel.inCart = purchasedList.getInStock();
             result.add(commodityModel);
         }
         return result;
     }
 
     private void updateUsedDiscounts() {
-        if (activeDiscount == null) return;
-        expiredDiscounts.put(activeDiscount.getDiscountCode(), activeDiscount);
-        activeDiscount = null;
+        if (activediscountcode == null) return;
+        expiredDiscounts.add(new UserExpiredDiscount(this, activediscountcode));
+        activediscountcode = null;
     }
 
     public void addDiscount(Discount discount) throws ExpiredDiscount {
-        if (expiredDiscounts.containsKey(discount.getDiscountCode())) throw new ExpiredDiscount();
-        activeDiscount = discount;
+        Optional<UserExpiredDiscount> optionalDiscount = expiredDiscounts.stream().filter(obj -> obj.getDiscountCode().equals(discount.getDiscountCode())).findFirst();
+        if (!optionalDiscount.isEmpty()) throw new ExpiredDiscount();
+        activediscountcode = discount.getDiscountCode();
     }
 }

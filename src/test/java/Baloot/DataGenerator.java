@@ -48,6 +48,7 @@ class DataGenerator {
 
     }
 
+    //TODO
     static void GenerateCommodity(int id, String name, int providerId, double price, String[] categories, double rating, int inStock) {
         CommodityModel commodityModel = new CommodityModel();
         commodityModel.id=id;

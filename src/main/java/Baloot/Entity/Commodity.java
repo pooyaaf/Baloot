@@ -1,64 +1,97 @@
 package Baloot.Entity;
 
 
+import Baloot.Context.ContextManager;
 import Baloot.Exception.CommodityNotInStuck;
 import Baloot.Model.CommentReportModel;
 import Baloot.Model.CommodityModel;
 import Baloot.View.CommodityShortModel;
-import lombok.Getter;
-import lombok.Setter;
+import Baloot.service.CommentService;
+import lombok.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import javax.persistence.*;
+import java.util.*;
 
+
+@Entity
+@Table(name = "commodity")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Commodity {
     @Getter
     @Setter
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Getter
     @Setter
+    @Column(name = "name")
+
     private String name;
     @Getter
     @Setter
-    private int providerId;
+    @ManyToOne(cascade = CascadeType.PERSIST, targetEntity = Provider.class)
+    private Provider provider;
     @Getter
     @Setter
+    @Column(name = "price")
     private double price;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "categories", joinColumns = @JoinColumn(name = "commodity_id"))
+    @Column(name = "category")
+    private List<String> categories = new ArrayList<>();
     @Getter
     @Setter
-    private String[] categories;
-    @Getter
-    @Setter
+    @Column(name = "rating")
     private double rating;
     @Getter
     @Setter
+    @Column(name = "inStock")
     private int inStock;
     @Getter
     @Setter
+    @Column(name = "image")
     private String image;
-    HashMap<String, Integer> userRates = new HashMap<>();
-    private HashMap<Integer, Comment> comments;
 
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinColumn(name = "commodity")
+    private Set<Rate> rates;
+
+//    public void setCategories(String[] array) {
+//        this.categories = String.join(",", array);
+//    }
+
+//    public String[] getCategories() {
+//        return categories.split(",");
+//    }
+    public void setCategories(List<String> categories) {
+        this.categories = categories;
+    }
+
+    public List<String> getCategories() {
+        return categories;
+    }
+    @SneakyThrows
     public Commodity(CommodityModel model) {
         super();
         id = model.id;
         name = model.name;
-        providerId = model.providerId;
+        provider = ContextManager.getInstance().getProvider(model.providerId);
         price = model.price;
-        categories = model.categories;
+        categories = List.of(model.categories);
         rating = model.rating;
         inStock = model.inStock;
         image = model.image;
-        comments = new HashMap<>();
+        rates = new HashSet<>();
     }
 
     public CommodityModel getModel() {
         CommodityModel model = new CommodityModel();
         model.id = id;
         model.name = name;
-        model.providerId = providerId;
+        model.providerId = provider.getId();
         model.price = price;
-        model.categories = categories;
+        model.categories = categories.toArray(new String[0]);
         model.rating = rating;
         model.inStock = inStock;
         model.image = image;
@@ -71,23 +104,21 @@ public class Commodity {
         model.commodityModel = new CommodityModel();
         model.commodityModel.id = id;
         model.commodityModel.name = name;
-        model.commodityModel.providerId = providerId;
+        model.commodityModel.providerId = provider.getId();
         model.commodityModel.price = price;
-        model.commodityModel.categories = categories;
+        model.commodityModel.categories = categories.toArray(new String[0]);
         model.commodityModel.rating = rating;
         model.commodityModel.inStock = inStock;
         model.commodityModel.image = image;
-        model.commentsList = getCommentsList();
         return model;
     }
 
-    public void addRate(String username, Integer rate) {
-        userRates.put(username, rate);
+    public void addRate(List<Rate> rates) {
         Double mean = 0.0;
-        for (Integer val : userRates.values()) {
-            mean += val;
+        for (Rate val : rates) {
+            mean += val.rateNumber;
         }
-        rating = mean / userRates.size();
+        rating = mean / rates.size();
     }
 
     public void increaseInStuck() {
@@ -105,36 +136,39 @@ public class Commodity {
     }
 
     public Boolean isInCategory(String targetCategory) {
-        for (String category : categories) {
-            if (category.equals(targetCategory)) {
-                return true;
-            }
-        }
-        return false;
+//        for (String category : categories) {
+//            if (category.equals(targetCategory)) {
+//                return true;
+//            }
+//        }
+//        return false;
+        return true;
     }
 
-    public void putComment(Comment comment) {
-        comments.put(comment.getId(), comment);
-    }
-
-    public ArrayList<CommentReportModel> getCommentsList() {
-        ArrayList<CommentReportModel> result = new ArrayList<>();
-        for (Comment comment : comments.values()) {
-            result.add(comment.getReportModel());
-        }
-        return result;
-    }
+//    public ArrayList<CommentReportModel> getCommentsList() {
+//        ArrayList<CommentReportModel> result = new ArrayList<>();
+//        System.out.println(comments.size());
+//        for (Comment comment : comments.stream().toList()) {
+//            result.add(comment.getReportModel());
+//        }
+//        return result;
+//    }
 
     public boolean checkPriceRange(double start_price, double end_price) {
         return start_price <= price && price <= end_price;
     }
 
-    public boolean isInSimilarCategory(String[] categories) {
-        for (String category : categories) {
-            for (String secondCategory : this.categories) {
-                if (category.equals(secondCategory)) return true;
-            }
-        }
-        return false;
+    public boolean isInSimilarCategory(List<String>  categories) {
+//        for (String category : categories) {
+//            for (String secondCategory : this.categories) {
+//                if (category.equals(secondCategory)) return true;
+//            }
+//        }
+//        return false;
+        return true;
+    }
+
+    public Integer getProviderId() {
+        return provider.getId();
     }
 }

@@ -2,33 +2,48 @@ package Baloot.Entity;
 
 import Baloot.Model.ProviderModel;
 import Baloot.View.ProviderViewModel;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
+
+@Entity
+@Table(name = "provider")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Provider {
     @Getter
     @Setter
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     @Getter
     @Setter
     private String name;
     @Getter
     @Setter
-    private String registryDate;
+    @Column(name="registrydate")
+    private String registrydate;
     @Getter
     @Setter
     private String image;
-    private HashMap<Integer, Commodity> commodities;
+
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinColumn(name = "provider")
+    private Map<Integer, Commodity> commodities;
 
     public Provider(ProviderModel model) {
         super();
         id = model.id;
         name = model.name;
-        registryDate = model.registryDate;
+        registrydate = model.registryDate;
         image = model.image;
         commodities = new HashMap<>();
     }
@@ -46,7 +61,7 @@ public class Provider {
         providerViewModel.providerModel = new ProviderModel();
         providerViewModel.providerModel.id = id;
         providerViewModel.providerModel.name = name;
-        providerViewModel.providerModel.registryDate = registryDate;
+        providerViewModel.providerModel.registryDate = registrydate;
         providerViewModel.providerModel.image = image;
         providerViewModel.commoditiesList = new ArrayList<>();
         for (Commodity commodity : commodities.values()) {

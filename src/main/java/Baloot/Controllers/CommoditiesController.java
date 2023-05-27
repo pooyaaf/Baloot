@@ -6,15 +6,21 @@ import Baloot.Context.UserContext;
 import Baloot.Entity.Commodity;
 import Baloot.Entity.User;
 import Baloot.Exception.CommodityNotFound;
+import Baloot.Model.CommentReportModel;
+import Baloot.Repository.CommodityRepository;
 import Baloot.View.CommodityFullModel;
 import Baloot.View.CommodityListModel;
+//import Baloot.service.CommentService;
+import Baloot.service.CommentService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -22,6 +28,11 @@ import java.util.stream.StreamSupport;
 @AllArgsConstructor
 @RequestMapping("/commodities")
 public class CommoditiesController {
+    @Autowired
+    private final CommentService commentService;
+
+    @Autowired
+    CommodityRepository repository;
     private CommodityListModel getSuggestedCommoditiesModel(Commodity commodity) {
         ArrayList<Commodity> suggestedCommodities = ContextManager.getInstance().getSuggestedCommodities(commodity);
         CommodityListModel commodityListModel = new CommodityListModel();
@@ -33,7 +44,7 @@ public class CommoditiesController {
     }
     @GetMapping
     public CommodityListModel all() {
-        Collection<Commodity> commodities = ContextManager.getInstance().getAllCommodities();
+        Iterable<Commodity> commodities = ContextManager.getInstance().getAllCommodities();
         ArrayList<Commodity> filtered = FilterManager.getInstance().filter(commodities);
         CommodityListModel result = new CommodityListModel();
         result.commoditiesList = new ArrayList<>();
@@ -49,6 +60,7 @@ public class CommoditiesController {
             Commodity commodity = ContextManager.getInstance().getCommodity(id);
             CommodityFullModel commodityFullModel = new CommodityFullModel();
             commodityFullModel.commodityShortModel = commodity.getReportModel();
+            commodityFullModel.commodityShortModel.commentsList = commentService.getCommentsOfCommodity(commodity);
             commodityFullModel.suggestedCommoditiesModel = getSuggestedCommoditiesModel(commodity);
             return commodityFullModel;
         }

@@ -1,6 +1,7 @@
 package Baloot;
 
 import Baloot.Context.ContextManager;
+
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +12,7 @@ import javax.annotation.PostConstruct;
 public class DataInitializer {
     @PostConstruct
     public void populateCourses(){
+
         ContextManager.getInstance().initialize();
     }
 }
