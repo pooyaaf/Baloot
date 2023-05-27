@@ -2,6 +2,8 @@ package Baloot.Controllers;
 
 import Baloot.Context.ContextManager;
 import Baloot.Context.UserContext;
+import Baloot.Entity.User;
+import Baloot.Model.UserModel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpMethod;
@@ -12,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
-
+import java.util.Calendar;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -20,7 +22,16 @@ import java.net.http.HttpClient;
 import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Date;
 import java.util.HashMap;
+
+class GithubUser {
+    public String login;
+    public String email;
+    public Date createdAt;
+    public String name;
+}
+
 
 @RestController
 public class LoginController {
@@ -59,9 +70,25 @@ public class LoginController {
         HttpRequest req = userDataBuilder.GET().header("Authorization", String.format("token %s", accessToken)).build();
         try {
             HttpResponse<String> userDataResult = client.send(req, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException | InterruptedException e) {
+            GithubUser user = mapper.readValue(userDataResult.body(), GithubUser.class);
+            UserModel model = new UserModel();
+            model.username = user.name;
+            model.email = user.email;
+            model.address = null;
+            model.credit = 0;
+            model.password=null;
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(user.createdAt);
+            calendar.add(Calendar.YEAR, -18);
+            model.birthDate = String.valueOf(calendar.getTime());
+            // TODO :  ResponseEntity.ok(JwtService.createToken(user.username))
+            return null;
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
+
         return null;
     }
 
