@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -47,8 +48,9 @@ public class BuyListController {
         return model;
     }
     @GetMapping
-    public UserInfoModel all() {
+    public UserInfoModel all(@RequestParam("username") String username) {
         try {
+            System.out.println(username);
             User user = ContextManager.getInstance().getUser(UserContext.username);
             UserInfoModel userInfoModel = user.getUserInfoModel(repository.findAllByBuyListId_User(user), purchasedListRepository.findAllByPurchasedListId_User(user));
             userInfoModel.buyList = getBuyList(user);

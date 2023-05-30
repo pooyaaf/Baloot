@@ -1,5 +1,6 @@
 package Baloot.Controllers;
 
+import Baloot.Commands.AddUser;
 import Baloot.Context.ContextManager;
 import Baloot.Context.UserContext;
 import Baloot.Entity.User;
@@ -121,5 +122,32 @@ public class LoginController {
         model.login = jwt;
         model.userId = username;
         return model;
+    }
+
+    @SneakyThrows
+    @PostMapping("/register")
+    public AuthenticatedModel register(@RequestParam("username") String username, @RequestParam("password") String password, @RequestParam("email") String email, @RequestParam("birthdate") String birthdate, @RequestParam("address") String address) {
+        if (ContextManager.getInstance().isUserPassExist(username, password)) {
+            UserContext.username = username;
+            return null;
+        }
+        UserModel model = new UserModel();
+        model.username = username;
+        model.password = HashCreator.getInstance().getMD5Hash(password);
+        model.email = email;
+        model.birthDate = birthdate;
+        model.address = address;
+        AddUser addUser = new AddUser();
+        try {
+            addUser.handle(model);
+            UserContext.username = username;
+            String jwt = createToken(username);
+            AuthenticatedModel authenticatedModel = new AuthenticatedModel();
+            authenticatedModel.login = jwt;
+            authenticatedModel.userId = username;
+            return authenticatedModel;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
 }

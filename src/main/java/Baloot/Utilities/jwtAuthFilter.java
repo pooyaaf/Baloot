@@ -23,6 +23,7 @@ public class jwtAuthFilter implements Filter {
         {
             add("login");
             add("register");
+            add("auth");
         }
     };
 
