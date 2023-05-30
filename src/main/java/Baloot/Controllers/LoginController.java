@@ -65,7 +65,7 @@ public class LoginController {
 
 
     @GetMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String auth(@RequestParam(value = "code") String code) throws Exception {
+    public AuthenticatedModel auth(@RequestParam(value = "code") String code) throws Exception {
         String accessTokenURL = String.format(
                 "https://github.com/login/oauth/access_token?client_id=%s&client_secret=%s&code=%s",
                 clientId, clientSecret, code
@@ -102,7 +102,11 @@ public class LoginController {
         //Database
         ContextManager.getInstance().putUser(model.username, new User(model));
 
-        return userDataResult.body();
+        String jwt = createToken(model.username);
+        AuthenticatedModel authenticatedModel = new AuthenticatedModel();
+        authenticatedModel.login = jwt;
+        authenticatedModel.userId = model.username;
+        return authenticatedModel;
     }
 
     @SneakyThrows
