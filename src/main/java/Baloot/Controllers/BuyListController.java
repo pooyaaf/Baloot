@@ -48,9 +48,8 @@ public class BuyListController {
         return model;
     }
     @GetMapping
-    public UserInfoModel all(@RequestParam("username") String username) {
+    public UserInfoModel all() {
         try {
-            System.out.println(username);
             User user = ContextManager.getInstance().getUser(UserContext.username);
             UserInfoModel userInfoModel = user.getUserInfoModel(repository.findAllByBuyListId_User(user), purchasedListRepository.findAllByPurchasedListId_User(user));
             userInfoModel.buyList = getBuyList(user);

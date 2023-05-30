@@ -9,13 +9,12 @@ import org.springframework.stereotype.Component;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
 @Component
-public class jwtAuthFilter implements Filter {
+public class JwtFilter implements Filter {
 
     private static String SECRET_KEY = "baloot2023";
 
@@ -40,7 +39,6 @@ public class jwtAuthFilter implements Filter {
             filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
-
         String header = httpRequest.getHeader("Authorization");
 
         if (header == null || !header.startsWith("Bearer ")) {
