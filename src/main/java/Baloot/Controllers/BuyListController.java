@@ -49,13 +49,12 @@ public class BuyListController {
     @GetMapping
     public UserInfoModel all() {
         try {
-            if (Authentication.isNotAuthenticated()) throw new UserNotAuthenticated();
             User user = ContextManager.getInstance().getUser(UserContext.username);
             UserInfoModel userInfoModel = user.getUserInfoModel(repository.findAllByBuyListId_User(user), purchasedListRepository.findAllByPurchasedListId_User(user));
             userInfoModel.buyList = getBuyList(user);
             return userInfoModel;
         }
-        catch (UserNotFound | UserNotAuthenticated | Exception e) {
+        catch (UserNotFound | Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }

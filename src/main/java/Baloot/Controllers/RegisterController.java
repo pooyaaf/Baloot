@@ -5,7 +5,9 @@ import Baloot.Context.ContextManager;
 import Baloot.Context.UserContext;
 import Baloot.Entity.User;
 import Baloot.Model.UserModel;
+import Baloot.Utilities.HashCreator;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 @AllArgsConstructor
 @RequestMapping("/register")
 public class RegisterController {
+    @SneakyThrows
     @PostMapping
     public void register(@RequestParam("username") String username, @RequestParam("password") String password, @RequestParam("email") String email, @RequestParam("birthdate") String birthdate, @RequestParam("address") String address) {
         if (ContextManager.getInstance().isUserPassExist(username, password)) {
@@ -25,7 +28,7 @@ public class RegisterController {
         }
         UserModel model = new UserModel();
         model.username = username;
-        model.password = password;
+        model.password = HashCreator.getInstance().getMD5Hash(password);
         model.email = email;
         model.birthDate = birthdate;
         model.address = address;

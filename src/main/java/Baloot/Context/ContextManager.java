@@ -4,6 +4,7 @@ import Baloot.Entity.*;
 import Baloot.Exception.*;
 import Baloot.Model.*;
 import Baloot.Repository.*;
+import Baloot.Utilities.HashCreator;
 import Baloot.Validation.IgnoreFailureTypeAdapterFactory;
 import Baloot.View.CommodityListModel;
 import Baloot.View.ProviderViewModel;
@@ -100,6 +101,7 @@ public class ContextManager {
         return null;
     }
 
+    @SneakyThrows
     public void initialize() {
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd")
@@ -110,6 +112,7 @@ public class ContextManager {
         UserModel[] userArray = gson.fromJson(users, UserModel[].class);
         for (UserModel model : userArray) {
             User user = new User(model);
+            user.setPassword(HashCreator.getInstance().getMD5Hash(user.getPassword()));
             putUser(model.username, user);
         }
 
@@ -169,29 +172,6 @@ public class ContextManager {
     }
 
     public Provider getProvider(Integer id) throws Exception, ProviderNotFound {
-//        Connection con = getConnection();
-//        StringBuilder builder = new StringBuilder();
-//
-//        builder.append("SELECT `id`,`image`,`name`,`registrydate` FROM `balootdb`.`provider` \n");
-//        builder.append(String.format("WHERE id=%d", id));
-//
-//        Statement stmt = con.createStatement();
-//        ResultSet result = stmt.executeQuery(builder.toString());
-//
-//        if (!result.next()) {
-//            con.close();
-//            stmt.close();
-//            throw new ProviderNotFound();
-//        }
-//        ProviderModel model = new ProviderModel();
-//        model.id = result.getInt("id");
-//        model.name = result.getString("name");
-//        model.image = result.getString("image");
-//        model.registryDate = result.getString("registrydate");
-//
-//
-//        con.close();
-//        stmt.close();
         Optional<Provider> providerOptional = providerRepository.findById(id);
         if (providerOptional.isEmpty()) throw new ProviderNotFound();
         return providerOptional.get();
@@ -245,13 +225,6 @@ public class ContextManager {
 
         return result;
     }
-
-//    @SneakyThrows
-//    public void updateCommodity(Comment comment) {
-//        Optional<Commodity> commodityOptional = commodityRepository.findById(comment.getCommodityId());
-//        if (commodityOptional.isEmpty()) throw new CommodityNotFound();
-//        commodityOptional.get().putComment(comment);
-//    }
 
     public boolean isUserPassExist(String username, String password) {
         Optional<User> optionalUser = userRepository.findById(username);
