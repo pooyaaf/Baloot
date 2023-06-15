@@ -30,7 +30,7 @@ import static java.lang.Math.max;
 @Component
 public class ContextManager {
     private static final BasicDataSource ds = new BasicDataSource();
-    private final static String dbURL = "jdbc:mysql://localhost:3306/balootdb?sessionVariables=sql_mode='NO_ENGINE_SUBSTITUTION'&jdbcCompliantTruncation=false&allowMultiQueries=true";
+    private final static String dbURL = "jdbc:mysql://mysqldb:3306/balootdb?sessionVariables=sql_mode='NO_ENGINE_SUBSTITUTION'&jdbcCompliantTruncation=false&allowMultiQueries=true";
     private final static String dbUserName = "root";
     private final static String dbPassword = "alibatman";
     public static CommodityRepository commodityRepository;
